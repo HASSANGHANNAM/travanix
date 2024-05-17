@@ -18,7 +18,13 @@ class MainController extends Controller
     public function touristRegester(Request $request)
     {
         $request->validate([
-            "Email_address" => "required|max:255|unique:users|email|regex:/(.+)@gmail.com/",
+            "Email_address" =>   [
+                'required',
+                'email',
+                'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com)$/u',
+                'max:255',
+                'unique:users'
+            ],
             // "Phone_number" => "required|min: 10|max:45|unique:users|regex:/09(.+)/",
             "Password" => ['required', 'string', password::min(8)],
             "name" => "required|max:45"
@@ -45,7 +51,12 @@ class MainController extends Controller
     {
         $request->validate(
             [
-                "Email_address" => "required",
+                "Email_address" =>   [
+                    'required',
+                    'email',
+                    'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com)$/u',
+                    'max:255'
+                ],
                 "Password" => ['required', 'string', password::min(8)]
             ]
         );
@@ -77,7 +88,12 @@ class MainController extends Controller
     {
         $request->validate(
             [
-                "Email_address" => "required",
+                "Email_address" =>   [
+                    'required',
+                    'email',
+                    'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com)$/u',
+                    'max:255',
+                ],
                 "Password" => ['required', 'string', password::min(8)]
             ]
         );
@@ -113,7 +129,50 @@ class MainController extends Controller
             "message" => "loged out"
         ]);
     }
-    
+    public function touristCheckEmailPassword(Request $request)
+    {
+        $request->validate(
+            [
+                "Email_address" =>   [
+                    'required',
+                    'email',
+                    'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com)$/u',
+                    'max:255',
+                ]
+            ]
+        );
+        $check = user::where('Email_address', $request->Email_address)->first();
+        if (isset($check)) {
+            $accessToken = $check->createToken('access_token')->plainTextToken;
+            return response()->json([
+                "status" => 1,
+                "message" => "correct email",
+                'access_token' => $accessToken
+            ]);
+        }
+        return response()->json([
+            "status" => 0,
+            "message" => "not found email",
+        ]);
+    }
+    public function touristChangePassword(Request $request)
+    {
+        $request->validate([
+            "Password" => ['required', 'string', password::min(8)]
+        ]);
+        $newpassword = Hash::make($request->Password);
+        $u = User::where('id', auth()->user()->id)->update(array('password' => $newpassword));
+        if ($u != 0) {
+            return response()->json([
+                "status" => 1,
+                "message" => "changed password"
+            ]);
+        }
+        return response()->json([
+            "status" => 0,
+            "message" => "not changed password"
+        ]);
+    }
 }
 
 

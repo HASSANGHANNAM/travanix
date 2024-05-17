@@ -18,10 +18,12 @@ use App\Http\Controllers\Api\MainController;
 
 Route::post('/touristRegester', [MainController::class, 'touristRegester']);
 Route::post('/touristLogin', [MainController::class, 'touristLogin']);
+Route::post('/touristCheckEmailPassword', [MainController::class, 'touristCheckEmailPassword']);
 Route::post('/Admin/adminLogin', [MainController::class, 'adminLogin']);
 
 
 Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('/touristLogout', [MainController::class, 'logout']);
     Route::get('/Admin/adminLogout', [MainController::class, 'logout']);
+    Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);
 });
