@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favorite', function (Blueprint $table) {
+        Schema::create('rating', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('type');
-            $table->integer('favorite_id');
-            $table->unsignedBigInteger('tourist_id');
-            $table->foreign('tourist_id')->references('id')->on('tourist');
+            $table->float('rate');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('favorite');
+        Schema::dropIfExists('rating');
     }
 };

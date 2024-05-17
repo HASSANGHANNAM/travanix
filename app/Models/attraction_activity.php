@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class tourist extends Model
+class attraction_activity extends Model
 {
     use HasFactory, HasApiTokens;
-    protected $table = "tourist";
-    protected $fillable = ['wallet', 'user_id', 'name'];
+    protected $table = "attraction_activities";
+    protected $fillable = ['name', 'opening_time', 'closing_time', 'description', 'location_id', 'rating_id'];
     public $timestamps = true;
-    public function user()
-    {
-        return $this->hasOne(user::class);
-    }
 }

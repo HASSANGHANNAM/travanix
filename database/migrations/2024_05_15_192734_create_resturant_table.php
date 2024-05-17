@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favorite', function (Blueprint $table) {
+        Schema::create('resturant', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('type');
-            $table->integer('favorite_id');
-            $table->unsignedBigInteger('tourist_id');
-            $table->foreign('tourist_id')->references('id')->on('tourist');
+            $table->unsignedBigInteger('location_id');
+            $table->foreign('location_id')->references('id')->on('location');
+            $table->unsignedBigInteger('rating_id');
+            $table->foreign('rating_id')->references('id')->on('rating');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('favorite');
+        Schema::dropIfExists('resturant');
     }
 };
