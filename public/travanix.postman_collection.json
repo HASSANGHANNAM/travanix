@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "8c94de82-3f49-40e3-bc9c-d9182044d39b",
-		"name": "tourism managment system",
+		"name": "travanix",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30842901"
 	},
@@ -31,7 +31,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n          \"name\" : \"a\",\r\n           \"Email_address\":\"aa@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
+									"raw": "{\r\n          \"name\" : \"a\",\r\n           \"Email_address\":\"dfggsd@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}touristRegester",
@@ -53,7 +53,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "3|mpv7rEtATTTuOgnuqvGUtuRwngQvObwX7W0RCpfb99d58ec5",
+											"value": "3|GvDaPgrJEgN2AyLTff2RCpXKJzKMktDpWkZ6ibU1cba586bd",
 											"type": "string"
 										}
 									]
@@ -114,12 +114,92 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\"Email_address\":\"aa@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
+									"raw": "{\r\n\"Email_address\":\"dfggsd@gmail.com\",\r\n            \"Password\" :\"11111119\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}touristLogin",
 									"host": [
 										"{{url}}touristLogin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristCheckEmailPassword",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 6|E6gPKOvpS3r8OVSBDDLDzwAGQpdnbOiXe2LKeXX8d842f0a1",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"Email_address\":\"dfggsd@gmail.com\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{url}}touristCheckEmailPassword",
+									"host": [
+										"{{url}}touristCheckEmailPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristChangePassword",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|ODwSrsxapqU4tpVCIeFmCfJTVAUQBGSA2ghnN1Zsf0a7ff5d",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 6|E6gPKOvpS3r8OVSBDDLDzwAGQpdnbOiXe2LKeXX8d842f0a1",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"Password\" :\"11111119\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}touristChangePassword",
+									"host": [
+										"{{url}}touristChangePassword"
 									]
 								}
 							},
@@ -240,7 +320,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\"Email_address\":\"aa@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
+									"raw": "{\r\n\"Email_address\":\"admin@admin@gmail.com\",\r\n            \"Password\" :\"admin12345\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}Admin/adminLogin",
