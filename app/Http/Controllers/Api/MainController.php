@@ -27,7 +27,7 @@ class MainController extends Controller
             ],
             // "Phone_number" => "required|min: 10|max:45|unique:users|regex:/09(.+)/",
             "Password" => ['required', 'string', password::min(8)],
-            "name" => "required|max:45"
+            "tourist_name" => "required|max:45"
         ]);
         $userData['type'] = 2;
         //$userData['Phone_number'] = $request->Phone_number;
@@ -37,7 +37,7 @@ class MainController extends Controller
         $touristData = [
             'user_id' => $userData['id'],
             'wallet' => 0,
-            'name' => $request->name
+            'tourist_name' => $request->tourist_name
         ];
         tourist::create($touristData);
         $accessToken = $userData->createToken('auth_token')->plainTextToken;
@@ -87,9 +87,9 @@ class MainController extends Controller
     public function touristProfile(Request $request)
     {
         $user_data = auth()->user();
-        $touristData = DB::table('tourist')->where('id', $user_data->id)->first();
+        $touristData = DB::table('tourist')->where('user_id', $user_data->id)->first();
         $data = [
-            'name' => $touristData->name,
+            'tourist_name' => $touristData->tourist_name,
             'Email_address' => $user_data->Email_address,
             'wallet' => $touristData->wallet,
             'created_at' => $touristData->created_at,
@@ -125,12 +125,11 @@ class MainController extends Controller
                     User::where('id', $user_data->id)->update(array('password' => Hash::make($request->Password)));
                 }
             }
-            if (isset($request->name)) {
+            if (isset($request->tourist_name)) {
                 $user = $request->validate([
-                    "name" => "required|max:45"
+                    "tourist_name" => "required|max:45"
                 ]);
-                $touristData = DB::table('tourist')->where('id', $user_data->id)->first();
-                tourist::where('id', $touristData->id)->update(array('name' => $request->name));
+                tourist::where('user_id', $user_data->id)->update(array('tourist_name' => $request->tourist_name));
             }
             return response()->json([
                 "status" => 1,

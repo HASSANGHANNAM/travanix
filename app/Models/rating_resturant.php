@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class rating extends Model
+class rating_resturant extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "rating_resturant";

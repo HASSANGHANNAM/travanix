@@ -53,7 +53,7 @@ class hotelController extends Controller
             file_put_contents($imagePath, $imagePut);
             $counter++;
             $imageData = [
-                'path_of_image' => $pathToStore, 'type' => 1, 'type_id' => $createHotel->id
+                'path_of_image' => $pathToStore, 'hotel_id' => $createHotel->id
             ];
             $creatImage = image_hotel::create($imageData);
         }
@@ -81,8 +81,8 @@ class hotelController extends Controller
         $this->validate($request, [
             '*.size_room' => 'required|integer',
             '*.size_of_bed' => 'required|max:45',
-            '*.capacity' => 'required|integer',
-            '*.price' => 'required|integer',
+            '*.capacity_room' => 'required|integer',
+            '*.price_room' => 'required|integer',
             '*.available_services' => 'required|max:255',
             '*.hotel_id' => 'required|integer'
         ]);

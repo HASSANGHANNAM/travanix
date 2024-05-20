@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class image extends Model
+class image_resturant extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "image_resturant";
-    protected $fillable = ['path_of_image', 'type', 'type_id'];
+    protected $fillable = ['path_of_image', 'resturant_id'];
     public $timestamps = true;
 }
