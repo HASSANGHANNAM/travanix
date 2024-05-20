@@ -15,7 +15,7 @@ class adminSeeder extends Seeder
     public function run(): void
     {
         $user = ([
-            "Email_address" => "admin@admin@gmail.com",
+            "Email_address" => "adminadmin@gmail.com",
             "password" => "admin12345",
             "type" => 1
         ]);

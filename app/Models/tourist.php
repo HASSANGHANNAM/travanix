@@ -10,7 +10,7 @@ class tourist extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "tourist";
-    protected $fillable = ['wallet', 'user_id', 'name'];
+    protected $fillable = ['wallet', 'user_id', 'tourist_name'];
     public $timestamps = true;
     public function user()
     {

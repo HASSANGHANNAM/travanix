@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class hotel extends Model
+class rating extends Model
 {
     use HasFactory, HasApiTokens;
-    protected $table = "hotel";
-    protected $fillable = ['location_id', 'reviews_about_hotel', 'simple_description_about_hotel', 'hotel_name'];
+    protected $table = "rating_hotel";
+    protected $fillable = ['rate', 'hotel_id'];
     public $timestamps = true;
 }

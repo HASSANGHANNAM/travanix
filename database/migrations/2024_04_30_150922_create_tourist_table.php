@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tourist', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->nullable();
+            $table->string('tourist_name', 45)->nullable();
             $table->double('wallet')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');

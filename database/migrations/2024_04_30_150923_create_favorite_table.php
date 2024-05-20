@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('favorite', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('type');
-            $table->integer('favorite_id');
+            $table->tinyInteger('type')->nullable();
+            $table->integer('favorite_id')->nullable();
             $table->unsignedBigInteger('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourist');
             $table->timestamps();

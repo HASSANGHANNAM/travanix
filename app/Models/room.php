@@ -10,6 +10,6 @@ class room extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "room";
-    protected $fillable = ['size_room', 'size_of_bed', 'capacity', 'price', 'available_services', 'hotel_id'];
+    protected $fillable = ['size_room', 'size_of_bed', 'capacity_room', 'price_room', 'available_services', 'hotel_id'];
     public $timestamps = true;
 }

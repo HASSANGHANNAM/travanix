@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('hotel', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('rating_id');
-            $table->foreign('rating_id')->references('id')->on('rating');
+            $table->text('simple_description_about_hotel')->nullable();
+            $table->text('reviews_about_hotel')->nullable();
+            $table->string('hotel_name', 45)->nullable();
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('location');
-            $table->text('reviews_about_hotel');
-            $table->text('simple_description_about_hotel');
-            $table->string('hotel_name');
             $table->timestamps();
         });
     }

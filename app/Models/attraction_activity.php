@@ -10,6 +10,6 @@ class attraction_activity extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "attraction_activities";
-    protected $fillable = ['name', 'opening_time', 'closing_time', 'description', 'location_id', 'rating_id'];
+    protected $fillable = ['attraction_activitie_name', 'opening_time', 'closing_time', 'description', 'location_id'];
     public $timestamps = true;
 }

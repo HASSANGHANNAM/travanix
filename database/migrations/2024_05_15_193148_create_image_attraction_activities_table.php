@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('image', function (Blueprint $table) {
+        Schema::create('image_attraction_activities', function (Blueprint $table) {
             $table->id();
-            $table->text('path_of_image');
-            $table->integer('type');
-            $table->integer('type_id');
-            $table->unsignedBigInteger('hotel_id');
-            $table->foreign('hotel_id')->references('id')->on('hotel');
-            $table->unsignedBigInteger('resturant_id');
-            $table->foreign('resturant_id')->references('id')->on('resturant');
+            $table->text('path_of_image')->nullable();
             $table->unsignedBigInteger('attraction_activities_id');
             $table->foreign('attraction_activities_id')->references('id')->on('attraction_activities');
             $table->timestamps();
@@ -31,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('image');
+        Schema::dropIfExists('image_attraction_activities');
     }
 };

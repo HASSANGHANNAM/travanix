@@ -9,7 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 class tripe extends Model
 {
     use HasFactory, HasApiTokens;
-    protected $table = "tripe";
-    protected $fillable = [];
+    protected $table = "trip";
+    protected $fillable = ['type', 'type_of_trip', 'reviews_about_trip', 'price_trip'];
     public $timestamps = true;
 }

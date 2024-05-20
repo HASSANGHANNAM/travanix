@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\city;
+use App\Models\nation;
 use App\Models\phatmacist;
 use Illuminate\Database\Seeder;
 
@@ -21,5 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call(adminSeeder::class);
+        $this->call(nationSeeder::class);
+        $this->call(citySeeder::class);
     }
 }

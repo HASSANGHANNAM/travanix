@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('location', function (Blueprint $table) {
+        Schema::create('rating_resturant', function (Blueprint $table) {
             $table->id();
-            $table->text('address')->nullable();
-            $table->text('coordinate_x')->nullable();
-            $table->text('coordinate_y')->nullable();
-            $table->unsignedBigInteger('city_id');
-            $table->foreign('city_id')->references('id')->on('city');
+            $table->float('rate')->nullable();
+            $table->unsignedBigInteger('resturant_id');
+            $table->foreign('resturant_id')->references('id')->on('resturant');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('location');
+        Schema::dropIfExists('rating_resturant');
     }
 };

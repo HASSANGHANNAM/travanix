@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('attraction_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->time('opening_time');
-            $table->time('closing_time');
-            $table->text('description');
+            $table->string('attraction_activitie_name', 45)->nullable();
+            $table->time('opening_time')->nullable();
+            $table->time('closing_time')->nullable();
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('location');
-            $table->unsignedBigInteger('rating_id');
-            $table->foreign('rating_id')->references('id')->on('rating');
             $table->timestamps();
         });
     }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('city', function (Blueprint $table) {
             $table->id();
-            $table->string('city_name_in_arabic');
-            $table->string('city_name_in_english');
+            $table->string('city_name_in_arabic', 45)->nullable();
+            $table->string('city_name_in_english', 45)->nullable();
             $table->unsignedBigInteger('nation_id');
             $table->foreign('nation_id')->references('id')->on('nation');
             $table->timestamps();

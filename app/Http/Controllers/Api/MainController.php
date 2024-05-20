@@ -84,6 +84,60 @@ class MainController extends Controller
             "message" => "your email not found",
         ]);
     }
+    public function touristProfile(Request $request)
+    {
+        $user_data = auth()->user();
+        $touristData = DB::table('tourist')->where('id', $user_data->id)->first();
+        $data = [
+            'name' => $touristData->name,
+            'Email_address' => $user_data->Email_address,
+            'wallet' => $touristData->wallet,
+            'created_at' => $touristData->created_at,
+            'updated_at' => $touristData->updated_at
+        ];
+        return response()->json([
+            "status" => 1,
+            "message" => "profile",
+            'data' => $data
+        ]);
+    }
+    public function touristUpdateProfile(Request $request)
+    {
+        $user_data = auth()->user();
+        if (isset($request->Email_address)) {
+            if ($user_data->Email_address !== $request->Email_address) {
+                $user = $request->validate([
+                    "Email_address" =>   [
+                        'required',
+                        'email',
+                        'regex:/^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com)$/u',
+                        'max:255',
+                        'unique:users'
+                    ],
+                ]);
+                User::where('id', $user_data->id)->update(array('Email_address' => $request->Email_address));
+            }
+            if (isset($request->Password)) {
+                if ($user_data->password !== $request->Password) {
+                    $user = $request->validate([
+                        "Password" => ['required', 'string', password::min(8)],
+                    ]);
+                    User::where('id', $user_data->id)->update(array('password' => Hash::make($request->Password)));
+                }
+            }
+            if (isset($request->name)) {
+                $user = $request->validate([
+                    "name" => "required|max:45"
+                ]);
+                $touristData = DB::table('tourist')->where('id', $user_data->id)->first();
+                tourist::where('id', $touristData->id)->update(array('name' => $request->name));
+            }
+            return response()->json([
+                "status" => 1,
+                "message" => "succes"
+            ]);
+        }
+    }
     public function adminLogin(Request $request)
     {
         $request->validate(

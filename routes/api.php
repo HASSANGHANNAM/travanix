@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\hotelController;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
@@ -25,5 +26,10 @@ Route::post('/Admin/adminLogin', [MainController::class, 'adminLogin']);
 Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('/touristLogout', [MainController::class, 'logout']);
     Route::get('/Admin/adminLogout', [MainController::class, 'logout']);
+    Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
+    Route::post('/Admin/adminCreateRooms', [hotelController::class, 'adminCreateRooms']);
+    Route::get('/Admin/adminGetHotels', [hotelController::class, 'adminGetHotels']);
+    Route::get('/touristProfile', [MainController::class, 'touristProfile']);
+    Route::post('/touristUpdateProfile', [MainController::class, 'touristUpdateProfile']);
     Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);
 });

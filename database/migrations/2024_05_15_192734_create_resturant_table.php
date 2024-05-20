@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('resturant', function (Blueprint $table) {
             $table->id();
+            $table->string('type_of_food', 255)->nullable();
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('location');
-            $table->unsignedBigInteger('rating_id');
-            $table->foreign('rating_id')->references('id')->on('rating');
             $table->timestamps();
         });
     }
