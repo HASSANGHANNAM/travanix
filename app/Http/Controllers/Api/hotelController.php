@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\hotel;
 use App\Models\location;
 use App\Models\room;
+use App\Models\image_hotel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,6 @@ class hotelController extends Controller
                 "hotel_name" => "required|max:45",
                 "simple_description_about_hotel" => "required",
                 "reviews_about_hotel" => "required",
-                "rate" => "required",
                 "city_id" => "required",
                 "address" => "required|max:255",
                 "coordinate_x" => "required",
@@ -36,17 +36,11 @@ class hotelController extends Controller
             'coordinate_y' => $request->city_id
         ];
         $location = location::create($locationData);
-        $findRate = DB::table('rating')->where('rate', $request->rate)->first();
-        if ($findRate == null) {
-            $createRate = ['rate' => $request->rate];
-            $findRate = rating::create($createRate);
-        }
         $hotelData = [
             'hotel_name' => $request->hotel_name,
             'simple_description_about_hotel' => $request->simple_description_about_hotel,
             'reviews_about_hotel' => $request->reviews_about_hotel,
             'location_id' => $location->id,
-            'rating_id' => $findRate->id
         ];
         $createHotel = hotel::create($hotelData);
         $counter = 1;
@@ -61,7 +55,7 @@ class hotelController extends Controller
             $imageData = [
                 'path_of_image' => $pathToStore, 'type' => 1, 'type_id' => $createHotel->id
             ];
-            $creatImage = image::create($imageData);
+            $creatImage = image_hotel::create($imageData);
         }
         return response()->json([
             "status" => 1,
