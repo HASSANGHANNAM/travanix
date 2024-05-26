@@ -38,6 +38,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('/Admin/adminGetHotels', [hotelController::class, 'adminGetHotels']);
     Route::post('/Admin/adminCreateCity', [locationsController::class, 'adminCreateCity']);
     Route::post('/Admin/adminCreateNation', [locationsController::class, 'adminCreateNation']);
+    Route::put('/Admin/adminUpdateCity', [locationsController::class, 'adminUpdateCity']);
     Route::get('/touristProfile', [MainController::class, 'touristProfile']);
     Route::post('/touristUpdateProfile', [MainController::class, 'touristUpdateProfile']);
     Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);

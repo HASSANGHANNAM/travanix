@@ -32,7 +32,7 @@ class citySeeder extends Seeder
             ['city_name' => "Al_Zarqa", 'nation_id' => 2],
         ];
         foreach ($cities as $city) {
-            // city::create($city);
+            city::create($city);
         }
     }
 }
