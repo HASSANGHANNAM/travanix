@@ -10,6 +10,6 @@ class nation extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "nation";
-    protected $fillable = ['nation_name_in_arabic', 'nation_name_in_english'];
+    protected $fillable = ['nation_name'];
     public $timestamps = true;
 }

@@ -15,7 +15,8 @@ class nationSeeder extends Seeder
     public function run()
     {
         $nations = [
-            ['nation_name_in_english' => "Syria", 'nation_name_in_arabic' => "سوريا"]
+            ['nation_name' => "Syria"],
+            ['nation_name' => "Jordan"]
         ];
         foreach ($nations as $nation) {
             nation::create($nation);

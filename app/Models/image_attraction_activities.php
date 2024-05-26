@@ -10,6 +10,6 @@ class image_attraction_activities extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "image_attraction_activities";
-    protected $fillable = ['path_of_image', 'attraction_activitie_id'];
+    protected $fillable = ['path_of_image', 'attraction_activity_id'];
     public $timestamps = true;
 }

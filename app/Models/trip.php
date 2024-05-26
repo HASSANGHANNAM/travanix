@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class tripe extends Model
+class trip extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "trip";
-    protected $fillable = ['type', 'type_of_trip', 'reviews_about_trip', 'price_trip'];
+    protected $fillable = ['type_of_trip', 'reviews_about_trip', 'price_trip'];
     public $timestamps = true;
 }

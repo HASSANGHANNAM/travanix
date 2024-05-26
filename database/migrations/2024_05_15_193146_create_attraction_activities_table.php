@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attraction_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('attraction_activitie_name', 45)->nullable();
+            $table->string('attraction_activity_name', 45)->nullable();
             $table->time('opening_time')->nullable();
             $table->time('closing_time')->nullable();
             $table->text('description')->nullable();

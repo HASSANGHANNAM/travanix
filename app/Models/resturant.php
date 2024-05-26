@@ -10,6 +10,6 @@ class resturant extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "resturant";
-    protected $fillable = ['location_id', 'type_of_food'];
+    protected $fillable = ['location_id', 'type_of_food', 'resturant_name'];
     public $timestamps = true;
 }

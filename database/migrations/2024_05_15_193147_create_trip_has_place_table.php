@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trip_has_blace', function (Blueprint $table) {
+        Schema::create('trip_has_place', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('resturant_id');
-            $table->foreign('resturant_id')->references('id')->on('resturant');
-            $table->unsignedBigInteger('attraction_activities_id');
-            $table->foreign('attraction_activities_id')->references('id')->on('attraction_activities');
-            $table->unsignedBigInteger('hotel_id');
-            $table->foreign('hotel_id')->references('id')->on('hotel');
+            $table->tinyInteger('type')->nullable();
+            $table->unsignedBigInteger('place_id');
             $table->unsignedBigInteger('trip_id');
             $table->foreign('trip_id')->references('id')->on('trip');
             $table->timestamps();

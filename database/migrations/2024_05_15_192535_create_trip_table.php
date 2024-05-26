@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('trip', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('type')->nullable();
             $table->float('price_trip')->nullable();
             $table->text('reviews_about_trip')->nullable();
             $table->string('type_of_trip', 45)->nullable();
