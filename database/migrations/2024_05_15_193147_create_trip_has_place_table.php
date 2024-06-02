@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->foreign('resturant_id')->references('id')->on('resturant');
             $table->unsignedBigInteger('attraction_activite_id')->nullable();
-            $table->foreign('attraction_activite_id')->references('id')->on('attraction_activites');
+            $table->foreign('attraction_activite_id')->references('id')->on('attraction_activities');
             $table->timestamps();
         });
     }
