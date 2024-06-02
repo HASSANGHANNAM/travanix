@@ -38,4 +38,16 @@ class tripController extends Controller
             "message" => "trip created"
         ]);
     }
+    public function adminGetTrips()
+    {
+    }
+    public function adminDeleteTrip($id)
+    {
+    }
+    public function adminUpdateTrip()
+    {
+    }
+    public function adminGetTripById($id)
+    {
+    }
 }

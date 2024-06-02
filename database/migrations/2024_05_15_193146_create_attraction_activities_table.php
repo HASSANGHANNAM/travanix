@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('attraction_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('attraction_activity_name', 45)->nullable();
-            $table->time('opening_time')->nullable();
-            $table->time('closing_time')->nullable();
-            $table->text('description')->nullable();
+            $table->string('attraction_activity_name', 45);
+            $table->time('opening_time');
+            $table->time('closing_time');
+            $table->text('description');
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('location');
             $table->timestamps();

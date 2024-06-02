@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class attraction_activityController extends Controller
 {
-    public function adminCreateattrAction_activity(Request $request)
+    public function adminCreateAttraction_activity(Request $request)
     {
         auth()->user();
         //TODO: validate time
@@ -60,5 +60,65 @@ class attraction_activityController extends Controller
             "status" => 1,
             "message" => "attraction_activity created"
         ]);
+    }
+    public function adminGetAttraction_activites()
+    {
+    }
+    public function adminDeleteAttraction_activity($id)
+    {
+    }
+    // FIXME:
+    public function adminUpdateAttraction_activity(Request $request)
+    {
+        // city_id
+        // coordinate_y
+        // coordinate_x
+        // address
+        // attraction_activity_name
+        // description
+        // closing_time
+        // opening_time
+        auth()->user();
+        if (auth()->user()->type == 2) {
+            return response()->json([
+                "status" => 0,
+                "message" => "you are not admin"
+            ]);
+        }
+        $request->validate([
+            "id" => "required|integer",
+            "name" => "required|max:45|string",
+
+        ]);
+        $nationData = DB::table('nation')->where('id', $request->id)->select('id', 'nation_name')->first();
+        if ($nationData == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "nation not found "
+            ]);
+        }
+        if ($nationData->nation_name == $request->nation_name) {
+            return response()->json([
+                "status" => 1,
+                "message" => "succes"
+            ]);
+        }
+        $request->validate([
+            "nation_name" => "unique:nation"
+        ]);
+        $update = nation::where('id', $request->id)->update(array('nation_name' => $request->nation_name));
+        if ($update != 0) {
+            return response()->json([
+                "status" => 1,
+                "message" => "succes"
+            ]);
+        }
+        return response()->json([
+            "status" => 0,
+            "message" => "not succes"
+        ]);
+    }
+    public function adminGetAttraction_activiteById($id)
+    {
     }
 }

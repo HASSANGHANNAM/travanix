@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('tourist_has_trip', function (Blueprint $table) {
             $table->id();
-            $table->enum("payment_status", ["paid", "unpaid"])->nullable();
-            $table->integer('number_of_seat')->nullable();
+            $table->enum("payment_status", ["paid", "unpaid"]);
+            $table->string('phone_number', 45);
+            $table->integer('number_of_seat')->unsigned();
             $table->unsignedBigInteger('trip_id');
             $table->foreign('trip_id')->references('id')->on('trip');
             $table->unsignedBigInteger('tourist_id');

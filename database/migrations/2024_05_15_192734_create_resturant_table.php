@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('resturant', function (Blueprint $table) {
             $table->id();
-            $table->string('resturant_name', 45)->nullable();
-            $table->string('type_of_food', 255)->nullable();
+            $table->string('resturant_name', 45);
+            $table->string('phone_number', 45);
+            $table->string('descreption', 255);
+            $table->time('opining_time');
+            $table->time('closing_time');
+            $table->float('resturant_class');
+            $table->string('type_of_food', 255);
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('location');
             $table->timestamps();

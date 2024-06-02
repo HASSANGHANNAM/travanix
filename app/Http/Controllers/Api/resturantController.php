@@ -56,4 +56,16 @@ class resturantController extends Controller
             "message" => "resturant created"
         ]);
     }
+    public function adminGetResturants()
+    {
+    }
+    public function adminDeleteResturant($id)
+    {
+    }
+    public function adminUpdateResturant()
+    {
+    }
+    public function adminGetResturantById($id)
+    {
+    }
 }

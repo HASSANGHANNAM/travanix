@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('image_resturant', function (Blueprint $table) {
+        Schema::create('charge_wallet', function (Blueprint $table) {
             $table->id();
-            $table->text('path_of_image')->nullable();
-            $table->unsignedBigInteger('resturant_id');
-            $table->foreign('resturant_id')->references('id')->on('resturant');
+            $table->string('charge_code');
+            $table->unsignedBigInteger('tourist_id');
+            $table->foreign('tourist_id')->references('id')->on('tourist');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('image_resturant');
+        Schema::dropIfExists('charge_wallet');
     }
 };

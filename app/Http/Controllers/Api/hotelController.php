@@ -95,4 +95,19 @@ class hotelController extends Controller
             "message" => "create rooms"
         ]);
     }
+    public function adminDeleteRoom($hotel_id, $room_id)
+    {
+    }
+    public function adminUpdateRoom()
+    {
+    }
+    public function adminDeleteHotel($id)
+    {
+    }
+    public function adminUpdateHotel()
+    {
+    }
+    public function adminGetHotelById($id)
+    {
+    }
 }

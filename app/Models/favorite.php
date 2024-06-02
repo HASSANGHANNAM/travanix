@@ -10,6 +10,6 @@ class favorite extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "favorite";
-    protected $fillable = ['type', 'favorite_id', 'tourist_id'];
+    protected $fillable = ['tourist_id', 'trip_id', 'attraction_activity_id', 'resturant_id', 'hotel_id'];
     public $timestamps = true;
 }

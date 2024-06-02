@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tourist', function (Blueprint $table) {
             $table->id();
-            $table->string('tourist_name', 45)->nullable();
-            $table->double('wallet')->nullable();
+            $table->string('tourist_name', 45)->unique();
+            $table->double('wallet')->unsigned();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

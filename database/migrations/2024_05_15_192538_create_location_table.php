@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('location', function (Blueprint $table) {
             $table->id();
-            $table->text('address')->nullable();
-            $table->text('coordinate_x')->nullable();
-            $table->text('coordinate_y')->nullable();
+            $table->text('address');
+            $table->text('coordinate_x');
+            $table->text('coordinate_y');
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('city');
             $table->timestamps();

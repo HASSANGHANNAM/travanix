@@ -10,6 +10,6 @@ class trip_has_place extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "trip_has_place";
-    protected $fillable = ['place_id', 'trip_id', 'type'];
+    protected $fillable = ['attraction_activite_id', 'trip_id', 'resturant_id', 'hotel_id'];
     public $timestamps = true;
 }

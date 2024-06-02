@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('Email_address', 255)->unique()->nullable();
-            $table->string('password', 255)->nullable();
-            $table->tinyInteger('type')->nullable();
+            $table->string('Email_address', 255)->unique();
+            $table->string('password', 255);
+            $table->tinyInteger('type')->unsigned();
             $table->rememberToken();
             $table->timestamps();
         });

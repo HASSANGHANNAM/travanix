@@ -13,14 +13,19 @@ return new class extends Migration
     {
         Schema::create('favorite', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('type')->nullable();
-            $table->integer('favorite_id')->nullable();
             $table->unsignedBigInteger('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourist');
+            $table->unsignedBigInteger('hotel_id')->nullable();
+            $table->foreign('hotel_id')->references('id')->on('hotel');
+            $table->unsignedBigInteger('resturant_id')->nullable();
+            $table->foreign('resturant_id')->references('id')->on('resturant');
+            $table->unsignedBigInteger('attraction_activity_id')->nullable();
+            $table->foreign('attraction_activity_id')->references('id')->on('attraction_activities');
+            $table->unsignedBigInteger('trip_id')->nullable();
+            $table->foreign('trip_id')->references('id')->on('trip');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
