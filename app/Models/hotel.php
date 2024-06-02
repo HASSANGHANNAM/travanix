@@ -12,4 +12,16 @@ class hotel extends Model
     protected $table = "hotel";
     protected $fillable = ['location_id', 'reviews_about_hotel', 'simple_description_about_hotel', 'hotel_name', 'hotel_class', 'phone_number'];
     public $timestamps = true;
+    public function images()
+    {
+        return $this->hasMany(image::class);
+    }
+    public function location()
+    {
+        return $this->hasOne(location::class);
+    }
+    public function hotel_has_services()
+    {
+        return $this->hasMany(hotel_has_services::class);
+    }
 }

@@ -13,16 +13,10 @@ class locationsController extends Controller
     public function adminCreateCity(Request $request)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $request->validate(
             [
-                "city_name" => "required|string",
-                "nation_id" => "required|inteDeleter"
+                "city_name" => "required|string|unique:city",
+                "nation_id" => "required|integer"
             ]
         );
         $cityData = [
@@ -38,16 +32,10 @@ class locationsController extends Controller
     public function adminUpdateCity(Request $request)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $request->validate([
             "id" => "required|integer",
-            "nation_id" => "required|integer",
-            "city_name" => "required|max:45|string"
+            "nation_id" => "integer",
+            "city_name" => "max:45|string"
         ]);
         $cityData = DB::table('city')->where('id', $request->id)->select('id', 'city_name', 'nation_id')->first();
         if ($cityData == null) {
@@ -56,59 +44,38 @@ class locationsController extends Controller
                 "message" => "city not found "
             ]);
         }
-        $nationId = nation::find($request->nation_id);
-        if ($nationId == null) {
-            return response()->json([
-                "status" => 0,
-                "message" => "nation not found "
-            ]);
+        if (isset($request->city_name)) {
+            if ($cityData->city_name != $request->city_name) {
+                $request->validate([
+                    "city_name" => "unique:city"
+                ]);
+                $update = city::where('id', $request->id)->update(array('city_name' => $request->city_name));
+            }
         }
-        if ($cityData->city_name == $request->city_name && $cityData->nation_id == $request->nation_id) {
-            return response()->json([
-                "status" => 1,
-                "message" => "succes"
-            ]);
-        }
-        if ($cityData->city_name == $request->city_name) {
-            $update = city::where('id', $request->id)->update(array('nation_id' => $nationId['id']));
-            if ($update != 0) {
+        if (isset($request->nation_id)) {
+            $nationId = nation::find($request->nation_id);
+            if ($nationId == null) {
                 return response()->json([
-                    "status" => 1,
-                    "message" => "succes"
+                    "status" => 0,
+                    "message" => "nation not found "
                 ]);
             }
-            return response()->json([
-                "status" => 0,
-                "message" => "not succes"
-            ]);
-        }
-        $request->validate([
-            "city_name" => "unique:city"
-        ]);
-        $update = city::where('id', $request->id)->update(array('city_name' => $request->city_name, 'nation_id' => $nationId['id']));
-        if ($update != 0) {
-            return response()->json([
-                "status" => 1,
-                "message" => "succes"
-            ]);
+            if ($cityData->nation_id != $request->nation_id) {
+
+                $update = city::where('id', $request->id)->update(array('nation_id' => $request->nation_id));
+            }
         }
         return response()->json([
-            "status" => 0,
-            "message" => "not succes"
+            "status" => 1,
+            "message" => "succes"
         ]);
     }
     public function  adminCreateNation(Request $request)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $request->validate(
             [
-                "nation_name" => "required|string"
+                "nation_name" => "required|string|unique:nation"
             ]
         );
         $nationData = [
@@ -123,12 +90,6 @@ class locationsController extends Controller
     public function adminUpdateNation(Request $request)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $request->validate([
             "id" => "required|integer",
             "nation_name" => "required|max:45|string"
@@ -140,36 +101,20 @@ class locationsController extends Controller
                 "message" => "nation not found "
             ]);
         }
-        if ($nationData->nation_name == $request->nation_name) {
-            return response()->json([
-                "status" => 1,
-                "message" => "succes"
+        if ($nationData->nation_name != $request->nation_name) {
+            $request->validate([
+                "nation_name" => "unique:nation"
             ]);
-        }
-        $request->validate([
-            "nation_name" => "unique:nation"
-        ]);
-        $update = nation::where('id', $request->id)->update(array('nation_name' => $request->nation_name));
-        if ($update != 0) {
-            return response()->json([
-                "status" => 1,
-                "message" => "succes"
-            ]);
+            $update = nation::where('id', $request->id)->update(array('nation_name' => $request->nation_name));
         }
         return response()->json([
-            "status" => 0,
-            "message" => "not succes"
+            "status" => 1,
+            "message" => "succes"
         ]);
     }
     public function adminGetCitiesByNation($nation_id)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         if (!isset($nation_id)) {
             return response()->json([
                 "status" => 0,
@@ -186,12 +131,6 @@ class locationsController extends Controller
     public function adminGetAllCities()
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $cities = DB::table('city')->select('id', 'city_name', 'nation_id')->get();
         return response()->json([
             "status" => 1,
@@ -202,12 +141,6 @@ class locationsController extends Controller
     public function adminDeleteCity($id)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         if (!isset($id)) {
             return response()->json([
                 "status" => 0,
@@ -215,7 +148,6 @@ class locationsController extends Controller
             ]);
         }
         $cities = DB::table('city')->where('id', $id)->delete();
-        // dd($cities);
         if ($cities == 0) {
             return response()->json([
                 "status" => 0,
@@ -230,12 +162,6 @@ class locationsController extends Controller
     public function adminDeleteNation($id)
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         if (!isset($id)) {
             return response()->json([
                 "status" => 0,
@@ -259,12 +185,6 @@ class locationsController extends Controller
     public function adminGetAllNations()
     {
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $nations = DB::table('nation')->select('id', 'nation_name')->get();
         return response()->json([
             "status" => 1,
@@ -275,12 +195,6 @@ class locationsController extends Controller
     public function touristGetCitiesByNation($nation_id)
     {
         auth()->user();
-        if (auth()->user()->type == 1) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not tourist"
-            ]);
-        }
         if (!isset($nation_id)) {
             return response()->json([
                 "status" => 0,
@@ -297,12 +211,6 @@ class locationsController extends Controller
     public function touristGetAllCities()
     {
         auth()->user();
-        if (auth()->user()->type == 1) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not tourist"
-            ]);
-        }
         $cities = DB::table('city')->select('id', 'city_name', 'nation_id')->get();
         return response()->json([
             "status" => 1,
@@ -313,12 +221,6 @@ class locationsController extends Controller
     public function touristGetAllNations()
     {
         auth()->user();
-        if (auth()->user()->type == 1) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not tourist"
-            ]);
-        }
         $nations = DB::table('nation')->select('id', 'nation_name')->get();
         return response()->json([
             "status" => 1,

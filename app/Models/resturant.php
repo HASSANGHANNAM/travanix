@@ -12,4 +12,8 @@ class resturant extends Model
     protected $table = "resturant";
     protected $fillable = ['location_id', 'type_of_food', 'resturant_name', 'resturant_class', 'closing_time', 'opining_time', 'descreption', 'phone_number'];
     public $timestamps = true;
+    public function images()
+    {
+        return $this->hasMany(image::class);
+    }
 }

@@ -14,40 +14,128 @@ class favoriteController extends Controller
     {
         auth()->user();
         $favoriteData = $request->validate([
-            "type" => "required|integer",
-            "favorite_id" => "required|integer",
+            "resturant_id" => "integer",
+            "hotel_id" => "integer",
+            "attraction_activity_id" => "integer",
+            "trip_id" => "integer",
         ]);
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
-        $chekeFavorite = DB::table('favorite')->where(
-            [
-                ['tourist_id', '=', $touristId->id],
-                ['type', '=',  $request->type],
-                ['favorite_id', '=',  $request->favorite_id]
-            ]
-        )->first();
-        if ($chekeFavorite == null) {
-            $favoritePut = [
-                "tourist_id" =>  $touristId->id,
-                "type" => $request->type,
-                "favorite_id" => $request->favorite_id
-            ];
-            $putFavorite = favorite::create($favoritePut);
+        if (isset($request->resturant_id)) {
+            $chekeFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['resturant_id', '=',  $request->resturant_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $favoritePut = [
+                    "tourist_id" =>  $touristId->id,
+                    "resturant_id" => $request->resturant_id
+                ];
+                $putFavorite = favorite::create($favoritePut);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put in favorite"
+                ]);
+            }
+            $deleteFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['resturant_id', '=',  $request->resturant_id]
+                ]
+            )->delete();
             return response()->json([
                 "status" => 1,
-                "message" => "succes put in favorite"
+                "message" => "succes delete from favorite"
             ]);
         }
-        $deleteFavorite = DB::table('favorite')->where(
-            [
-                ['tourist_id', '=', $touristId->id],
-                ['type', '=',  $request->type],
-                ['favorite_id', '=',  $request->favorite_id]
-            ]
-        )->delete();
-        return response()->json([
-            "status" => 1,
-            "message" => "succes delete from favorite"
-        ]);
+        if (isset($request->hotel_id)) {
+            $chekeFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['hotel_id', '=',  $request->hotel_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $favoritePut = [
+                    "tourist_id" =>  $touristId->id,
+                    "hotel_id" => $request->hotel_id
+                ];
+                $putFavorite = favorite::create($favoritePut);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put in favorite"
+                ]);
+            }
+            $deleteFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['hotel_id', '=',  $request->hotel_id]
+                ]
+            )->delete();
+            return response()->json([
+                "status" => 1,
+                "message" => "succes delete from favorite"
+            ]);
+        }
+        if (isset($request->attraction_activity_id)) {
+            $chekeFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $favoritePut = [
+                    "tourist_id" =>  $touristId->id,
+                    "attraction_activity_id" => $request->attraction_activity_id
+                ];
+                $putFavorite = favorite::create($favoritePut);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put in favorite"
+                ]);
+            }
+            $deleteFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                ]
+            )->delete();
+            return response()->json([
+                "status" => 1,
+                "message" => "succes delete from favorite"
+            ]);
+        }
+        if (isset($request->trip_id)) {
+            $chekeFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $favoritePut = [
+                    "tourist_id" =>  $touristId->id,
+                    "trip_id" => $request->trip_id
+                ];
+                $putFavorite = favorite::create($favoritePut);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put in favorite"
+                ]);
+            }
+            $deleteFavorite = DB::table('favorite')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->delete();
+            return response()->json([
+                "status" => 1,
+                "message" => "succes delete from favorite"
+            ]);
+        }
     }
     public function touristGetAllFavorite()
     {

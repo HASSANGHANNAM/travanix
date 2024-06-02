@@ -12,4 +12,8 @@ class location extends Model
     protected $table = "location";
     protected $fillable = ['address', 'coordinate_x', 'coordinate_y', 'city_id'];
     public $timestamps = true;
+    public function hotel()
+    {
+        return $this->belongsTo(hotel::class);
+    }
 }

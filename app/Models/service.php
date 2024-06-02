@@ -12,4 +12,12 @@ class service extends Model
     protected $table = "service";
     protected $fillable = ['service'];
     public $timestamps = true;
+    public function hotels()
+    {
+        return $this->belongsToMany(hotel::class);
+    }
+    public function hotel_has_services()
+    {
+        return $this->belongsToMany(hotel_has_services::class);
+    }
 }

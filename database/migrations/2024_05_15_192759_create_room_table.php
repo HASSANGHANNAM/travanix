@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('size_of_bed')->nullable();
             $table->integer('capacity_room')->unsigned();
             $table->float('price_room')->unsigned();
-            $table->dateTime('start_reservation');
-            $table->dateTime('end_reservation');
+            $table->dateTime('start_reservation')->nullable();
+            $table->dateTime('end_reservation')->nullable();
             $table->string('available_services', 255)->nullable();
             $table->unsignedBigInteger('hotel_id');
             $table->foreign('hotel_id')->references('id')->on('hotel');

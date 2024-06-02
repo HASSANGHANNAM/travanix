@@ -12,4 +12,8 @@ class attraction_activity extends Model
     protected $table = "attraction_activities";
     protected $fillable = ['attraction_activity_name', 'opening_time', 'closing_time', 'description', 'location_id'];
     public $timestamps = true;
+    public function images()
+    {
+        return $this->hasMany(image::class);
+    }
 }

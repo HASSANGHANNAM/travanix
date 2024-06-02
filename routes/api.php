@@ -32,6 +32,12 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('/touristGetAllCities', [locationsController::class, 'touristGetAllCities']);
     Route::get('/touristGetCitiesByNation/{nation_id}', [locationsController::class, 'touristGetCitiesByNation']);
     Route::get('/touristGetAllNations', [locationsController::class, 'touristGetAllNations']);
+    Route::get('/touristGetHotels', [hotelController::class, 'touristGetHotels']);
+    Route::get('/touristGetResturants', [resturantController::class, 'touristGetResturants']);
+    Route::get('/touristGetAttraction_activites', [attraction_activityController::class, 'touristGetAttraction_activites']);
+    Route::get('/touristGetHotelById/{id}', [hotelController::class, 'touristGetHotelById']);
+    Route::get('/touristGetResturantById/{id}', [resturantController::class, 'touristGetResturantById']);
+    Route::get('/touristGetAttraction_activiteById/{id}', [attraction_activityController::class, 'touristGetAttraction_activiteById']);
 
 
     Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);
@@ -64,7 +70,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::put('/Admin/adminUpdateCity', [locationsController::class, 'adminUpdateCity']);
     Route::put('/Admin/adminUpdateNation', [locationsController::class, 'adminUpdateNation']);
     Route::put('/Admin/adminUpdateHotel', [hotelController::class, 'adminUpdateHotel']);
-    Route::put('/Admin/adminUpdateRooms', [hotelController::class, 'adminUpdateRooms']);
+    Route::put('/Admin/adminUpdateRoom', [hotelController::class, 'adminUpdateRoom']);
     Route::put('/Admin/adminUpdateResturant', [resturantController::class, 'adminUpdateResturant']);
     Route::put('/Admin/adminUpdateAttraction_activity', [attraction_activityController::class, 'adminUpdateAttraction_activity']);
     Route::put('/Admin/adminUpdateTrip', [tripController::class, 'adminUpdateTrip']);
@@ -72,7 +78,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::delete('/Admin/adminDeleteNation/{id}', [locationsController::class, 'adminDeleteNation']);
     Route::delete('/Admin/adminDeleteCity/{id}', [locationsController::class, 'adminDeleteCity']);
     Route::delete('/Admin/adminDeleteHotel/{id}', [hotelController::class, 'adminDeleteHotel']);
-    Route::delete('/Admin/adminDeleteRoom/{hotel_id}/{room_id}', [hotelController::class, 'adminDeleteRoom']);
+    Route::delete('/Admin/adminDeleteRoom/{room_id}', [hotelController::class, 'adminDeleteRoom']);
     Route::delete('/Admin/adminDeleteResturant/{id}', [resturantController::class, 'adminDeleteResturant']);
     Route::delete('/Admin/adminDeleteAttraction_activity/{id}', [attraction_activityController::class, 'adminDeleteAttraction_activity']);
     Route::delete('/Admin/adminDeleteTrip/{id}', [tripController::class, 'adminDeleteTrip']);

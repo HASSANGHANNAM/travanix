@@ -12,4 +12,12 @@ class hotel_has_services extends Model
     protected $table = "hotel_has_services";
     protected $fillable = ['hotel_id', 'service_id'];
     public $timestamps = true;
+    public function hotel()
+    {
+        return $this->belongsTo(hotel::class);
+    }
+    public function services()
+    {
+        return $this->hasMany(service::class);
+    }
 }
