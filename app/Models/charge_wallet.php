@@ -10,6 +10,6 @@ class charge_wallet extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "charge_wallet";
-    protected $fillable = ['tourist_id', 'charge_code'];
+    protected $fillable = ['tourist_id', 'charge_code', 'status'];
     public $timestamps = true;
 }

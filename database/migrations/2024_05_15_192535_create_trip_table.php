@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('trip', function (Blueprint $table) {
             $table->id();
             $table->float('price_trip')->unsigned();
+            $table->integer('number_of_allSeat')->unsigned();
             $table->text('reviews_about_trip')->nullable();
             $table->string('type_of_trip', 45);
             $table->dateTime('trip_start_time');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('hotel', function (Blueprint $table) {
             $table->id();
-            $table->string('hotel_name', 45);
+            $table->string('hotel_name', 45)->unique();
             $table->string('phone_number', 45);
             $table->text('simple_description_about_hotel');
             $table->float('hotel_class');

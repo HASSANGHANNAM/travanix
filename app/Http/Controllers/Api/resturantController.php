@@ -19,7 +19,7 @@ class resturantController extends Controller
         auth()->user();
         $request->validate(
             [
-                "resturant_name" => "required|max:45",
+                "resturant_name" => "required|max:45|unique:resturant",
                 "type_of_food" => "required|max:255",
                 "address" => "required|max:255",
                 "city_id" => "required",

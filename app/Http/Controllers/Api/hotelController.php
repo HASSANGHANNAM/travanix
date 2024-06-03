@@ -26,7 +26,7 @@ class hotelController extends Controller
         auth()->user();
         $request->validate(
             [
-                "hotel_name" => "required|max:45",
+                "hotel_name" => "required|max:45|unique:hotel",
                 "simple_description_about_hotel" => "required",
                 "reviews_about_hotel" => "required",
                 "hotel_class" => "required",
@@ -242,6 +242,16 @@ class hotelController extends Controller
             "status" => 1,
             "message" => "hotel get",
             "data" => $data
+        ]);
+    }
+    public function adminGetServices()
+    {
+        auth()->user();
+        $services = DB::table('service')->select('id', 'service')->get();
+        return response()->json([
+            "status" => 1,
+            "message" => "services",
+            "data" => $services
         ]);
     }
 

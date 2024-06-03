@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('city', function (Blueprint $table) {
             $table->id();
-            $table->string('city_name', 45);
+            $table->string('city_name', 45)->unique();
             $table->unsignedBigInteger('nation_id');
             $table->foreign('nation_id')->references('id')->on('nation');
             $table->timestamps();

@@ -20,7 +20,7 @@ class attraction_activityController extends Controller
         //TODO: validate time
         $request->validate(
             [
-                "attraction_activity_name" => "required|max:45",
+                "attraction_activity_name" => "required|max:45|unique:attraction_activities",
                 "opening_time" => "required",
                 "closing_time" => "required",
                 "description" => "required",

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('charge_wallet', function (Blueprint $table) {
             $table->id();
             $table->string('charge_code');
+            $table->tinyInteger('status');
             $table->unsignedBigInteger('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourist');
             $table->timestamps();

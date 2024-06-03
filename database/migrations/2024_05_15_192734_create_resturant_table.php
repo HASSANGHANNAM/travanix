@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('resturant', function (Blueprint $table) {
             $table->id();
-            $table->string('resturant_name', 45);
+            $table->string('resturant_name', 45)->unique();
             $table->string('phone_number', 45);
             $table->string('descreption', 255);
             $table->time('opining_time');
