@@ -34,8 +34,8 @@ class attraction_activityController extends Controller
         $locationData = [
             'city_id' => $request->city_id,
             'address' => $request->address,
-            'coordinate_x' => $request->city_id,
-            'coordinate_y' => $request->city_id
+            'coordinate_x' => $request->coordinate_x,
+            'coordinate_y' => $request->coordinate_y
         ];
         $location = location::create($locationData);
         $attraction_activityData = [
