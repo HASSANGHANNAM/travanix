@@ -311,7 +311,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "4|W0FI1D1d5XSBeeDB6uHJDczyx9rSb9jfJki3RH6R4e3f97e2",
+											"value": "3|rNv9T2Ai6Y6QY2GGuKf9WGqyzYoFB18zY4s0llMPa48dcccd",
 											"type": "string"
 										}
 									]
@@ -320,7 +320,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n             \r\n             //\"hotel_id\":1\r\n            // \"resturant_id\":1,\r\n            // \"attraction_activity_id\":1,\r\n            \"trip_id\":1\r\n}",
+									"raw": "{\r\n             \r\n             \"hotel_id\":2\r\n            // \"resturant_id\":1,\r\n            // \"attraction_activity_id\":1,\r\n            // \"trip_id\":1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -331,6 +331,30 @@
 									"raw": "{{url}}touristPutDeleteFavorite",
 									"host": [
 										"{{url}}touristPutDeleteFavorite"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristGetAllFavorite",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "3|rNv9T2Ai6Y6QY2GGuKf9WGqyzYoFB18zY4s0llMPa48dcccd",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}touristGetAllFavorite",
+									"host": [
+										"{{url}}touristGetAllFavorite"
 									]
 								}
 							},

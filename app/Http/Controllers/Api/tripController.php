@@ -211,7 +211,6 @@ class tripController extends Controller
             })->all(),
             "favorite" => $fav,
             "number_of_seats_available" => $number_of_seats_available
-
         ];
         return response()->json([
             "status" => 1,
