@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('phone_number', 45);
             $table->text('simple_description_about_hotel');
             $table->float('hotel_class');
-            $table->text('reviews_about_hotel')->nullable();
             $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')->references('id')->on('location');
             $table->timestamps();

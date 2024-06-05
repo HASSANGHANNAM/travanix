@@ -10,7 +10,7 @@ class hotel extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "hotel";
-    protected $fillable = ['location_id', 'reviews_about_hotel', 'simple_description_about_hotel', 'hotel_name', 'hotel_class', 'phone_number'];
+    protected $fillable = ['location_id', 'simple_description_about_hotel', 'hotel_name', 'hotel_class', 'phone_number'];
     public $timestamps = true;
     public function images()
     {

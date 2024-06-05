@@ -52,6 +52,7 @@ class citySeeder extends Seeder
             ['city_name' => "Phoenix", 'nation_id' => 3],
             ['city_name' => "San Antonio", 'nation_id' => 3],
             ['city_name' => "San Diego", 'nation_id' => 3],
+            ['city_name' => "Dubai", 'nation_id' => 225],
         ];
         foreach ($cities as $city) {
             city::create($city);

@@ -50,6 +50,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::post('/touristChargeCode', [charge_walletController::class, 'touristChargeCode']);
     Route::post('/touristPutComment', [rateAndCommentController::class, 'touristPutComment']);
     Route::post('/touristPutRate', [rateAndCommentController::class, 'touristPutRate']);
+    Route::post('/touristReserveTrip', [tripController::class, 'touristReserveTrip']);
 
 
 

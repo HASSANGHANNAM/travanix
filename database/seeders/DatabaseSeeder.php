@@ -26,5 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(nationSeeder::class);
         $this->call(citySeeder::class);
         $this->call(servicesSeeder::class);
+        $this->call(hotelSeeder::class);
     }
 }

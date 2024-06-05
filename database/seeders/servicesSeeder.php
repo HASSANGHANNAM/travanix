@@ -17,7 +17,11 @@ class servicesSeeder extends Seeder
     {
         $services = [
             ['service' => "Free wifi"],
-            ['service' => "good breakfast"],
+            ['service' => "Parking free"],
+            ['service' => "Buffer dinner"],
+            ['service' => "Breakfast"],
+            ['service' => "Credit Cards"],
+            ['service' => "NFC mobile payments"]
         ];
         foreach ($services as $service) {
             service::create($service);

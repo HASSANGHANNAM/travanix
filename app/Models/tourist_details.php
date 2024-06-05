@@ -10,6 +10,6 @@ class tourist_details extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "tourist_details";
-    protected $fillable = ['age', 'name', 'user_has_trip_id'];
+    protected $fillable = ['age', 'name', 'tourist_has_trip_id'];
     public $timestamps = true;
 }
