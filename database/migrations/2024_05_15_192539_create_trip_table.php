@@ -17,8 +17,11 @@ return new class extends Migration
             $table->float('price_trip')->unsigned();
             $table->integer('number_of_allSeat')->unsigned();
             $table->string('type_of_trip', 45);
+            $table->text('description');
             $table->dateTime('trip_start_time');
             $table->dateTime('trip_end_time');
+            $table->unsignedBigInteger('location_id');
+            $table->foreign('location_id')->references('id')->on('location');
             $table->timestamps();
         });
     }

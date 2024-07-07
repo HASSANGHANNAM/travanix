@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\city;
+use App\Models\comment;
 use App\Models\favorite;
 use App\Models\hotel;
 use App\Models\hotel_has_services;
@@ -12,8 +13,10 @@ use App\Models\location;
 use App\Models\room;
 use App\Models\image_hotel;
 use App\Models\nation;
+use App\Models\rate;
 use App\Models\service;
 use App\Models\tourist;
+use App\Models\trip_has_place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -21,9 +24,15 @@ use IlluminateSupportFacadesStorage;
 
 class hotelController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('check.admin');
+    // }
+
     public function adminCreateHotel(Request $request)
     {
         auth()->user();
+        dd(auth()->user()->Email_address);
         $request->validate(
             [
                 "hotel_name" => "required|max:45|unique:hotel",
@@ -192,9 +201,41 @@ class hotelController extends Controller
             "message" => "room was updated"
         ]);
     }
-    // TODO:
     public function adminDeleteHotel($id)
     {
+        auth()->user();
+        if (!isset($id)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel id not isset"
+            ]);
+        }
+        $find = hotel::find($id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel not found"
+            ]);
+        }
+        $trip = trip_has_place::where('hotel_id', $id)->count();
+        if ($trip != 0) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel was exist in trip you cannot delete it"
+            ]);
+        }
+        $deleteimage = image::where('hotel_id', $id)->delete();
+        $deleteservice = hotel_has_services::where('hotel_id', $id)->delete();
+        $deleterate = rate::where('hotel_id', $id)->delete();
+        $deletecomment = comment::where('hotel_id', $id)->delete();
+        $deletefavorite = favorite::where('hotel_id', $id)->delete();
+        $hotel = hotel::where('id', $id)->first();
+        $deletehotel = hotel::where('id', $id)->delete();
+        $deletelocation = location::where('id', $hotel['location_id'])->delete();
+        return response()->json([
+            "status" => 1,
+            "message" => "hotel was deleted"
+        ]);
     }
     // TODO:
     public function adminUpdateHotel()
@@ -250,8 +291,6 @@ class hotelController extends Controller
             "data" => $services
         ]);
     }
-
-
     public function touristGetHotels()
     {
         auth()->user();

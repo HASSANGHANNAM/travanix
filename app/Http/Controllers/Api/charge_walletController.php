@@ -62,6 +62,13 @@ class charge_walletController extends Controller
                 "wallet" => "regex:/^\d*(\.\d{2})?$/",
             ]
         );
+        $find = charge_wallet::find($request->id);
+        if ($find['status'] != 1) {
+            return response()->json([
+                "status" => 0,
+                "message" => "this request was handler"
+            ]);
+        }
         if ($request->status == false) {
             $update = charge_wallet::where('id', $request->id)->update(array('status' => 3));
             return response()->json([
@@ -74,7 +81,6 @@ class charge_walletController extends Controller
                 "wallet" => "required",
             ]
         );
-        $find = charge_wallet::find($request->id);
         $update = charge_wallet::where('id', $request->id)->update(array('status' => 2));
         $oldWallet = DB::table('tourist')->select('wallet')->where('id', $find->tourist_id)->first();
         $updateWallet = tourist::where('id', $find->tourist_id)->update(array('wallet' => ($request->wallet + $oldWallet->wallet)));

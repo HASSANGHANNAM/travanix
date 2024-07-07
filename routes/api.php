@@ -35,14 +35,16 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('/touristGetCitiesByNation/{nation_id}', [locationsController::class, 'touristGetCitiesByNation']);
     Route::get('/touristGetAllNations', [locationsController::class, 'touristGetAllNations']);
     Route::get('/touristGetHotels', [hotelController::class, 'touristGetHotels']);
-    Route::get('/touristGetResturants', [resturantController::class, 'touristGetResturants']);
-    Route::get('/touristGetAttraction_activites', [attraction_activityController::class, 'touristGetAttraction_activites']);
     Route::get('/touristGetHotelById/{id}', [hotelController::class, 'touristGetHotelById']);
+    Route::get('/touristGetResturants', [resturantController::class, 'touristGetResturants']);
     Route::get('/touristGetResturantById/{id}', [resturantController::class, 'touristGetResturantById']);
+    Route::get('/touristGetAttraction_activites', [attraction_activityController::class, 'touristGetAttraction_activites']);
     Route::get('/touristGetAttraction_activiteById/{id}', [attraction_activityController::class, 'touristGetAttraction_activiteById']);
     Route::get('/touristGetTrips', [tripController::class, 'touristGetTrips']);
+    Route::get('/touristGetTripsReserved', [tripController::class, 'touristGetTripsReserved']);
     Route::get('/touristGetTripById/{id}', [tripController::class, 'touristGetTripById']);
     Route::get('/touristGetAllFavorite', [favoriteController::class, 'touristGetAllFavorite']);
+    Route::get('/touristGetAllRateAndComment', [rateAndCommentController::class, 'touristGetAllRateAndComment']);
 
     Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);
     Route::post('/touristUpdateProfile', [MainController::class, 'touristUpdateProfile']);
@@ -54,13 +56,22 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
 
 
 
+    Route::put('/touristUpdateReserveTrip', [tripController::class, 'touristUpdateReserveTrip']);
+
+
+
+    Route::delete('/touristDeleteEmail', [MainController::class, 'touristDeleteEmail']);
+    Route::delete('/touristDeleteReserveTrip/{id}', [tripController::class, 'touristDeleteReserveTrip']);
+
+
+
     Route::get('/Admin/adminLogout', [MainController::class, 'logout']);
     Route::get('/Admin/adminGetServices', [hotelController::class, 'adminGetServices']);
     Route::get('/Admin/adminGetHotels', [hotelController::class, 'adminGetHotels']);
-    Route::get('/Admin/adminGetResturants', [resturantController::class, 'adminGetResturants']);
-    Route::get('/Admin/adminGetAttraction_activites', [attraction_activityController::class, 'adminGetAttraction_activites']);
     Route::get('/Admin/adminGetHotelById/{id}', [hotelController::class, 'adminGetHotelById']);
+    Route::get('/Admin/adminGetResturants', [resturantController::class, 'adminGetResturants']);
     Route::get('/Admin/adminGetResturantById/{id}', [resturantController::class, 'adminGetResturantById']);
+    Route::get('/Admin/adminGetAttraction_activites', [attraction_activityController::class, 'adminGetAttraction_activites']);
     Route::get('/Admin/adminGetAttraction_activiteById/{id}', [attraction_activityController::class, 'adminGetAttraction_activiteById']);
     Route::get('/Admin/adminGetAllCities', [locationsController::class, 'adminGetAllCities']);
     Route::get('/Admin/adminGetCitiesByNation/{nation_id}', [locationsController::class, 'adminGetCitiesByNation']);
@@ -68,7 +79,6 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('/Admin/adminGetAllCharges', [charge_walletController::class, 'adminGetAllCharges']);
     Route::get('/Admin/adminGetTrips', [tripController::class, 'adminGetTrips']);
     Route::get('/Admin/adminGetTripById/{id}', [tripController::class, 'adminGetTripById']);
-
 
     Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
     Route::post('/Admin/adminCreateRooms', [hotelController::class, 'adminCreateRooms']);
@@ -96,3 +106,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::delete('/Admin/adminDeleteAttraction_activity/{id}', [attraction_activityController::class, 'adminDeleteAttraction_activity']);
     Route::delete('/Admin/adminDeleteTrip/{id}', [tripController::class, 'adminDeleteTrip']);
 });
+
+// Route::group(["middleware" => ["auth:sanctum"], "middleware" => ["check.admin"]], function () {
+//     // Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
+// });

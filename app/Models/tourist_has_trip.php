@@ -12,4 +12,8 @@ class tourist_has_trip extends Model
     protected $table = "tourist_has_trip";
     protected $fillable = ['tourist_id', 'trip_id', 'payment_status', 'number_of_seat', 'phone_number'];
     public $timestamps = true;
+    public function details()
+    {
+        return $this->hasMany(tourist_details::class);
+    }
 }

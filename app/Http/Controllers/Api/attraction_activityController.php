@@ -5,10 +5,13 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\attraction_activity;
 use App\Models\city;
+use App\Models\comment;
+use App\Models\favorite;
 use App\Models\image;
-use App\Models\image_attraction_activities;
 use App\Models\location;
 use App\Models\nation;
+use App\Models\rate;
+use App\Models\trip_has_place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -96,9 +99,40 @@ class attraction_activityController extends Controller
             "data" => $data
         ]);
     }
-    //TODO:
     public function adminDeleteAttraction_activity($id)
     {
+        auth()->user();
+        if (!isset($id)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "attraction_activity id not isset"
+            ]);
+        }
+        $find = attraction_activity::find($id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "attraction_activity not found"
+            ]);
+        }
+        $trip = trip_has_place::where('attraction_activity_id', $id)->count();
+        if ($trip != 0) {
+            return response()->json([
+                "status" => 0,
+                "message" => "attraction_activity was exist in trip you cannot delete it"
+            ]);
+        }
+        $deleteimage = image::where('attraction_activity_id', $id)->delete();
+        $deleterate = rate::where('attraction_activity_id', $id)->delete();
+        $deletecomment = comment::where('attraction_activity_id', $id)->delete();
+        $deletefavorite = favorite::where('attraction_activity_id', $id)->delete();
+        $attraction_activity = attraction_activity::where('id', $id)->first();
+        $deleteattraction_activity = attraction_activity::where('id', $id)->delete();
+        $deletelocation = location::where('id', $attraction_activity['location_id'])->delete();
+        return response()->json([
+            "status" => 1,
+            "message" => "attraction_activity was deleted"
+        ]);
     }
     // FIXME:
     public function adminUpdateAttraction_activity(Request $request)
@@ -112,12 +146,6 @@ class attraction_activityController extends Controller
         // closing_time
         // opening_time
         auth()->user();
-        if (auth()->user()->type == 2) {
-            return response()->json([
-                "status" => 0,
-                "message" => "you are not admin"
-            ]);
-        }
         $request->validate([
             "id" => "required|integer",
             "name" => "required|max:45|string",

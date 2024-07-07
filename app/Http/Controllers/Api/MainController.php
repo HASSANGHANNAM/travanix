@@ -137,8 +137,12 @@ class MainController extends Controller
             ]);
         }
     }
+    public function touristDeleteEmail()
+    {
+    }
     public function adminLogin(Request $request)
     {
+        // dd("fff");
         $request->validate(
             [
                 "Email_address" =>   [

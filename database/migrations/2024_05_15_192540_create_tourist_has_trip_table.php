@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tourist_has_trip', function (Blueprint $table) {
             $table->id();
-            $table->enum("payment_status", ["paid", "unpaid"]);
+            $table->enum("payment_status", ["paid", "unpaid", "wallet", "cash"]);
             $table->string('phone_number', 45);
             $table->integer('number_of_seat')->unsigned();
             $table->unsignedBigInteger('trip_id');

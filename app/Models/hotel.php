@@ -24,4 +24,22 @@ class hotel extends Model
     {
         return $this->hasMany(hotel_has_services::class);
     }
+    public function comments()
+    {
+        return $this->hasMany(comment::class, 'hotel_id');
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(rate::class, 'hotel_id');
+    }
+
+    public function commentsWithRates()
+    {
+        return $this->comments()->join('rates', function ($join) {
+            $join->on('comments.tourist_id', '=', 'rates.tourist_id')
+                ->where('comments.hotel_id', '=', 'rates.hotel_id');
+            dd($join);
+        });
+    }
 }

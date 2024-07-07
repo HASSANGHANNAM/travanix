@@ -12,4 +12,13 @@ class comment extends Model
     protected $table = "comment";
     protected $fillable = ['attraction_activity_id', 'resturant_id', 'hotel_id', 'comment', 'tourist_id'];
     public $timestamps = true;
+    public function hotel()
+    {
+        return $this->belongsTo(hotel::class, 'hotel_id');
+    }
+
+    public function rate()
+    {
+        return $this->hasOne(rate::class, 'tourist_id', 'tourist_id');
+    }
 }

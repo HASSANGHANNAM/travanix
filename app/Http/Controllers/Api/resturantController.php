@@ -4,11 +4,15 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\city;
+use App\Models\comment;
+use App\Models\favorite;
 use App\Models\image;
 use App\Models\image_resturant;
 use App\Models\location;
 use App\Models\nation;
+use App\Models\rate;
 use App\Models\resturant;
+use App\Models\trip_has_place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -104,9 +108,40 @@ class resturantController extends Controller
             "data" => $data
         ]);
     }
-    //TODO:
     public function adminDeleteResturant($id)
     {
+        auth()->user();
+        if (!isset($id)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "resturant id not isset"
+            ]);
+        }
+        $find = resturant::find($id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "resturant not found"
+            ]);
+        }
+        $trip = trip_has_place::where('resturant_id', $id)->count();
+        if ($trip != 0) {
+            return response()->json([
+                "status" => 0,
+                "message" => "resturant was exist in trip you cannot delete it"
+            ]);
+        }
+        $deleteimage = image::where('resturant_id', $id)->delete();
+        $deleterate = rate::where('resturant_id', $id)->delete();
+        $deletecomment = comment::where('resturant_id', $id)->delete();
+        $deletefavorite = favorite::where('resturant_id', $id)->delete();
+        $resturant = resturant::where('id', $id)->first();
+        $deleteresturant = resturant::where('id', $id)->delete();
+        $deletelocation = location::where('id', $resturant['location_id'])->delete();
+        return response()->json([
+            "status" => 1,
+            "message" => "resturant was deleted"
+        ]);
     }
     //TODO:
     public function adminUpdateResturant()

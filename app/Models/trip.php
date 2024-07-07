@@ -10,7 +10,7 @@ class trip extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "trip";
-    protected $fillable = ['trip_name', 'type_of_trip',  'price_trip', 'trip_end_time', 'trip_start_time', 'number_of_allSeat'];
+    protected $fillable = ['trip_name', 'type_of_trip',  'price_trip', 'trip_end_time', 'trip_start_time', 'number_of_allSeat', 'location_id', 'description'];
     public $timestamps = true;
     public function places()
     {
