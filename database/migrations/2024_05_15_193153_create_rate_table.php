@@ -22,6 +22,8 @@ return new class extends Migration
             $table->foreign('attraction_activities_id')->references('id')->on('attraction_activities');
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->foreign('resturant_id')->references('id')->on('resturant');
+            $table->unsignedBigInteger('trip_id')->nullable();
+            $table->foreign('trip_id')->references('id')->on('trip');
             $table->timestamps();
         });
     }

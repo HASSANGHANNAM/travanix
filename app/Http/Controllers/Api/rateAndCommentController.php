@@ -21,6 +21,7 @@ class rateAndCommentController extends Controller
             "resturant_id" => "integer",
             "hotel_id" => "integer",
             "attraction_activity_id" => "integer",
+            "trip_id" => "integer",
             "rate" => "required"
         ]);
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
@@ -115,6 +116,36 @@ class rateAndCommentController extends Controller
                 "message" => "succes you override your rate"
             ]);
         }
+        if (isset($request->trip_id)) {
+            $chekeFavorite = DB::table('rate')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $ratePut = [
+                    "tourist_id" =>  $touristId->id,
+                    "trip_id" => $request->trip_id,
+                    "rate" => $request->rate
+                ];
+                $putRate = rate::create($ratePut);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put your rate"
+                ]);
+            }
+            $overrideFavorite = DB::table('rate')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->update(array('rate' => $request->rate));
+            return response()->json([
+                "status" => 1,
+                "message" => "succes you override your rate"
+            ]);
+        }
         return response()->json([
             "status" => 0,
             "message" => "i want place id"
@@ -129,43 +160,128 @@ class rateAndCommentController extends Controller
                 "resturant_id" => "integer",
                 "hotel_id" => "integer",
                 "attraction_activity_id" => "integer",
+                "trip_id" => "integer",
             ]
         );
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
         if (isset($request->resturant_id)) {
-            $putComment = [
-                "tourist_id" => $touristId->id,
-                "resturant_id" => $request->resturant_id,
-                "comment" => $request->comment,
-            ];
-            $createcomment = comment::create($putComment);
+            $chekeFavorite = DB::table('rate')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['resturant_id', '=',  $request->resturant_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $putComment = [
+                    "tourist_id" => $touristId->id,
+                    "resturant_id" => $request->resturant_id,
+                    "comment" => $request->comment,
+                ];
+                $createcomment = comment::create($putComment);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put your comment"
+                ]);
+            }
+            $overrideFavorite = DB::table('comment')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['resturant_id', '=',  $request->resturant_id]
+                ]
+            )->update(array('comment' => $request->comment));
             return response()->json([
                 "status" => 1,
-                "message" => "succes put your comment"
+                "message" => "succes you override your comment"
             ]);
         }
         if (isset($request->hotel_id)) {
-            $putComment = [
-                "tourist_id" => $touristId->id,
-                "hotel_id" => $request->hotel_id,
-                "comment" => $request->comment,
-            ];
-            $createcomment = comment::create($putComment);
+            $chekeFavorite = DB::table('rate')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['hotel_id', '=',  $request->hotel_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $putComment = [
+                    "tourist_id" => $touristId->id,
+                    "hotel_id" => $request->hotel_id,
+                    "comment" => $request->comment,
+                ];
+                $createcomment = comment::create($putComment);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put your comment"
+                ]);
+            }
+            $overrideFavorite = DB::table('comment')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['hotel_id', '=',  $request->hotel_id]
+                ]
+            )->update(array('comment' => $request->comment));
             return response()->json([
                 "status" => 1,
-                "message" => "succes put your comment"
+                "message" => "succes you override your comment"
             ]);
         }
         if (isset($request->attraction_activity_id)) {
-            $putComment = [
-                "tourist_id" => $touristId->id,
-                "attraction_activity_id" => $request->attraction_activity_id,
-                "comment" => $request->comment,
-            ];
-            $createcomment = comment::create($putComment);
+            $chekeFavorite = DB::table('rate')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $putComment = [
+                    "tourist_id" => $touristId->id,
+                    "attraction_activity_id" => $request->attraction_activity_id,
+                    "comment" => $request->comment,
+                ];
+                $createcomment = comment::create($putComment);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put your comment"
+                ]);
+            }
+            $overrideFavorite = DB::table('comment')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                ]
+            )->update(array('comment' => $request->comment));
             return response()->json([
                 "status" => 1,
-                "message" => "succes put your comment"
+                "message" => "succes you override your comment"
+            ]);
+        }
+        if (isset($request->trip_id)) {
+            $chekeFavorite = DB::table('comment')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->first();
+            if ($chekeFavorite == null) {
+                $putComment = [
+                    "tourist_id" => $touristId->id,
+                    "trip_id" => $request->trip_id,
+                    "comment" => $request->comment,
+                ];
+                $createcomment = comment::create($putComment);
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes put your comment"
+                ]);
+            }
+            $overrideFavorite = DB::table('comment')->where(
+                [
+                    ['tourist_id', '=', $touristId->id],
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->update(array('comment' => $request->comment));
+            return response()->json([
+                "status" => 1,
+                "message" => "succes you override your comment"
             ]);
         }
         return response()->json([

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('comment', function (Blueprint $table) {
             $table->id();
-            $table->string('comment');
+            $table->string('comment', 255);
             $table->unsignedBigInteger('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourist');
             $table->unsignedBigInteger('hotel_id')->nullable();
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->foreign('resturant_id')->references('id')->on('resturant');
             $table->unsignedBigInteger('attraction_activity_id')->nullable();
             $table->foreign('attraction_activity_id')->references('id')->on('attraction_activities');
+            $table->unsignedBigInteger('trip_id')->nullable();
+            $table->foreign('trip_id')->references('id')->on('trip');
             $table->timestamps();
         });
     }

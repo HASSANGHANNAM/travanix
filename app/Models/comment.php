@@ -10,7 +10,7 @@ class comment extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "comment";
-    protected $fillable = ['attraction_activity_id', 'resturant_id', 'hotel_id', 'comment', 'tourist_id'];
+    protected $fillable = ['attraction_activity_id', 'resturant_id', 'hotel_id', 'trip_id', 'comment', 'tourist_id'];
     public $timestamps = true;
     public function hotel()
     {

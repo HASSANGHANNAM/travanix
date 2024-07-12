@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckAdminApi
+class CheckTouristApi
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,6 @@ class CheckAdminApi
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (!auth()->user()) {
             return response()->json(
                 [
@@ -27,13 +26,13 @@ class CheckAdminApi
             );
         }
         if (auth()->check()) {
-            if (auth()->user()->type == 1) {
+            if (auth()->user()->type == 2) {
                 return $next($request);
             }
             return response()->json(
                 [
                     'status' => 0,
-                    'message' => 'your token for tourist but this api to admin'
+                    'message' => 'your token for admin but this api to tourist'
                 ]
             );
         }

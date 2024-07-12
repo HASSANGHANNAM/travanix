@@ -22,13 +22,15 @@ use App\Http\Controllers\api\tripController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+// Route::group(["middleware" => ["auth:sanctum"]], function () {
+// });
 
 Route::post('/touristRegester', [MainController::class, 'touristRegester']);
 Route::post('/touristLogin', [MainController::class, 'touristLogin']);
 Route::post('/touristCheckEmailPassword', [MainController::class, 'touristCheckEmailPassword']);
 Route::post('/Admin/adminLogin', [MainController::class, 'adminLogin']);
 
-Route::group(["middleware" => ["auth:sanctum"]], function () {
+Route::group(['middleware' => ['auth:sanctum', 'check.tourist']], function () {
     Route::get('/touristLogout', [MainController::class, 'logout']);
     Route::get('/touristProfile', [MainController::class, 'touristProfile']);
     Route::get('/touristGetAllCities', [locationsController::class, 'touristGetAllCities']);
@@ -62,9 +64,8 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
 
     Route::delete('/touristDeleteEmail', [MainController::class, 'touristDeleteEmail']);
     Route::delete('/touristDeleteReserveTrip/{id}', [tripController::class, 'touristDeleteReserveTrip']);
-
-
-
+});
+Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::get('/Admin/adminLogout', [MainController::class, 'logout']);
     Route::get('/Admin/adminGetServices', [hotelController::class, 'adminGetServices']);
     Route::get('/Admin/adminGetHotels', [hotelController::class, 'adminGetHotels']);
@@ -106,7 +107,3 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::delete('/Admin/adminDeleteAttraction_activity/{id}', [attraction_activityController::class, 'adminDeleteAttraction_activity']);
     Route::delete('/Admin/adminDeleteTrip/{id}', [tripController::class, 'adminDeleteTrip']);
 });
-
-// Route::group(["middleware" => ["auth:sanctum"], "middleware" => ["check.admin"]], function () {
-//     // Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
-// });
