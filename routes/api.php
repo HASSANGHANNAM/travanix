@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth:sanctum', 'check.tourist']], function () {
     Route::get('/touristGetTripById/{id}', [tripController::class, 'touristGetTripById']);
     Route::get('/touristGetAllFavorite', [favoriteController::class, 'touristGetAllFavorite']);
     Route::get('/touristGetAllRateAndComment', [rateAndCommentController::class, 'touristGetAllRateAndComment']);
+    Route::get('/touristGetAvgRate', [rateAndCommentController::class, 'touristGetAvgRate']);
 
     Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);
     Route::post('/touristUpdateProfile', [MainController::class, 'touristUpdateProfile']);

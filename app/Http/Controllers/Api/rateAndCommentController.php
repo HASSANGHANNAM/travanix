@@ -33,6 +33,11 @@ class rateAndCommentController extends Controller
                     ['resturant_id', '=',  $request->resturant_id]
                 ]
             )->first();
+            $findAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['resturant_id', '=',  $request->resturant_id]
+                ]
+            )->first();
             if ($chekeFavorite == null) {
                 $ratePut = [
                     "tourist_id" =>  $touristId->id,
@@ -40,6 +45,12 @@ class rateAndCommentController extends Controller
                     "rate" => $request->rate
                 ];
                 $putRate = rate::create($ratePut);
+                $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate) / ($findAvgRate->count + 1);
+                $overrideAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['resturant_id', '=',  $request->resturant_id]
+                    ]
+                )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count + 1));
                 return response()->json([
                     "status" => 1,
                     "message" => "succes put your rate"
@@ -51,6 +62,12 @@ class rateAndCommentController extends Controller
                     ['resturant_id', '=',  $request->resturant_id]
                 ]
             )->update(array('rate' => $request->rate));
+            $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate - $chekeFavorite->rate) / ($findAvgRate->count);
+            $overrideAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['resturant_id', '=',  $request->resturant_id]
+                ]
+            )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count));
             return response()->json([
                 "status" => 1,
                 "message" => "succes you override your rate"
@@ -63,6 +80,11 @@ class rateAndCommentController extends Controller
                     ['hotel_id', '=',  $request->hotel_id]
                 ]
             )->first();
+            $findAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['hotel_id', '=',  $request->hotel_id]
+                ]
+            )->first();
             if ($chekeFavorite == null) {
                 $ratePut = [
                     "tourist_id" =>  $touristId->id,
@@ -70,6 +92,12 @@ class rateAndCommentController extends Controller
                     "rate" => $request->rate
                 ];
                 $putRate = rate::create($ratePut);
+                $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate) / ($findAvgRate->count + 1);
+                $overrideAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['hotel_id', '=',  $request->hotel_id]
+                    ]
+                )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count + 1));
                 return response()->json([
                     "status" => 1,
                     "message" => "succes put your rate"
@@ -81,6 +109,12 @@ class rateAndCommentController extends Controller
                     ['hotel_id', '=',  $request->hotel_id]
                 ]
             )->update(array('rate' => $request->rate));
+            $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate - $chekeFavorite->rate) / ($findAvgRate->count);
+            $overrideAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['hotel_id', '=',  $request->hotel_id]
+                ]
+            )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count));
             return response()->json([
                 "status" => 1,
                 "message" => "succes you override your rate"
@@ -93,6 +127,11 @@ class rateAndCommentController extends Controller
                     ['attraction_activity_id', '=',  $request->attraction_activity_id]
                 ]
             )->first();
+            $findAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                ]
+            )->first();
             if ($chekeFavorite == null) {
                 $ratePut = [
                     "tourist_id" =>  $touristId->id,
@@ -100,6 +139,12 @@ class rateAndCommentController extends Controller
                     "rate" => $request->rate
                 ];
                 $putRate = rate::create($ratePut);
+                $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate) / ($findAvgRate->count + 1);
+                $overrideAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                    ]
+                )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count + 1));
                 return response()->json([
                     "status" => 1,
                     "message" => "succes put your rate"
@@ -111,6 +156,12 @@ class rateAndCommentController extends Controller
                     ['attraction_activity_id', '=',  $request->attraction_activity_id]
                 ]
             )->update(array('rate' => $request->rate));
+            $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate - $chekeFavorite->rate) / ($findAvgRate->count);
+            $overrideAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                ]
+            )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count));
             return response()->json([
                 "status" => 1,
                 "message" => "succes you override your rate"
@@ -123,6 +174,11 @@ class rateAndCommentController extends Controller
                     ['trip_id', '=',  $request->trip_id]
                 ]
             )->first();
+            $findAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->first();
             if ($chekeFavorite == null) {
                 $ratePut = [
                     "tourist_id" =>  $touristId->id,
@@ -130,6 +186,12 @@ class rateAndCommentController extends Controller
                     "rate" => $request->rate
                 ];
                 $putRate = rate::create($ratePut);
+                $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate) / ($findAvgRate->count + 1);
+                $overrideAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['trip_id', '=',  $request->trip_id]
+                    ]
+                )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count + 1));
                 return response()->json([
                     "status" => 1,
                     "message" => "succes put your rate"
@@ -141,6 +203,12 @@ class rateAndCommentController extends Controller
                     ['trip_id', '=',  $request->trip_id]
                 ]
             )->update(array('rate' => $request->rate));
+            $newAvg = ($findAvgRate->avg * $findAvgRate->count + $request->rate - $chekeFavorite->rate) / ($findAvgRate->count);
+            $overrideAvgRate = DB::table('avg_rate')->where(
+                [
+                    ['trip_id', '=',  $request->trip_id]
+                ]
+            )->update(array('avg' => $newAvg, 'count' => $findAvgRate->count));
             return response()->json([
                 "status" => 1,
                 "message" => "succes you override your rate"
@@ -449,6 +517,118 @@ class rateAndCommentController extends Controller
                     "status" => 1,
                     "message" => "succes   ",
                     "data" => $data
+                ]);
+            }
+            return response()->json([
+                "status" => 0,
+                "message" => "attraction_activity_id must be integer"
+            ]);
+        }
+        return response()->json([
+            "status" => 0,
+            "message" => "you send more than parameter or not send it"
+        ]);
+    }
+    public function  touristGetAvgRate(Request $request)
+    {
+        auth()->user();
+        $hotelId = $request->input('hotel_id');
+        $attractionId = $request->input('attraction_activity_id');
+        $restaurantId = $request->input('restaurant_id');
+        $tripId = $request->input('trip_id');
+        if (isset($hotelId) & !isset($restaurantId) & !isset($tripId) & !isset($attractionId)) {
+            if (is_numeric($hotelId)) {
+                $hotel = hotel::find($hotelId);
+                if ($hotel == null) {
+                    return response()->json([
+                        "status" => 0,
+                        "message" => "hotel not found"
+                    ]);
+                }
+                $findAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['hotel_id', '=',  $request->hotel_id]
+                    ]
+                )->first();
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes   ",
+                    "avg_rate" => $findAvgRate->avg
+                ]);
+            }
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel_id must be integer"
+            ]);
+        }
+        if (!isset($hotelId) & isset($restaurantId) & !isset($tripId) & !isset($attractionId)) {
+            if (is_numeric($restaurantId)) {
+                $resturant = resturant::find($restaurantId);
+                if ($resturant == null) {
+                    return response()->json([
+                        "status" => 0,
+                        "message" => "resturant not found"
+                    ]);
+                }
+                $findAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['resturant_id', '=',  $request->resturant_id]
+                    ]
+                )->first();
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes   ",
+                    "avg_rate" => $findAvgRate->avg
+                ]);
+            }
+            return response()->json([
+                "status" => 0,
+                "message" => "resturant_id must be integer"
+            ]);
+        }
+        if (!isset($hotelId) & !isset($restaurantId) & isset($tripId) & !isset($attractionId)) {
+            if (is_numeric($tripId)) {
+                $trip = trip::find($tripId);
+                if ($trip == null) {
+                    return response()->json([
+                        "status" => 0,
+                        "message" => "trip not found"
+                    ]);
+                }
+                $findAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['trip_id', '=',  $request->trip_id]
+                    ]
+                )->first();
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes   ",
+                    "avg_rate" => $findAvgRate->avg
+                ]);
+            }
+            return response()->json([
+                "status" => 0,
+                "message" => "trip_id must be integer"
+            ]);
+        }
+        if (!isset($hotelId) & !isset($restaurantId) & !isset($tripId) & isset($attractionId)) {
+            if (is_numeric($attractionId)) {
+                $attraction_activity = attraction_activity::find($attractionId);
+                if ($attraction_activity == null) {
+                    return response()->json([
+                        "status" => 0,
+                        "message" => "attraction_activity not found"
+                    ]);
+                }
+                $findAvgRate = DB::table('avg_rate')->where(
+                    [
+                        ['attraction_activity_id', '=',  $request->attraction_activity_id]
+                    ]
+                )->first();
+                return response()->json([
+                    "status" => 1,
+                    "message" => "succes   ",
+                    "avg_rate" => $findAvgRate->avg
                 ]);
             }
             return response()->json([

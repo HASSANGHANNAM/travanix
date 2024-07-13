@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\avg_rate;
 use App\Models\city;
 use App\Models\favorite;
 use App\Models\location;
@@ -77,6 +78,12 @@ class tripController extends Controller
                 $create_trip_has_place = trip_has_place::create($trip_has_placeData);
             }
         }
+        $rateData = [
+            'trip_id' => $trip->id,
+            'count' => 0,
+            'avg' => 0
+        ];
+        $rate = avg_rate::create($rateData);
         return response()->json([
             "status" => 1,
             "message" => "trip created"
@@ -153,6 +160,7 @@ class tripController extends Controller
             }
             $delete = tourist_has_trip::where('id', $t->id)->delete();
         }
+        $deletetriprate = avg_rate::where('trip_id', $id)->delete();
         $deletetrip = trip::where('id', $id)->delete();
         $deletelocation = location::where('id', $find['location_id']);
         return response()->json([

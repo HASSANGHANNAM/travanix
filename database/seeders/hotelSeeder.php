@@ -7,6 +7,7 @@ use App\Models\hotel_has_services;
 use App\Models\image;
 use App\Models\location;
 use App\Models\service;
+use App\Models\avg_rate;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -96,6 +97,12 @@ class hotelSeeder extends Seeder
                 ];
                 $creatImage = image::create($imageData);
             }
+            $rateData = [
+                'hotel_id' => $createHotel->id,
+                'count' => 0,
+                'avg' => 0
+            ];
+            $rate =avg_rate::create($rateData);
             if (isset($hotel['services'])) {
                 foreach ($hotel['services'] as $service) {
                     if (isset($service['service_id'])) {

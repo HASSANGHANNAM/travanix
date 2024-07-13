@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\avg_rate;
 use App\Models\city;
 use App\Models\comment;
 use App\Models\favorite;
@@ -32,7 +33,7 @@ class hotelController extends Controller
     public function adminCreateHotel(Request $request)
     {
         auth()->user();
-        dd(auth()->user()->Email_address);
+        // dd(auth()->user()->Email_address);
         $request->validate(
             [
                 "hotel_name" => "required|max:45|unique:hotel",
@@ -76,6 +77,12 @@ class hotelController extends Controller
             ];
             $creatImage = image::create($imageData);
         }
+        $rateData = [
+            'hotel_id' => $createHotel->id,
+            'count' => 0,
+            'avg' => 0
+        ];
+        $rate = avg_rate::create($rateData);
         if (isset($request->services)) {
             foreach ($request->services as $service) {
                 if (isset($service['service_id'])) {
@@ -229,6 +236,7 @@ class hotelController extends Controller
         $deleterate = rate::where('hotel_id', $id)->delete();
         $deletecomment = comment::where('hotel_id', $id)->delete();
         $deletefavorite = favorite::where('hotel_id', $id)->delete();
+        $deletehotelrate = avg_rate::where('hotel_id', $id)->delete();
         $hotel = hotel::where('id', $id)->first();
         $deletehotel = hotel::where('id', $id)->delete();
         $deletelocation = location::where('id', $hotel['location_id'])->delete();

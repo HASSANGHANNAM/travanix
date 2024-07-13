@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\attraction_activity;
+use App\Models\avg_rate;
 use App\Models\city;
 use App\Models\comment;
 use App\Models\favorite;
@@ -63,6 +64,12 @@ class attraction_activityController extends Controller
             ];
             $creatImage = image::create($imageData);
         }
+        $rateData = [
+            'attraction_activity_id' => $createAttraction_activity->id,
+            'count' => 0,
+            'avg' => 0
+        ];
+        $rate = avg_rate::create($rateData);
         return response()->json([
             "status" => 1,
             "message" => "attraction_activity created"
@@ -126,6 +133,7 @@ class attraction_activityController extends Controller
         $deleterate = rate::where('attraction_activity_id', $id)->delete();
         $deletecomment = comment::where('attraction_activity_id', $id)->delete();
         $deletefavorite = favorite::where('attraction_activity_id', $id)->delete();
+        $deleteattraction_activityrate = avg_rate::where('attraction_activity_id', $id)->delete();
         $attraction_activity = attraction_activity::where('id', $id)->first();
         $deleteattraction_activity = attraction_activity::where('id', $id)->delete();
         $deletelocation = location::where('id', $attraction_activity['location_id'])->delete();

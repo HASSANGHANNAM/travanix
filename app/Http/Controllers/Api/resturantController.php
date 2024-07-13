@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\avg_rate;
 use App\Models\city;
 use App\Models\comment;
 use App\Models\favorite;
@@ -69,6 +70,12 @@ class resturantController extends Controller
             ];
             $creatImage = image::create($imageData);
         }
+        $rateData = [
+            'resturant_id' => $createResturant->id,
+            'count' => 0,
+            'avg' => 0
+        ];
+        $rate = avg_rate::create($rateData);
         return response()->json([
             "status" => 1,
             "message" => "resturant created"
@@ -135,6 +142,7 @@ class resturantController extends Controller
         $deleterate = rate::where('resturant_id', $id)->delete();
         $deletecomment = comment::where('resturant_id', $id)->delete();
         $deletefavorite = favorite::where('resturant_id', $id)->delete();
+        $deleteresturantrate = avg_rate::where('resturant_id', $id)->delete();
         $resturant = resturant::where('id', $id)->first();
         $deleteresturant = resturant::where('id', $id)->delete();
         $deletelocation = location::where('id', $resturant['location_id'])->delete();
