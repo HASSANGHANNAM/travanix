@@ -261,6 +261,9 @@ class favoriteController extends Controller
             $fav = true;
             $sum = tourist_has_trip::where('trip_id', $tripData->id)->sum('number_of_seat');
             $number_of_seats_available = $tripData->number_of_allSeat - $sum;
+            $location = location::find($tripData->location_id);
+            $city = city::find($location->city_id);
+            $nation = nation::find($city->nation_id);
             $trips = [
                 'id' => $tripData->id,
                 'type_of_trip' => $tripData->type_of_trip,
@@ -269,6 +272,13 @@ class favoriteController extends Controller
                 'number_of_allSeat' => $tripData->number_of_allSeat,
                 'trip_start_time' => $tripData->trip_start_time,
                 'trip_end_time' => $tripData->trip_end_time,
+                "city_id" => $city->id,
+                "city_name" => $city->city_name,
+                "nation_id" => $nation->id,
+                "nation_name" => $nation->nation_name,
+                "address" => $location->address,
+                "coordinate_x" => $location->coordinate_x,
+                "coordinate_y" => $location->coordinate_y,
                 'places' => $tripData->places->map(function ($place) {
                     if (isset($place->hotel_id))
                         return ['hotel_id' => $place->hotel_id];
