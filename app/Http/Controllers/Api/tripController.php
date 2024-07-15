@@ -318,6 +318,55 @@ class tripController extends Controller
             "data" => $data
         ]);
     }
+    public function adminGetTripsReserved()
+    {
+        auth()->user();
+        $tripReserved = tourist_has_trip::all();
+        $data = [];
+        foreach ($tripReserved as $tr) {
+            $tripData = app(tripController::class)->adminGetTripById($tr->trip_id);
+            $tourist_id = $tr->tourist_id;
+            $dataoftourist = DB::table('tourist')
+                ->join('users', function ($join) use ($tourist_id) {
+                    $join->on('tourist.user_id', '=', 'users.id')
+                        ->where('tourist.id', '=', $tourist_id);
+                })
+                ->first();
+            // dd($dataoftourist);
+            $data[] = [
+                'id' => $tripData->original['data']['id'],
+                'type_of_trip' => $tripData->original['data']['type_of_trip'],
+                'trip_name' => $tripData->original['data']['trip_name'],
+                'price_trip' => $tripData->original['data']['price_trip'],
+                'number_of_allSeat' => $tripData->original['data']['number_of_allSeat'],
+                'trip_start_time' => $tripData->original['data']['trip_start_time'],
+                'trip_end_time' => $tripData->original['data']['trip_end_time'],
+                "city_id" => $tripData->original['data']['city_id'],
+                "city_name" => $tripData->original['data']['city_name'],
+                "nation_id" => $tripData->original['data']['nation_id'],
+                "nation_name" => $tripData->original['data']['nation_name'],
+                "address" => $tripData->original['data']['address'],
+                "coordinate_x" => $tripData->original['data']['coordinate_x'],
+                "coordinate_y" => $tripData->original['data']['coordinate_y'],
+                'places' => $tripData->original['data']['places'],
+                "number_of_seats_available" => $tripData->original['data']['number_of_seats_available'],
+                "payment_status" => $tr->payment_status,
+                "number_of_seat_reserved" => $tr->number_of_seat,
+                "phone_number" => $tr->phone_number,
+                "Email_address" => $dataoftourist->Email_address,
+                "tourist_name" => $dataoftourist->tourist_name,
+                "wallet" => $dataoftourist->wallet,
+                'details' => $tr->details->map(function ($detail) {
+                    return [$detail->name, $detail->age, $detail->id];
+                })->all()
+            ];
+        }
+        return response()->json([
+            "status" => 1,
+            "message" => "trip gets",
+            "data" => $data
+        ]);
+    }
     public function touristGetTrips()
     {
         auth()->user();
@@ -370,16 +419,12 @@ class tripController extends Controller
     public function touristGetTripsReserved()
     {
         auth()->user();
-        $touristDet = tourist_has_trip::with('details')->get();
+        // $touristDet = tourist_has_trip::with('details')->get();
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
         $tripReserved = tourist_has_trip::where('tourist_id', $touristId->id)->get();
         $data = [];
         foreach ($tripReserved as $tr) {
             $tripData = app(tripController::class)->touristGetTripById($tr->trip_id);
-            // dd($tripData->original['data']['id']);
-            $location = location::find($tripData->original['data']['location_id']);
-            $city = city::find($location->city_id);
-            $nation = nation::find($city->nation_id);
             $data[] = [
                 'id' => $tripData->original['data']['id'],
                 'type_of_trip' => $tripData->original['data']['type_of_trip'],
@@ -388,13 +433,13 @@ class tripController extends Controller
                 'number_of_allSeat' => $tripData->original['data']['number_of_allSeat'],
                 'trip_start_time' => $tripData->original['data']['trip_start_time'],
                 'trip_end_time' => $tripData->original['data']['trip_end_time'],
-                "city_id" => $city->id,
-                "city_name" => $city->city_name,
-                "nation_id" => $nation->id,
-                "nation_name" => $nation->nation_name,
-                "address" => $location->address,
-                "coordinate_x" => $location->coordinate_x,
-                "coordinate_y" => $location->coordinate_y,
+                "city_id" => $tripData->original['data']['city_id'],
+                "city_name" => $tripData->original['data']['city_name'],
+                "nation_id" => $tripData->original['data']['nation_id'],
+                "nation_name" => $tripData->original['data']['nation_name'],
+                "address" => $tripData->original['data']['address'],
+                "coordinate_x" => $tripData->original['data']['coordinate_x'],
+                "coordinate_y" => $tripData->original['data']['coordinate_y'],
                 'places' => $tripData->original['data']['places'],
                 "favorite" => $tripData->original['data']['favorite'],
                 "number_of_seats_available" => $tripData->original['data']['number_of_seats_available'],

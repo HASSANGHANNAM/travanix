@@ -88,11 +88,13 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::get('/Admin/adminGetAllCharges', [charge_walletController::class, 'adminGetAllCharges']);
     Route::get('/Admin/adminGetTrips', [tripController::class, 'adminGetTrips']);
     Route::get('/Admin/adminGetTripById/{id}', [tripController::class, 'adminGetTripById']);
+    Route::get('/Admin/adminGetTripsReserved', [tripController::class, 'adminGetTripsReserved']);
     Route::get('/Admin/adminSearchAll', [searchController::class, 'adminSearchAll']);
     Route::get('/Admin/adminSearchHotel', [searchController::class, 'adminSearchHotel']);
     Route::get('/Admin/adminSearchResturant', [searchController::class, 'adminSearchResturant']);
     Route::get('/Admin/adminSearchattraction_activity', [searchController::class, 'adminSearchattraction_activity']);
     Route::get('/Admin/adminSearchTrip', [searchController::class, 'adminSearchTrip']);
+
 
     Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
     Route::post('/Admin/adminCreateRooms', [hotelController::class, 'adminCreateRooms']);
