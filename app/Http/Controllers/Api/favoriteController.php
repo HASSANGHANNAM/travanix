@@ -264,7 +264,7 @@ class favoriteController extends Controller
             $location = location::find($tripData->location_id);
             $city = city::find($location->city_id);
             $nation = nation::find($city->nation_id);
-            $trips = [
+            $trips[] = [
                 'id' => $tripData->id,
                 'type_of_trip' => $tripData->type_of_trip,
                 'trip_name' => $tripData->trip_name,
