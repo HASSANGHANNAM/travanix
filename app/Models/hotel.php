@@ -16,10 +16,6 @@ class hotel extends Model
     {
         return $this->hasMany(image::class);
     }
-    public function location()
-    {
-        return $this->hasOne(location::class);
-    }
     public function hotel_has_services()
     {
         return $this->hasMany(hotel_has_services::class);
@@ -41,5 +37,17 @@ class hotel extends Model
                 ->where('comments.hotel_id', '=', 'rates.hotel_id');
             dd($join);
         });
+    }
+    public function location()
+    {
+        return $this->belongsTo(location::class);
+    }
+    public function avg_rate()
+    {
+        return $this->hasOne(avg_rate::class);
+    }
+    public function favorite()
+    {
+        return $this->hasOne(avg_rate::class);
     }
 }

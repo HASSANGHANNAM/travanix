@@ -16,4 +16,8 @@ class location extends Model
     {
         return $this->belongsTo(hotel::class);
     }
+    public function city()
+    {
+        return $this->belongsTo(city::class);
+    }
 }

@@ -12,4 +12,8 @@ class city extends Model
     protected $table = "city";
     protected $fillable = ['city_name', 'nation_id'];
     public $timestamps = true;
+    public function nation()
+    {
+        return $this->belongsTo(nation::class);
+    }
 }

@@ -16,4 +16,12 @@ class trip extends Model
     {
         return $this->hasMany(trip_has_place::class);
     }
+    public function location()
+    {
+        return $this->belongsTo(location::class);
+    }
+    public function avg_rate()
+    {
+        return $this->hasOne(avg_rate::class);
+    }
 }

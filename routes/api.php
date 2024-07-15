@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MainController;
 use App\Http\Controllers\api\rateAndCommentController;
 use App\Http\Controllers\api\resturantController;
+use App\Http\Controllers\api\searchController;
 use App\Http\Controllers\api\tripController;
 
 /*
@@ -48,6 +49,12 @@ Route::group(['middleware' => ['auth:sanctum', 'check.tourist']], function () {
     Route::get('/touristGetAllFavorite', [favoriteController::class, 'touristGetAllFavorite']);
     Route::get('/touristGetAllRateAndComment', [rateAndCommentController::class, 'touristGetAllRateAndComment']);
     Route::get('/touristGetAvgRate', [rateAndCommentController::class, 'touristGetAvgRate']);
+    Route::get('/touristSearchAll', [searchController::class, 'touristSearchAll']);
+    Route::get('/touristSearchHotel', [searchController::class, 'touristSearchHotel']);
+    Route::get('/touristSearchResturant', [searchController::class, 'touristSearchResturant']);
+    Route::get('/touristSearchattraction_activity', [searchController::class, 'touristSearchattraction_activity']);
+    Route::get('/touristSearchTrip', [searchController::class, 'touristSearchTrip']);
+    Route::get('/touristSearchAllFavorite', [searchController::class, 'touristSearchAllFavorite']);
 
     Route::post('/touristChangePassword', [MainController::class, 'touristChangePassword']);
     Route::post('/touristUpdateProfile', [MainController::class, 'touristUpdateProfile']);
@@ -81,6 +88,11 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::get('/Admin/adminGetAllCharges', [charge_walletController::class, 'adminGetAllCharges']);
     Route::get('/Admin/adminGetTrips', [tripController::class, 'adminGetTrips']);
     Route::get('/Admin/adminGetTripById/{id}', [tripController::class, 'adminGetTripById']);
+    Route::get('/Admin/adminSearchAll', [searchController::class, 'adminSearchAll']);
+    Route::get('/Admin/adminSearchHotel', [searchController::class, 'adminSearchHotel']);
+    Route::get('/Admin/adminSearchResturant', [searchController::class, 'adminSearchResturant']);
+    Route::get('/Admin/adminSearchattraction_activity', [searchController::class, 'adminSearchattraction_activity']);
+    Route::get('/Admin/adminSearchTrip', [searchController::class, 'adminSearchTrip']);
 
     Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
     Route::post('/Admin/adminCreateRooms', [hotelController::class, 'adminCreateRooms']);

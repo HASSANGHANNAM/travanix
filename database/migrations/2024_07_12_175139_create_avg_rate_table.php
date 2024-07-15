@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('count')->unsigned();
             $table->unsignedBigInteger('hotel_id')->nullable();
             $table->foreign('hotel_id')->references('id')->on('hotel');
-            $table->unsignedBigInteger('attraction_activities_id')->nullable();
-            $table->foreign('attraction_activities_id')->references('id')->on('attraction_activities');
+            $table->unsignedBigInteger('attraction_activity_id')->nullable();
+            $table->foreign('attraction_activity_id')->references('id')->on('attraction_activities');
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->foreign('resturant_id')->references('id')->on('resturant');
             $table->unsignedBigInteger('trip_id')->nullable();

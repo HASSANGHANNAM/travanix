@@ -16,4 +16,12 @@ class resturant extends Model
     {
         return $this->hasMany(image::class);
     }
+    public function location()
+    {
+        return $this->belongsTo(location::class);
+    }
+    public function avg_rate()
+    {
+        return $this->hasOne(avg_rate::class);
+    }
 }

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreign('hotel_id')->references('id')->on('hotel');
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->foreign('resturant_id')->references('id')->on('resturant');
-            $table->unsignedBigInteger('attraction_activite_id')->nullable();
-            $table->foreign('attraction_activite_id')->references('id')->on('attraction_activities');
+            $table->unsignedBigInteger('attraction_activity_id')->nullable();
+            $table->foreign('attraction_activity_id')->references('id')->on('attraction_activities');
             $table->timestamps();
         });
     }

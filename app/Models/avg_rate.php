@@ -10,6 +10,6 @@ class avg_rate extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "avg_rate";
-    protected $fillable = ['hotel_id', 'attraction_activities_id', 'resturant_id', 'trip_id', 'count', 'avg'];
+    protected $fillable = ['hotel_id', 'attraction_activity_id', 'resturant_id', 'trip_id', 'count', 'avg'];
     public $timestamps = true;
 }
