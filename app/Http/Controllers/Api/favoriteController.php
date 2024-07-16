@@ -14,6 +14,7 @@ use App\Models\service;
 use App\Models\tourist;
 use App\Models\tourist_has_trip;
 use App\Models\trip;
+use App\Models\trip_has_place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -264,6 +265,11 @@ class favoriteController extends Controller
             $location = location::find($tripData->location_id);
             $city = city::find($location->city_id);
             $nation = nation::find($city->nation_id);
+            $image = trip_has_place::where('trip_id', $tripData->id)
+                ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+                ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+                ->select('image.path_of_image')
+                ->first();
             $trips[] = [
                 'id' => $tripData->id,
                 'type_of_trip' => $tripData->type_of_trip,
@@ -272,6 +278,7 @@ class favoriteController extends Controller
                 'number_of_allSeat' => $tripData->number_of_allSeat,
                 'trip_start_time' => $tripData->trip_start_time,
                 'trip_end_time' => $tripData->trip_end_time,
+                'description' => $tripData->description,
                 "city_id" => $city->id,
                 "city_name" => $city->city_name,
                 "nation_id" => $nation->id,
@@ -279,6 +286,7 @@ class favoriteController extends Controller
                 "address" => $location->address,
                 "coordinate_x" => $location->coordinate_x,
                 "coordinate_y" => $location->coordinate_y,
+                "image" => $image->path_of_image,
                 'places' => $tripData->places->map(function ($place) {
                     if (isset($place->hotel_id))
                         return ['hotel_id' => $place->hotel_id];

@@ -100,6 +100,11 @@ class tripController extends Controller
             $location = location::find($t->location_id);
             $city = city::find($location->city_id);
             $nation = nation::find($city->nation_id);
+            $image = trip_has_place::where('trip_id', $t->id)
+                ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+                ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+                ->select('image.path_of_image')
+                ->first();
             $data[] = [
                 'id' => $t->id,
                 'type_of_trip' => $t->type_of_trip,
@@ -116,6 +121,7 @@ class tripController extends Controller
                 "address" => $location->address,
                 "coordinate_x" => $location->coordinate_x,
                 "coordinate_y" => $location->coordinate_y,
+                "image" => $image->path_of_image,
                 'places' => $t->places->map(function ($place) {
                     if (isset($place->hotel_id))
                         return ['hotel_id' => $place->hotel_id];
@@ -287,10 +293,16 @@ class tripController extends Controller
         $location = location::find($tripData->location_id);
         $city = city::find($location->city_id);
         $nation = nation::find($city->nation_id);
+        $image = trip_has_place::where('trip_id', $tripData->id)
+            ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+            ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+            ->select('image.path_of_image')
+            ->first();
         $data = [
             'id' => $tripData->id,
             'type_of_trip' => $tripData->type_of_trip,
             'trip_name' => $tripData->trip_name,
+            'description' => $tripData->description,
             'price_trip' => $tripData->price_trip,
             'number_of_allSeat' => $tripData->number_of_allSeat,
             'trip_start_time' => $tripData->trip_start_time,
@@ -302,6 +314,7 @@ class tripController extends Controller
             "address" => $location->address,
             "coordinate_x" => $location->coordinate_x,
             "coordinate_y" => $location->coordinate_y,
+            "image" => $image->path_of_image,
             'places' => $tripData->places->map(function ($place) {
                 if (isset($place->hotel_id))
                     return ['hotel_id' => $place->hotel_id];
@@ -337,6 +350,7 @@ class tripController extends Controller
                 'id' => $tripData->original['data']['id'],
                 'type_of_trip' => $tripData->original['data']['type_of_trip'],
                 'trip_name' => $tripData->original['data']['trip_name'],
+                'description' => $tripData->original['data']['description'],
                 'price_trip' => $tripData->original['data']['price_trip'],
                 'number_of_allSeat' => $tripData->original['data']['number_of_allSeat'],
                 'trip_start_time' => $tripData->original['data']['trip_start_time'],
@@ -348,6 +362,7 @@ class tripController extends Controller
                 "address" => $tripData->original['data']['address'],
                 "coordinate_x" => $tripData->original['data']['coordinate_x'],
                 "coordinate_y" => $tripData->original['data']['coordinate_y'],
+                "image" => $tripData->original['data']['image'],
                 'places' => $tripData->original['data']['places'],
                 "number_of_seats_available" => $tripData->original['data']['number_of_seats_available'],
                 "payment_status" => $tr->payment_status,
@@ -382,10 +397,16 @@ class tripController extends Controller
             $location = location::find($t->location_id);
             $city = city::find($location->city_id);
             $nation = nation::find($city->nation_id);
+            $image = trip_has_place::where('trip_id', $t->id)
+                ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+                ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+                ->select('image.path_of_image')
+                ->first();
             $data[] = [
                 'id' => $t->id,
                 'type_of_trip' => $t->type_of_trip,
                 'trip_name' => $t->trip_name,
+                'description' => $t->description,
                 'price_trip' => $t->price_trip,
                 'number_of_allSeat' => $t->number_of_allSeat,
                 'trip_start_time' => $t->trip_start_time,
@@ -397,6 +418,7 @@ class tripController extends Controller
                 "address" => $location->address,
                 "coordinate_x" => $location->coordinate_x,
                 "coordinate_y" => $location->coordinate_y,
+                "image" => $image->path_of_image,
                 'places' => $t->places->map(function ($place) {
                     if (isset($place->hotel_id))
                         return ['hotel_id' => $place->hotel_id];
@@ -429,6 +451,7 @@ class tripController extends Controller
                 'id' => $tripData->original['data']['id'],
                 'type_of_trip' => $tripData->original['data']['type_of_trip'],
                 'trip_name' => $tripData->original['data']['trip_name'],
+                'description' => $tripData->original['data']['description'],
                 'price_trip' => $tripData->original['data']['price_trip'],
                 'number_of_allSeat' => $tripData->original['data']['number_of_allSeat'],
                 'trip_start_time' => $tripData->original['data']['trip_start_time'],
@@ -440,6 +463,7 @@ class tripController extends Controller
                 "address" => $tripData->original['data']['address'],
                 "coordinate_x" => $tripData->original['data']['coordinate_x'],
                 "coordinate_y" => $tripData->original['data']['coordinate_y'],
+                "image" => $tripData->original['data']['image'],
                 'places' => $tripData->original['data']['places'],
                 "favorite" => $tripData->original['data']['favorite'],
                 "number_of_seats_available" => $tripData->original['data']['number_of_seats_available'],
@@ -476,10 +500,16 @@ class tripController extends Controller
         $location = location::find($tripData->location_id);
         $city = city::find($location->city_id);
         $nation = nation::find($city->nation_id);
+        $image = trip_has_place::where('trip_id', $tripData->id)
+            ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+            ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+            ->select('image.path_of_image')
+            ->first();
         $data = [
             'id' => $tripData->id,
             'type_of_trip' => $tripData->type_of_trip,
             'trip_name' => $tripData->trip_name,
+            'description' => $tripData->description,
             'price_trip' => $tripData->price_trip,
             'number_of_allSeat' => $tripData->number_of_allSeat,
             'trip_start_time' => $tripData->trip_start_time,
@@ -491,6 +521,7 @@ class tripController extends Controller
             "address" => $location->address,
             "coordinate_x" => $location->coordinate_x,
             "coordinate_y" => $location->coordinate_y,
+            "image" => $image->path_of_image,
             'places' => $tripData->places->map(function ($place) {
                 if (isset($place->hotel_id))
                     return ['hotel_id' => $place->hotel_id];
