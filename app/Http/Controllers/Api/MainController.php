@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\charge_wallet;
+use App\Models\comment;
+use App\Models\favorite;
+use App\Models\rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +16,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use App\Models\User;
 use App\Models\tourist;
+use App\Models\tourist_details;
+use App\Models\tourist_has_trip;
 
 class MainController extends Controller
 {
@@ -137,8 +143,28 @@ class MainController extends Controller
             ]);
         }
     }
+    public function touristCheckIfCanDeleteEmail()
+    {
+    }
     public function touristDeleteEmail()
     {
+        auth()->user();
+        $find = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+        $deleterate = rate::where('tourist_id', $find->id)->delete();
+        $deletecomment = comment::where('tourist_id', $find->id)->delete();
+        $deletefavorite = favorite::where('tourist_id', $find->id)->delete();
+        $deletechargewallet = charge_wallet::where('tourist_id', $find->id)->delete();
+        $findtrip = tourist_has_trip::where('tourist_id', $find->id)->get();
+        foreach ($findtrip as $t) {
+            $deletetourist_details = tourist_details::where('tourist_has_trip_id', $t->id)->delete();
+            $deletetourist_has_trip = tourist_has_trip::where('id', $t->id)->delete();
+        }
+        $deletetourist = tourist::where('id', $find->id)->delete();
+        $deleteuser = User::where('id', auth()->user()->id)->delete();
+        return response()->json([
+            "status" => 1,
+            "message" => "Email was deleted"
+        ]);
     }
     public function adminLogin(Request $request)
     {

@@ -34,6 +34,7 @@ Route::post('/Admin/adminLogin', [MainController::class, 'adminLogin']);
 Route::group(['middleware' => ['auth:sanctum', 'check.tourist']], function () {
     Route::get('/touristLogout', [MainController::class, 'logout']);
     Route::get('/touristProfile', [MainController::class, 'touristProfile']);
+    Route::get('/touristCheckIfCanDeleteEmail', [MainController::class, 'touristCheckIfCanDeleteEmail']);
     Route::get('/touristGetAllCities', [locationsController::class, 'touristGetAllCities']);
     Route::get('/touristGetCitiesByNation/{nation_id}', [locationsController::class, 'touristGetCitiesByNation']);
     Route::get('/touristGetAllNations', [locationsController::class, 'touristGetAllNations']);
