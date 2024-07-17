@@ -747,13 +747,111 @@ class searchController extends Controller
         $hotels = $hotelquery->with(['location', 'location.city', 'location.city.nation', 'hotel_has_services.service'])->get();
         $resturants = $resturantquery->with(['location', 'location.city', 'location.city.nation'])->get();
         $attraction_activities = $attraction_activityquery->with(['location', 'location.city', 'location.city.nation'])->get();
+        $attraction_activitiesReturn = [];
+        foreach ($attraction_activities as $attraction_activity) {
+            $attraction_activitiesReturn[] = [
+                'id' => $attraction_activity->id,
+                'address' => $attraction_activity->location->address,
+                'coordinate_y' => $attraction_activity->location->coordinate_y,
+                'coordinate_x' => $attraction_activity->location->coordinate_x,
+                'city_name' => $attraction_activity->location->city->city_name,
+                'nation_name' => $attraction_activity->location->city->nation->nation_name,
+                'attraction_activity_name' => $attraction_activity->attraction_activity_name,
+                'description' => $attraction_activity->description,
+                'opening_time' => $attraction_activity->opening_time,
+                'closing_time' => $attraction_activity->closing_time,
+                'images' => $attraction_activity->images->map(function ($image) {
+                    return $image->path_of_image;
+                })->all(),
+            ];
+        }
+        $resturantsReturn = [];
+        foreach ($resturants as $resturant) {
+            $resturantsReturn[] = [
+                'id' => $resturant->id,
+                'address' => $resturant->location->address,
+                'coordinate_y' => $resturant->location->coordinate_y,
+                'coordinate_x' => $resturant->location->coordinate_x,
+                'city_name' => $resturant->location->city->city_name,
+                'nation_name' => $resturant->location->city->nation->nation_name,
+                'type_of_food' => $resturant->type_of_food,
+                'descreption' => $resturant->descreption,
+                'resturant_name' => $resturant->resturant_name,
+                'resturant_class' => $resturant->resturant_class,
+                'phone_number' => $resturant->phone_number,
+                'opining_time' => $resturant->opining_time,
+                'closing_time' => $resturant->closing_time,
+                'images' => $resturant->images->map(function ($image) {
+                    return $image->path_of_image;
+                })->all(),
+            ];
+        }
+        $hotelsReturn = [];
+        foreach ($hotels as $hotel) {
+            $services = [];
+            foreach ($hotel->hotel_has_services as $h)
+                $services[] = $h->service->service;
+            $hotelsReturn[] = [
+                'id' => $hotel->id,
+                'address' => $hotel->location->address,
+                'coordinate_y' => $hotel->location->coordinate_y,
+                'coordinate_x' => $hotel->location->coordinate_x,
+                'city_name' => $hotel->location->city->city_name,
+                'nation_name' => $hotel->location->city->nation->nation_name,
+                'simple_description_about_hotel' => $hotel->simple_description_about_hotel,
+                'hotel_name' => $hotel->hotel_name,
+                'hotel_class' => $hotel->hotel_class,
+                'phone_number' => $hotel->phone_number,
+                'images' => $hotel->images->map(function ($image) {
+                    return $image->path_of_image;
+                })->all(),
+                "services" => $services,
+            ];
+        }
+        $tripsReturn = [];
+        foreach ($trips as $trip) {
+            $sum = tourist_has_trip::where('trip_id', $trip->id)->sum('number_of_seat');
+            $number_of_seats_available = $trip->number_of_allSeat - $sum;
+            $image = trip_has_place::where('trip_id', $trip->id)
+                ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+                ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+                ->select('image.path_of_image')
+                ->first();
+            $tripsReturn[] = [
+                'id' => $trip->id,
+                'type_of_trip' => $trip->type_of_trip,
+                'trip_name' => $trip->trip_name,
+                'description' => $trip->description,
+                'price_trip' => $trip->price_trip,
+                'number_of_allSeat' => $trip->number_of_allSeat,
+                'trip_start_time' => $trip->trip_start_time,
+                'trip_end_time' => $trip->trip_end_time,
+                'address' => $trip->location->address,
+                'coordinate_y' => $trip->location->coordinate_y,
+                'coordinate_x' => $trip->location->coordinate_x,
+                "city_id" => $trip->location->city->id,
+                'city_name' => $trip->location->city->city_name,
+                "nation_id" => $trip->location->city->nation->id,
+                'nation_name' => $trip->location->city->nation->nation_name,
+                "image" => $image->path_of_image,
+                'places' => $trip->places->map(function ($place) {
+                    if (isset($place->hotel_id))
+                        return ['hotel_id' => $place->hotel_id];
+                    if (isset($place->attraction_activity_id))
+                        return ['attraction_activity_id' => $place->attraction_activity_id];
+                    if (isset($place->resturant_id))
+                        return ['resturant_id' => $place->resturant_id];
+                })->all(),
+                "number_of_seats_available" => $number_of_seats_available
+            ];
+        }
         return response()->json([
             "status" => 1,
             "message" => "succes   ",
-            "trips" => $trips,
-            "hotels" => $hotels,
-            "resturants" => $resturants,
-            "attraction_activities" => $attraction_activities,
+            "trips" => $tripsReturn,
+            "hotels" => $hotelsReturn,
+            "resturants" => $resturantsReturn,
+            "attraction_activities" => $attraction_activitiesReturn,
         ]);
     }
     public function adminSearchTrip(Request $request)
@@ -791,10 +889,47 @@ class searchController extends Controller
             });
         }
         $trips = $tripquery->with(['location', 'location.city', 'location.city.nation'])->get();
+        $tripsReturn = [];
+        foreach ($trips as $trip) {
+            $sum = tourist_has_trip::where('trip_id', $trip->id)->sum('number_of_seat');
+            $number_of_seats_available = $trip->number_of_allSeat - $sum;
+            $image = trip_has_place::where('trip_id', $trip->id)
+                ->join('attraction_activities', 'trip_has_place.attraction_activity_id', '=', 'attraction_activities.id')
+                ->join('image', 'attraction_activities.id', '=', 'image.attraction_activity_id')
+                ->select('image.path_of_image')
+                ->first();
+            $tripsReturn[] = [
+                'id' => $trip->id,
+                'type_of_trip' => $trip->type_of_trip,
+                'trip_name' => $trip->trip_name,
+                'description' => $trip->description,
+                'price_trip' => $trip->price_trip,
+                'number_of_allSeat' => $trip->number_of_allSeat,
+                'trip_start_time' => $trip->trip_start_time,
+                'trip_end_time' => $trip->trip_end_time,
+                'address' => $trip->location->address,
+                'coordinate_y' => $trip->location->coordinate_y,
+                'coordinate_x' => $trip->location->coordinate_x,
+                "city_id" => $trip->location->city->id,
+                'city_name' => $trip->location->city->city_name,
+                "nation_id" => $trip->location->city->nation->id,
+                'nation_name' => $trip->location->city->nation->nation_name,
+                "image" => $image->path_of_image,
+                'places' => $trip->places->map(function ($place) {
+                    if (isset($place->hotel_id))
+                        return ['hotel_id' => $place->hotel_id];
+                    if (isset($place->attraction_activity_id))
+                        return ['attraction_activity_id' => $place->attraction_activity_id];
+                    if (isset($place->resturant_id))
+                        return ['resturant_id' => $place->resturant_id];
+                })->all(),
+                "number_of_seats_available" => $number_of_seats_available
+            ];
+        }
         return response()->json([
             "status" => 1,
             "message" => "succes   ",
-            "trips" => $trips,
+            "trips" => $tripsReturn,
         ]);
     }
     public function adminSearchattraction_activity(Request $request)
@@ -828,10 +963,28 @@ class searchController extends Controller
             });
         }
         $attraction_activities = $attraction_activityquery->with(['location', 'location.city', 'location.city.nation'])->get();
+        $attraction_activitiesReturn = [];
+        foreach ($attraction_activities as $attraction_activity) {
+            $attraction_activitiesReturn[] = [
+                'id' => $attraction_activity->id,
+                'address' => $attraction_activity->location->address,
+                'coordinate_y' => $attraction_activity->location->coordinate_y,
+                'coordinate_x' => $attraction_activity->location->coordinate_x,
+                'city_name' => $attraction_activity->location->city->city_name,
+                'nation_name' => $attraction_activity->location->city->nation->nation_name,
+                'attraction_activity_name' => $attraction_activity->attraction_activity_name,
+                'description' => $attraction_activity->description,
+                'opening_time' => $attraction_activity->opening_time,
+                'closing_time' => $attraction_activity->closing_time,
+                'images' => $attraction_activity->images->map(function ($image) {
+                    return $image->path_of_image;
+                })->all(),
+            ];
+        }
         return response()->json([
             "status" => 1,
             "message" => "succes   ",
-            "attraction_activities" => $attraction_activities,
+            "attraction_activities" => $attraction_activitiesReturn,
         ]);
     }
     public function adminSearchResturant(Request $request)
@@ -871,10 +1024,31 @@ class searchController extends Controller
             });
         }
         $resturants = $resturantquery->with(['location', 'location.city', 'location.city.nation'])->get();
+        $resturantsReturn = [];
+        foreach ($resturants as $resturant) {
+            $resturantsReturn[] = [
+                'id' => $resturant->id,
+                'address' => $resturant->location->address,
+                'coordinate_y' => $resturant->location->coordinate_y,
+                'coordinate_x' => $resturant->location->coordinate_x,
+                'city_name' => $resturant->location->city->city_name,
+                'nation_name' => $resturant->location->city->nation->nation_name,
+                'type_of_food' => $resturant->type_of_food,
+                'descreption' => $resturant->descreption,
+                'resturant_name' => $resturant->resturant_name,
+                'resturant_class' => $resturant->resturant_class,
+                'phone_number' => $resturant->phone_number,
+                'opining_time' => $resturant->opining_time,
+                'closing_time' => $resturant->closing_time,
+                'images' => $resturant->images->map(function ($image) {
+                    return $image->path_of_image;
+                })->all(),
+            ];
+        }
         return response()->json([
             "status" => 1,
             "message" => "succes   ",
-            "resturants" => $resturants,
+            "resturants" => $resturantsReturn,
         ]);
     }
     public function adminSearchHotel(Request $request)
@@ -908,10 +1082,32 @@ class searchController extends Controller
             });
         }
         $hotels = $hotelquery->with(['location', 'location.city', 'location.city.nation', 'hotel_has_services.service'])->get();
+        $hotelsReturn = [];
+        foreach ($hotels as $hotel) {
+            $services = [];
+            foreach ($hotel->hotel_has_services as $h)
+                $services[] = $h->service->service;
+            $hotelsReturn[] = [
+                'id' => $hotel->id,
+                'address' => $hotel->location->address,
+                'coordinate_y' => $hotel->location->coordinate_y,
+                'coordinate_x' => $hotel->location->coordinate_x,
+                'city_name' => $hotel->location->city->city_name,
+                'nation_name' => $hotel->location->city->nation->nation_name,
+                'simple_description_about_hotel' => $hotel->simple_description_about_hotel,
+                'hotel_name' => $hotel->hotel_name,
+                'hotel_class' => $hotel->hotel_class,
+                'phone_number' => $hotel->phone_number,
+                'images' => $hotel->images->map(function ($image) {
+                    return $image->path_of_image;
+                })->all(),
+                "services" => $services,
+            ];
+        }
         return response()->json([
             "status" => 1,
             "message" => "succes   ",
-            "hotels" => $hotels,
+            "hotels" => $hotelsReturn,
         ]);
     }
 }
