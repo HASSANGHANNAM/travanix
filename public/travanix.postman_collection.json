@@ -2391,6 +2391,53 @@
 							"response": []
 						},
 						{
+							"name": "adminUpdateTripReserved",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|u7aaQw1mQPf2bRKE12jYJI6jfnBB8JpYUzo9xjbBc0aa7b78",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n               \"id\" :1,\r\n                \"payment_status\" :\"paid\"\r\n                // \"unpaid\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}Admin/adminUpdateTripReserved",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminUpdateTripReserved"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "adminUpdateTrip",
 							"request": {
 								"auth": {

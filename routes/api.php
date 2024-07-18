@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::post('/Admin/adminCreateCity', [locationsController::class, 'adminCreateCity']);
     Route::post('/Admin/adminCreateNation', [locationsController::class, 'adminCreateNation']);
     Route::post('/Admin/adminCharge', [charge_walletController::class, 'adminCharge']);
+    Route::post('/Admin/adminUpdateTripReserved', [tripController::class, 'adminUpdateTripReserved']);
 
 
     Route::put('/Admin/adminUpdateCity', [locationsController::class, 'adminUpdateCity']);
@@ -114,6 +115,7 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::put('/Admin/adminUpdateResturant', [resturantController::class, 'adminUpdateResturant']);
     Route::put('/Admin/adminUpdateAttraction_activity', [attraction_activityController::class, 'adminUpdateAttraction_activity']);
     Route::put('/Admin/adminUpdateTrip', [tripController::class, 'adminUpdateTrip']);
+
 
     Route::delete('/Admin/adminDeleteNation/{id}', [locationsController::class, 'adminDeleteNation']);
     Route::delete('/Admin/adminDeleteCity/{id}', [locationsController::class, 'adminDeleteCity']);

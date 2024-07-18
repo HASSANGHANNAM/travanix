@@ -382,6 +382,53 @@ class tripController extends Controller
             "data" => $data
         ]);
     }
+    public function adminUpdateTripReserved(Request $request)
+    {
+        auth()->user();
+        $request->validate(
+            [
+                "id" => "required|integer",
+                "payment_status" => "required",
+            ]
+        );
+        $find = tourist_has_trip::find($request->id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "id not found"
+            ]);
+        }
+        if ($find['payment_status'] == "paid" | $find['payment_status'] == "unpaid") {
+            return response()->json([
+                "status" => 0,
+                "message" => "this request was handler"
+            ]);
+        }
+        if ($request->payment_status != "paid" & $request->payment_status != "unpaid") {
+            return response()->json([
+                "status" => 0,
+                "message" => "your post payment status not found in system"
+            ]);
+        }
+        if ($find->payment_status == "wallet" & $request->payment_status == "paid") {
+            $oldWallet = DB::table('tourist')->select('wallet')->where('id', $find->tourist_id)->first();
+            $price = DB::table('trip')->select('price_trip')->where('id', $find->trip_id)->first();
+            $newwallet = $oldWallet - ($price * $find->number_of_seat);
+            if ($newwallet >= 0) {
+                $updateWallet = tourist::where('id', $find->tourist_id)->update(array('wallet' => ($request->wallet + $oldWallet->wallet)));
+            } else {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "your  wallet less than price trip"
+                ]);
+            }
+        }
+        $payment_status = tourist_has_trip::where('id', $request->id)->update(array('payment_status' => $request->payment_status));
+        return response()->json([
+            "status" => 1,
+            "message" => "you update payment status"
+        ]);
+    }
     public function touristGetTrips()
     {
         auth()->user();
