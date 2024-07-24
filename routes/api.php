@@ -95,6 +95,9 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::get('/Admin/adminSearchResturant', [searchController::class, 'adminSearchResturant']);
     Route::get('/Admin/adminSearchattraction_activity', [searchController::class, 'adminSearchattraction_activity']);
     Route::get('/Admin/adminSearchTrip', [searchController::class, 'adminSearchTrip']);
+    Route::get('/Admin/adminGetAllRateAndComment', [rateAndCommentController::class, 'adminGetAllRateAndComment']);
+    Route::get('/Admin/adminGetAvgRate', [rateAndCommentController::class, 'adminGetAvgRate']);
+
 
 
     Route::post('/Admin/adminCreateHotel', [hotelController::class, 'adminCreateHotel']);
@@ -124,4 +127,5 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::delete('/Admin/adminDeleteResturant/{id}', [resturantController::class, 'adminDeleteResturant']);
     Route::delete('/Admin/adminDeleteAttraction_activity/{id}', [attraction_activityController::class, 'adminDeleteAttraction_activity']);
     Route::delete('/Admin/adminDeleteTrip/{id}', [tripController::class, 'adminDeleteTrip']);
+    Route::delete('/Admin/adminDeleteComment/{comment_id}', [rateAndCommentController::class, 'adminDeleteComment']);
 });

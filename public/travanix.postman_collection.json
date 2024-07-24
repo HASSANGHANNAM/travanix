@@ -117,7 +117,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\"Email_address\":\"dd@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
+									"raw": "{\r\n\"Email_address\":\"dddd@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}touristLogin",
@@ -744,7 +744,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|OmI3GHssQSfNonX3ArOKpJmwaPnZdstqj88qYOawe8b9dce1",
+											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
 											"type": "string"
 										}
 									]
@@ -753,7 +753,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n            //  \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            \"trip_id\" : 1,\r\n           \r\n            \"rate\" : 1.4\r\n}",
+									"raw": "{\r\n             \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n           \r\n            \"rate\" : 1.4\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -777,7 +777,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "3|N9Hg5ZMxoaolbgoywitJXH9CzSQUbg23aJaBGIYZ421b9580",
+											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
 											"type": "string"
 										}
 									]
@@ -786,7 +786,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n            // \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            \"trip_id\" : 1,\r\n            \"comment\" : \"ddcccccccccccccccccd\"\r\n}",
+									"raw": "{\r\n            \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n            \"comment\" : \"ddcccccccccccccccccd\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -810,7 +810,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|OmI3GHssQSfNonX3ArOKpJmwaPnZdstqj88qYOawe8b9dce1",
+											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
 											"type": "string"
 										}
 									]
@@ -1086,7 +1086,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "8|QBNYSXzzzMkzMhcaUHzG8hgczUFP5tUBrfT7F4HH471559cc",
+											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
 											"type": "string"
 										}
 									]
@@ -3207,6 +3207,114 @@
 										{
 											"key": "price_trip",
 											"value": "88"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "rateAndcooment Copy",
+					"item": [
+						{
+							"name": "adminDeleteComment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "9|aS1hgEkvZSm5Tz1zPPODHS79ppkWPYdjIyzW8sDZfa230a72",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}Admin/adminDeleteComment/1",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminDeleteComment",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "adminGetAllRateAndComment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "9|aS1hgEkvZSm5Tz1zPPODHS79ppkWPYdjIyzW8sDZfa230a72",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}Admin/adminGetAllRateAndComment?hotel_id=1",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminGetAllRateAndComment"
+									],
+									"query": [
+										{
+											"key": "hotel_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "adminGetAvgRate",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "9|aS1hgEkvZSm5Tz1zPPODHS79ppkWPYdjIyzW8sDZfa230a72",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}Admin/adminGetAvgRate?hotel_id=1",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminGetAvgRate"
+									],
+									"query": [
+										{
+											"key": "hotel_id",
+											"value": "1"
 										}
 									]
 								}
