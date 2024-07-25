@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('room', function (Blueprint $table) {
+        Schema::create('reserve_has_room', function (Blueprint $table) {
             $table->id();
-            $table->integer('capacity_room')->unsigned();
-            $table->integer('quantity')->unsigned();
-            $table->float('price_room')->unsigned();
-            $table->unsignedBigInteger('hotel_id');
-            $table->foreign('hotel_id')->references('id')->on('hotel');
+            $table->unsignedBigInteger('reserve_id');
+            $table->foreign('reserve_id')->references('id')->on('reserve');
+            $table->unsignedBigInteger('room_id');
+            $table->foreign('room_id')->references('id')->on('room');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room');
+        Schema::dropIfExists('reserve_has_room');
     }
 };

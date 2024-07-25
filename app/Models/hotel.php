@@ -50,4 +50,8 @@ class hotel extends Model
     {
         return $this->hasOne(avg_rate::class);
     }
+    public function rooms()
+    {
+        return $this->hasMany(room::class);
+    }
 }

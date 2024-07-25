@@ -957,4 +957,3 @@ class rateAndCommentController extends Controller
         ]);
     }
 }
-//com

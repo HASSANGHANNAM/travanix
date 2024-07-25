@@ -642,6 +642,231 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "touristReserve",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|6lFdi9uhzdbNhuJOpzCFlQ87XI39WylHhY1tULyWbbf480e1",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n     \"start_reservation\":\"s\",\r\n    \"end_reservation\":\"s\",\r\n    \"rooms\":[\r\n        {\r\n        \"capacity_room\":1,\r\n        \"number_of_room\":1\r\n        }\r\n        // ,{\r\n        // \"capacity_room\":1,\r\n        // \"number_of_room\":1\r\n        // }\r\n        ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}touristReserve",
+									"host": [
+										"{{url}}touristReserve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristCheckReserve",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "3|zTg3RRKSo1CeOHMaiPiU2nq4VxW1D23DJgM1cpEP278c1ef8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hotel_id\":1,\r\n     \"start_reservation\":\"2024-06-03\",\r\n    \"end_reservation\":\"2024-06-03\",\r\n    \"rooms\":[\r\n        {\r\n        \"capacity_room\":1,\r\n        \"number_of_room\":1\r\n        }\r\n        // ,{\r\n        // \"capacity_room\":1,\r\n        // \"number_of_room\":1\r\n        // }\r\n        ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}touristCheckReserve",
+									"host": [
+										"{{url}}touristCheckReserve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristGetReserved",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|6lFdi9uhzdbNhuJOpzCFlQ87XI39WylHhY1tULyWbbf480e1",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}touristGetReserved",
+									"host": [
+										"{{url}}touristGetReserved"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristUpdateReserved",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|Qar3OhJntOcCbRI1YzBBLKJsoDmzB166Ky6yBP4l43e91b78",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n\"size_room\":1,\r\n \"size_of_bed\":2,\r\n  \"capacity_room\":3,\r\n   \"price_room\":44, \r\n   \"available_services\":\"dd\",\r\n    \"hotel_id\":1\r\n\r\n},\r\n{\r\n\"size_room\":4,\r\n \"size_of_bed\":\"5\",\r\n  \"capacity_room\":5,\r\n   \"price_room\":555,\r\n    \"available_services\":\"ggggg\",\r\n     \"hotel_id\":1\r\n}\r\n]"
+								},
+								"url": {
+									"raw": "{{url}}touristUpdateReserved",
+									"host": [
+										"{{url}}touristUpdateReserved"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristDeleteReserved",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|iDvCtKXfRfFsRO3a4B0rPOQw3Hv3rIyunyT4bCXc3c42393d",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}touristDeleteReserved/1",
+									"host": [
+										"{{url}}touristDeleteReserved"
+									],
+									"path": [
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -777,7 +1002,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
+											"value": "11|7LPHMczbuMmVCabGe0qrEun7JyNj4XsAHNqmSHVo50c65c05",
 											"type": "string"
 										}
 									]
@@ -786,7 +1011,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n            \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n            \"comment\" : \"ddcccccccccccccccccd\"\r\n}",
+									"raw": "{\r\n            \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n            \"comment\" : \"Tffgdfg\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1534,7 +1759,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|Qar3OhJntOcCbRI1YzBBLKJsoDmzB166Ky6yBP4l43e91b78",
+											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
 											"type": "string"
 										}
 									]
@@ -1559,7 +1784,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n\"size_room\":1,\r\n \"size_of_bed\":2,\r\n  \"capacity_room\":3,\r\n   \"price_room\":44, \r\n   \"available_services\":\"dd\",\r\n    \"hotel_id\":1\r\n\r\n},\r\n{\r\n\"size_room\":4,\r\n \"size_of_bed\":\"5\",\r\n  \"capacity_room\":5,\r\n   \"price_room\":555,\r\n    \"available_services\":\"ggggg\",\r\n     \"hotel_id\":1\r\n}\r\n]"
+									"raw": " {\r\n  \"capacity_room\":3,\r\n   \"price_room\":44, \r\n   \"quantity\":44, \r\n    \"hotel_id\":1\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}Admin/adminCreateRooms",
@@ -1568,6 +1793,100 @@
 									],
 									"path": [
 										"adminCreateRooms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "adminAddRooms",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n   \"number\":44, \r\n    \"room_id\":1\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}Admin/adminAddRooms",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminAddRooms"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "adminUpdateReserved",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|Qar3OhJntOcCbRI1YzBBLKJsoDmzB166Ky6yBP4l43e91b78",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n\"size_room\":1,\r\n \"size_of_bed\":2,\r\n  \"capacity_room\":3,\r\n   \"price_room\":44, \r\n   \"available_services\":\"dd\",\r\n    \"hotel_id\":1\r\n\r\n},\r\n{\r\n\"size_room\":4,\r\n \"size_of_bed\":\"5\",\r\n  \"capacity_room\":5,\r\n   \"price_room\":555,\r\n    \"available_services\":\"ggggg\",\r\n     \"hotel_id\":1\r\n}\r\n]"
+								},
+								"url": {
+									"raw": "{{url}}Admin/adminUpdateReserved",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminUpdateReserved"
 									]
 								}
 							},
@@ -1617,6 +1936,50 @@
 							"response": []
 						},
 						{
+							"name": "adminGetRooms",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}Admin/adminGetRooms/1",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminGetRooms",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "adminGetServices",
 							"request": {
 								"auth": {
@@ -1654,6 +2017,49 @@
 									],
 									"path": [
 										"adminGetServices"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "adminGetReserved",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "2|6lFdi9uhzdbNhuJOpzCFlQ87XI39WylHhY1tULyWbbf480e1",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|1JpHg3wP0EbhwfVJ7W9We7hEAdCgkxSeHwx4kM1Vad6bfd92",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}Admin/adminGetReserved",
+									"host": [
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminGetReserved"
 									]
 								}
 							},
@@ -1754,7 +2160,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|Qar3OhJntOcCbRI1YzBBLKJsoDmzB166Ky6yBP4l43e91b78",
+											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
 											"type": "string"
 										}
 									]
@@ -1779,7 +2185,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \r\n    \"room_id\":2,\r\n    \"size_room\":4,\r\n \"size_of_bed\":5,\r\n  \"capacity_room\":4,\r\n   \"price_room\":4, \r\n   \"available_services\":\"dd5\"\r\n}",
+									"raw": "{ \r\n   \"price_room\":43032, \r\n    \"room_id\":1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1806,7 +2212,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|Qar3OhJntOcCbRI1YzBBLKJsoDmzB166Ky6yBP4l43e91b78",
+											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
 											"type": "string"
 										}
 									]
@@ -3000,7 +3406,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|yuSpSeW9ZxVatmXhaopC3pc3yFa5jFVJ1rUdFxxI52fa40db",
+											"value": "12|ISv3XninOquJrzjLUWwUG66dwtMHmMc563snARni358ba002",
 											"type": "string"
 										}
 									]
@@ -3008,9 +3414,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}touristSearchHotel?name=b&address=d&nation_name=u&city_name=d&avg_rate=0&hotel_class=5",
+									"raw": "{{url}}Admin/adminSearchHotel?name=b&address=d&nation_name=u&city_name=d&avg_rate=0&hotel_class=5",
 									"host": [
-										"{{url}}touristSearchHotel"
+										"{{url}}Admin"
+									],
+									"path": [
+										"adminSearchHotel"
 									],
 									"query": [
 										{
@@ -3216,7 +3625,7 @@
 					]
 				},
 				{
-					"name": "rateAndcooment Copy",
+					"name": "rateAndcooment",
 					"item": [
 						{
 							"name": "adminDeleteComment",

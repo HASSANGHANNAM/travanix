@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('room', function (Blueprint $table) {
+        Schema::create('reserve', function (Blueprint $table) {
             $table->id();
-            $table->integer('capacity_room')->unsigned();
-            $table->integer('quantity')->unsigned();
-            $table->float('price_room')->unsigned();
-            $table->unsignedBigInteger('hotel_id');
-            $table->foreign('hotel_id')->references('id')->on('hotel');
+            $table->date('start_reservation')->nullable();
+            $table->date('end_reservation')->nullable();
+            $table->float('price_all_reserve')->unsigned();
+            $table->enum("payment_status", ["paid", "unpaid", "wallet", "cash"]);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room');
+        Schema::dropIfExists('reserve');
     }
 };

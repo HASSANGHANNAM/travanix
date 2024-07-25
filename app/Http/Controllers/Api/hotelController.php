@@ -15,6 +15,7 @@ use App\Models\room;
 use App\Models\image_hotel;
 use App\Models\nation;
 use App\Models\rate;
+use App\Models\reserve;
 use App\Models\service;
 use App\Models\tourist;
 use App\Models\trip_has_place;
@@ -25,11 +26,6 @@ use IlluminateSupportFacadesStorage;
 
 class hotelController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('check.admin');
-    // }
-
     public function adminCreateHotel(Request $request)
     {
         auth()->user();
@@ -140,18 +136,28 @@ class hotelController extends Controller
     public function adminCreateRooms(Request $request)
     {
         auth()->user();
-        $this->validate($request, [
-            '*.size_room' => 'required|integer',
-            '*.size_of_bed' => 'required|max:45',
-            '*.capacity_room' => 'required|integer',
-            '*.price_room' => 'required|integer',
-            '*.available_services' => 'required|max:255',
-            '*.hotel_id' => 'required|integer'
-        ]);
-        $rooms = $request->json()->all();
-        foreach ($rooms as $room) {
-            room::create($room);
+        $room = $request->validate(
+            [
+                'capacity_room' => 'required|integer',
+                'price_room' => 'required',
+                'quantity' => 'required|integer',
+                'hotel_id' => 'required|integer'
+            ]
+        );
+        $findRoom = DB::table('room')->where([['hotel_id',  $request->hotel_id], ['capacity_room', $request->capacity_room]])->first();
+        if ($findRoom != null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "there is similar capacity of room before to add number of room use add room"
+            ]);
         }
+        if (hotel::find($request->hotel_id) == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel not found "
+            ]);
+        }
+        room::create($room);
         return response()->json([
             "status" => 1,
             "message" => "create rooms"
@@ -174,38 +180,65 @@ class hotelController extends Controller
     public function adminUpdateRoom(Request $request)
     {
         auth()->user();
-        $this->validate($request, [
-            'room_id' => 'required|integer',
-            'size_room' => 'integer',
-            'size_of_bed' => 'max:45',
-            'capacity_room' => 'integer',
-            'price_room' => 'integer',
-            'available_services' => 'max:255'
-        ]);
+        $request->validate(
+            [
+                'room_id' => 'required|integer',
+                'price_room' => 'required',
+            ]
+        );
         if (!room::find($request->room_id)) {
             return response()->json([
                 "status" => 0,
                 "message" => "room not found"
             ]);
         }
-        if (isset($request->size_room)) {
-            $update = room::where('id', $request->room_id)->update(array('size_room' => $request->size_room));
-        }
-        if (isset($request->size_of_bed)) {
-            $update = room::where('id', $request->room_id)->update(array('size_of_bed' => $request->size_of_bed));
-        }
-        if (isset($request->capacity_room)) {
-            $update = room::where('id', $request->room_id)->update(array('capacity_room' => $request->capacity_room));
-        }
         if (isset($request->price_room)) {
             $update = room::where('id', $request->room_id)->update(array('price_room' => $request->price_room));
         }
-        if (isset($request->available_services)) {
-            $update = room::where('id', $request->room_id)->update(array('available_services' => $request->available_services));
+        return response()->json([
+            "status" => 1,
+            "message" => "price room was updated"
+        ]);
+    }
+    public function adminAddRooms(Request $request)
+    {
+        auth()->user();
+        $request->validate(
+            [
+                'room_id' => 'required|integer',
+                'number' => 'required|integer',
+            ]
+        );
+        $find = room::find($request->room_id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "room not found"
+            ]);
+        }
+        if (isset($request->number)) {
+            $update = room::where('id', $request->room_id)->update(array('quantity' => $request->number + $find->quantity));
         }
         return response()->json([
             "status" => 1,
-            "message" => "room was updated"
+            "message" => "quantity was updated"
+        ]);
+    }
+    public function adminGetRooms($hotel_id)
+    {
+        auth()->user();
+        $find = hotel::find($hotel_id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel not found"
+            ]);
+        }
+        $data = DB::table('room')->where('hotel_id', $hotel_id)->select('id', 'quantity', 'capacity_room', 'price_room', 'hotel_id')->get();
+        return response()->json([
+            "status" => 1,
+            "message" => "succes",
+            "data" => $data
         ]);
     }
     public function adminDeleteHotel($id)
@@ -390,9 +423,54 @@ class hotelController extends Controller
 
 
     // TODO: all 
+    public function touristCheckReserve(Request $request)
+    {
+        auth()->user();
+        $request->validate(
+            [
+                "hotel_id" => "required|integer",
+                "start_reservation" => "required",
+                "end_reservation" => "required",
+                'rooms.*.capacity_room' => 'integer',
+                'rooms.*.number_of_room' => 'integer'
+            ]
+        );
+        $startDate = $request->start_reservation;
+        $endDate = $request->end_reservatio;
+        $capacity = $request->capacity;
+
+        $f = DB::table('reserve')->where('start_reservation',  $endDate)->get();
+        dd($f);
+        $availableRooms = DB::table('hotel')
+            ->join('room', 'hotel.id', '=', 'room.hotel_id')
+            ->leftJoin('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
+            ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->where('start_reservation', '>', $endDate)
+                    ->orWhere('end_reservation', '<', $startDate);
+            })
+            // ->select('room.id', 'room.price_room', 'hotel.name as hotel_name')
+            // ->join('hotel', 'room.hotel_id', '=', 'hotel.id')
+            ->get();
+
+        // dd("d");
+        dd($availableRooms);
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
     public function touristReserve(Request $request)
     {
         auth()->user();
+        $request->validate(
+            [
+                "start_reservation" => "required",
+                "end_reservation" => "required",
+                'rooms.*.capacity_room' => 'integer',
+                'rooms.*.number_of_room' => 'integer'
+            ]
+        );
         return response()->json([
             "status" => 0,
             "message" => "hotel not found",
