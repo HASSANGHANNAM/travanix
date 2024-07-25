@@ -387,4 +387,55 @@ class hotelController extends Controller
             "data" => $data
         ]);
     }
+
+
+    // TODO: all 
+    public function touristReserve(Request $request)
+    {
+        auth()->user();
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
+    public function touristGetReserved()
+    {
+        auth()->user();
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
+    public function touristUpdateReserved(Request $request)
+    {
+        auth()->user();
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
+    public function touristDeleteReserved($id)
+    {
+        auth()->user();
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
+    public function adminUpdateReserved(Request $request)
+    {
+        auth()->user();
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
+    public function adminGetReserved()
+    {
+        auth()->user();
+        return response()->json([
+            "status" => 0,
+            "message" => "hotel not found",
+        ]);
+    }
 }

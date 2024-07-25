@@ -233,7 +233,7 @@ class rateAndCommentController extends Controller
         );
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
         if (isset($request->resturant_id)) {
-            $chekeFavorite = DB::table('rate')->where(
+            $chekeFavorite = DB::table('comment')->where(
                 [
                     ['tourist_id', '=', $touristId->id],
                     ['resturant_id', '=',  $request->resturant_id]
@@ -263,13 +263,13 @@ class rateAndCommentController extends Controller
             ]);
         }
         if (isset($request->hotel_id)) {
-            $chekeFavorite = DB::table('rate')->where(
+            $chekeComment = DB::table('comment')->where(
                 [
                     ['tourist_id', '=', $touristId->id],
                     ['hotel_id', '=',  $request->hotel_id]
                 ]
             )->first();
-            if ($chekeFavorite == null) {
+            if ($chekeComment == null) {
                 $putComment = [
                     "tourist_id" => $touristId->id,
                     "hotel_id" => $request->hotel_id,
@@ -293,7 +293,7 @@ class rateAndCommentController extends Controller
             ]);
         }
         if (isset($request->attraction_activity_id)) {
-            $chekeFavorite = DB::table('rate')->where(
+            $chekeFavorite = DB::table('comment')->where(
                 [
                     ['tourist_id', '=', $touristId->id],
                     ['attraction_activity_id', '=',  $request->attraction_activity_id]
