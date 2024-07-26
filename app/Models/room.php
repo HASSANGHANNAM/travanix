@@ -35,4 +35,8 @@ class room extends Model
         return $this->whereNotIn('id', $reservedRooms)
             ->count();
     }
+    public function reserve_has_room()
+    {
+        return $this->belongsToMany(reserve_has_room::class);
+    }
 }

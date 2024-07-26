@@ -17,6 +17,8 @@ return new class extends Migration
             $table->date('end_reservation')->nullable();
             $table->float('price_all_reserve')->unsigned();
             $table->enum("payment_status", ["paid", "unpaid", "wallet", "cash"]);
+            $table->unsignedBigInteger('tourist_id');
+            $table->foreign('tourist_id')->references('id')->on('tourist');
             $table->timestamps();
         });
     }

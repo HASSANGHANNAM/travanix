@@ -284,7 +284,7 @@ class searchController extends Controller
                 "favorite" => $fav
             ];
         }
-        if ($request->input('avg_rate') == null & $request->input('city_name') == null & $request->input('nation_name') == null & $request->input('address') == null & $request->input('name') == null) {
+        if ($request->input('avg_rate') == null & $request->input('city_name') == null & $request->input('nation_name') == null & $request->input('address') == null & $request->input('name') == null & $request->input('hotel_class') == null) {
             return response()->json([
                 "status" => 1,
                 "message" => "succes",

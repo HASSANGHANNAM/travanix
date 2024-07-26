@@ -10,11 +10,11 @@ class reserve extends Model
 {
     use HasFactory, HasApiTokens;
     protected $table = "reserve";
-    protected $fillable = ['price_all_reserve', 'end_reservation', 'start_reservation', 'payment_status'];
+    protected $fillable = ['price_all_reserve', 'end_reservation', 'start_reservation', 'payment_status', 'tourist_id'];
     public $timestamps = true;
 
-    public function rooms()
+    public function reserve_has_room()
     {
-        return $this->belongsToMany(room::class, 'room_reserves');
+        return $this->hasMany(reserve_has_room::class);
     }
 }

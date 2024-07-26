@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('reserve_has_room', function (Blueprint $table) {
             $table->id();
+            $table->integer('number');
             $table->unsignedBigInteger('reserve_id');
             $table->foreign('reserve_id')->references('id')->on('reserve');
             $table->unsignedBigInteger('room_id');

@@ -16,9 +16,12 @@ use App\Models\image_hotel;
 use App\Models\nation;
 use App\Models\rate;
 use App\Models\reserve;
+use App\Models\reserve_has_room;
 use App\Models\service;
 use App\Models\tourist;
 use App\Models\trip_has_place;
+use App\Models\User;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -420,9 +423,6 @@ class hotelController extends Controller
             "data" => $data
         ]);
     }
-
-
-    // TODO: all 
     public function touristCheckReserve(Request $request)
     {
         auth()->user();
@@ -431,33 +431,64 @@ class hotelController extends Controller
                 "hotel_id" => "required|integer",
                 "start_reservation" => "required",
                 "end_reservation" => "required",
-                'rooms.*.capacity_room' => 'integer',
-                'rooms.*.number_of_room' => 'integer'
+                'rooms.*.capacity_room' => 'integer|required',
+                'rooms.*.number_of_room' => 'integer|required'
             ]
         );
+        $find = hotel::find($request->hotel_id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel not found",
+            ]);
+        }
         $startDate = $request->start_reservation;
-        $endDate = $request->end_reservatio;
-        $capacity = $request->capacity;
-
-        $f = DB::table('reserve')->where('start_reservation',  $endDate)->get();
-        dd($f);
-        $availableRooms = DB::table('hotel')
-            ->join('room', 'hotel.id', '=', 'room.hotel_id')
-            ->leftJoin('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
-            ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->where('start_reservation', '>', $endDate)
-                    ->orWhere('end_reservation', '<', $startDate);
-            })
-            // ->select('room.id', 'room.price_room', 'hotel.name as hotel_name')
-            // ->join('hotel', 'room.hotel_id', '=', 'hotel.id')
-            ->get();
-
-        // dd("d");
-        dd($availableRooms);
+        $endDate = $request->end_reservation;
+        $price_all_reserve = 0;
+        foreach ($request->rooms as $room) {
+            $capacity = $room['capacity_room'];
+            $availableRooms = DB::table('hotel')
+                ->join('room', 'hotel.id', '=', 'room.hotel_id')
+                ->Join('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
+                ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
+                ->where('capacity_room', $capacity)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereRaw('start_reservation < ?', [$startDate])
+                        ->whereRaw('end_reservation > ?', [$endDate])
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                                ->whereRaw('start_reservation <?', [$endDate]);
+                        })
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('end_reservation > ?', [$startDate])
+                                ->whereRaw('end_reservation < ?', [$endDate]);
+                        })
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                                ->whereRaw('end_reservation < ?', [$endDate]);
+                        });
+                })
+                ->selectRaw("room_id,capacity_room,price_room,quantity, SUM(`number`) AS number")
+                ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
+                ->first();
+            if ($availableRooms == null) {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel"
+                ]);
+            }
+            if ($availableRooms->quantity - $availableRooms->number < $room['number_of_room']) {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "number of room not found",
+                ]);
+            }
+            $price_all_reserve = $price_all_reserve +  $availableRooms->price_room * $room['number_of_room'];
+        }
         return response()->json([
-            "status" => 0,
-            "message" => "hotel not found",
+            "status" => 1,
+            "message" => "succes",
+            "price" => $price_all_reserve
         ]);
     }
     public function touristReserve(Request $request)
@@ -465,55 +496,205 @@ class hotelController extends Controller
         auth()->user();
         $request->validate(
             [
+                "hotel_id" => "required|integer",
                 "start_reservation" => "required",
                 "end_reservation" => "required",
+                "payment_status" => "required",
                 'rooms.*.capacity_room' => 'integer',
                 'rooms.*.number_of_room' => 'integer'
             ]
         );
+        $find = hotel::find($request->hotel_id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "hotel not found",
+            ]);
+        }
+        $startDate = $request->start_reservation;
+        $endDate = $request->end_reservation;
+        $price_all_reserve = 0;
+        foreach ($request->rooms as $room) {
+            $capacity = $room['capacity_room'];
+            $availableRooms = DB::table('hotel')
+                ->join('room', 'hotel.id', '=', 'room.hotel_id')
+                ->Join('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
+                ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
+                ->where('capacity_room', $capacity)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereRaw('start_reservation < ?', [$startDate])
+                        ->whereRaw('end_reservation > ?', [$endDate])
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                                ->whereRaw('start_reservation <?', [$endDate]);
+                        })
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('end_reservation > ?', [$startDate])
+                                ->whereRaw('end_reservation < ?', [$endDate]);
+                        })
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                                ->whereRaw('end_reservation < ?', [$endDate]);
+                        });
+                })
+                ->selectRaw("room_id,capacity_room,price_room,quantity, SUM(`number`) AS number")
+                ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
+                ->first();
+            if ($availableRooms == null) {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel"
+                ]);
+            }
+            if ($availableRooms->quantity - $availableRooms->number < $room['number_of_room']) {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "number of room not found",
+                ]);
+            }
+            $price_all_reserve = $price_all_reserve +  $availableRooms->price_room * $room['number_of_room'];
+        }
+        $reserve = [
+            "start_reservation" => $request->start_reservation,
+            "end_reservation" => $request->end_reservation,
+            "tourist_id" => (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id,
+            "payment_status" => $request->payment_status,
+            "price_all_reserve" => $price_all_reserve
+        ];
+        $create = reserve::create($reserve);
+        foreach ($request->rooms as $room) {
+            $find = DB::table('room')->where([
+                ['hotel_id', $request->hotel_id], ['capacity_room', $room['capacity_room']]
+            ])->first();
+            $reserve_has_room = [
+                'reserve_id' => $create->id, 'number' => $room['number_of_room'], 'room_id' => $find->id
+            ];
+            reserve_has_room::create($reserve_has_room);
+        }
         return response()->json([
-            "status" => 0,
-            "message" => "hotel not found",
+            "status" => 1,
+            "message" => "you are reserve",
         ]);
     }
+
+
+
     public function touristGetReserved()
     {
         auth()->user();
+        $reservequery = reserve::query();
+        $reservequery->where('tourist_id', (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id);
+        $reserves = $reservequery->with(['reserve_has_room.room'])->get();
+        $reservesReturn = [];
+        foreach ($reserves as $reserve) {
+            $rooms = [];
+            $hotel_id = 0;
+            foreach ($reserve->reserve_has_room as $reserve_has_room) {
+                $rooms[] = [
+                    'capacity_room' => $reserve_has_room->room->capacity_room,
+                    'number' => $reserve_has_room->number,
+                ];
+                $hotel_id = $reserve_has_room->room->hotel_id;
+            }
+            $reservesReturn[] = [
+                'id' => $reserve->id,
+                'hotel_id' => $hotel_id,
+                'payment_status' => $reserve->payment_status,
+                'price_all_reserve' => $reserve->price_all_reserve,
+                'start_reservation' => $reserve->start_reservation,
+                'end_reservation' => $reserve->end_reservation,
+                "rooms" => $rooms
+            ];
+        }
         return response()->json([
-            "status" => 0,
-            "message" => "hotel not found",
+            "status" => 1,
+            "message" => "succes",
+            "data" => $reservesReturn
         ]);
     }
+    // TODO: 
     public function touristUpdateReserved(Request $request)
     {
         auth()->user();
         return response()->json([
             "status" => 0,
-            "message" => "hotel not found",
+            "message" => "noooooooooooooooo",
         ]);
     }
     public function touristDeleteReserved($id)
     {
         auth()->user();
+        $find = reserve::find($id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "reserve not found",
+            ]);
+        }
+        $update = DB::table('reserve_has_room')->where('reserve_id', $id)->delete();
+        $update = DB::table('reserve')->where('id', $id)->delete();
         return response()->json([
-            "status" => 0,
-            "message" => "hotel not found",
+            "status" => 1,
+            "message" => "reserve was deleted",
         ]);
     }
     public function adminUpdateReserved(Request $request)
     {
         auth()->user();
+        $request->validate(
+            [
+                "id" => "required|integer",
+                "payment_status" => "required",
+            ]
+        );
+        $find = reserve::find($request->id);
+        if ($find == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "reserve not found",
+            ]);
+        }
+        $update = reserve::where('id', $request->id)->update(array('payment_status' => $request->payment_status));
         return response()->json([
-            "status" => 0,
-            "message" => "hotel not found",
+            "status" => 1,
+            "message" => "reserve was updated payment_status",
         ]);
     }
-    public function adminGetReserved()
+    public function adminGetRseserved()
     {
         auth()->user();
+        $reservequery = reserve::query();
+        $reserves = $reservequery->with(['reserve_has_room.room'])->get();
+        $reservesReturn = [];
+        foreach ($reserves as $reserve) {
+            $tourist = tourist::find($reserve->tourist_id);
+            $user = User::find($tourist->user_id);
+            $rooms = [];
+            $hotel_id = 0;
+            foreach ($reserve->reserve_has_room as $reserve_has_room) {
+                $rooms[] = [
+                    'capacity_room' => $reserve_has_room->room->capacity_room,
+                    'number' => $reserve_has_room->number,
+                ];
+                $hotel_id = $reserve_has_room->room->hotel_id;
+            }
+            $reservesReturn[] = [
+                'id' => $reserve->id,
+                'hotel_id' => $hotel_id,
+                "Email_address" => $user->Email_address,
+                "tourist_name" => $tourist->tourist_name,
+                "wallet" => $tourist->wallet,
+                'payment_status' => $reserve->payment_status,
+                'price_all_reserve' => $reserve->price_all_reserve,
+                'start_reservation' => $reserve->start_reservation,
+                'end_reservation' => $reserve->end_reservation,
+                "rooms" => $rooms
+            ];
+        }
         return response()->json([
-            "status" => 0,
-            "message" => "hotel not found",
+            "status" => 1,
+            "message" => "succes",
+            "data" => $reservesReturn
         ]);
     }
 }
