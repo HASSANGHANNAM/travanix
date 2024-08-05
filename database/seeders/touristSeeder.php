@@ -24,7 +24,7 @@ class touristSeeder extends Seeder
         $user = User::create($user);
         $touristData = [
             'user_id' => $user['id'],
-            'wallet' => 0,
+            'wallet' => 333333333,
             'tourist_name' => "nawwar"
         ];
         tourist::create($touristData);

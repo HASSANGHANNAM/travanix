@@ -493,11 +493,12 @@ class rateAndCommentController extends Controller
                         "message" => "attraction_activity not found"
                     ]);
                 }
+
                 $commentsWithRates = DB::table('comment')
                     ->join('rate', function ($join) use ($attractionId) {
                         $join->on('comment.tourist_id', '=', 'rate.tourist_id')
                             ->where('comment.attraction_activity_id', '=', $attractionId)
-                            ->where('rate.attraction_activities_id', '=', $attractionId);
+                            ->where('rate.attraction_activity_id', '=', $attractionId);
                     })
                     ->get();
                 $data = [];
@@ -784,7 +785,7 @@ class rateAndCommentController extends Controller
                     ->join('comment', function ($join) use ($attractionId) {
                         $join->on('rate.tourist_id', '=', 'comment.tourist_id')
                             ->where('rate.attraction_activity_id', '=', $attractionId)
-                            ->where('comment.attraction_activities_id', '=', $attractionId);
+                            ->where('comment.attraction_activity_id', '=', $attractionId);
                     })
                     ->get();
                 $data = [];

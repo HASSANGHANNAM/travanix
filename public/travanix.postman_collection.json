@@ -117,7 +117,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\"Email_address\":\"dddd@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
+									"raw": "{\r\n\"Email_address\":\"nameaalbad@gmail.com\",\r\n            \"Password\" :\"11111111\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}touristLogin",
@@ -152,7 +152,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n\"Email_address\":\"dfggsd@gmail.com\"\r\n}\r\n"
+									"raw": "{\r\n\"Email_address\":\"nameaalbad@gmail.com\"\r\n}\r\n"
 								},
 								"url": {
 									"raw": "{{url}}touristCheckEmailPassword",
@@ -309,7 +309,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "8|QBNYSXzzzMkzMhcaUHzG8hgczUFP5tUBrfT7F4HH471559cc",
+											"value": "4|fM9uIk0XbRJ3eiFkwzmDUVEoJqiHuhB96mmi81ao5b9c1874",
 											"type": "string"
 										}
 									]
@@ -320,6 +320,30 @@
 									"raw": "{{url}}touristDeleteEmail",
 									"host": [
 										"{{url}}touristDeleteEmail"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "touristCheckIfCanDeleteEmail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "5|hJXZx4nCLyYzStTJytO4rhL5ufDNZbTFLQ3CKZayfd205277",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}touristCheckIfCanDeleteEmail",
+									"host": [
+										"{{url}}touristCheckIfCanDeleteEmail"
 									]
 								}
 							},
@@ -651,7 +675,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "4|V0OxBajl2DrH0U3vNID86Pc50kJ02JeADlHTO6ppa70bb6fb",
+											"value": "3|F9XoHJ4P2zxGmqMsEepIZKw4inKNyHPrywEnGfOg6ffdd6d3",
 											"type": "string"
 										}
 									]
@@ -676,7 +700,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"hotel_id\":1,\r\n     \"start_reservation\":\"2024-06-01\",\r\n    \"end_reservation\":\"2024-06-05\",\r\n        \"payment_status\":\"wallet\",\r\n    \"rooms\":[\r\n        {\r\n        \"capacity_room\":3,\r\n        \"number_of_room\":32\r\n        }\r\n        ,{\r\n        \"capacity_room\":1,\r\n        \"number_of_room\":33\r\n        }\r\n        ]\r\n}",
+									"raw": "{\r\n   \"hotel_id\" : 1,\r\n                \"start_reservation\" :\"2024-09-01\",\r\n                \"end_reservation\" : \"2024-09-03\",\r\n    \"rooms\":[\r\n        {\r\n        \"capacity_room\":2,\r\n        \"number_of_room\":44\r\n        }\r\n        ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -700,7 +724,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "4|V0OxBajl2DrH0U3vNID86Pc50kJ02JeADlHTO6ppa70bb6fb",
+											"value": "3|PTgPzQzwkWscU02V3udjUdppXE0YPgtk3sAmJeRW194ab3e5",
 											"type": "string"
 										}
 									]
@@ -725,7 +749,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"hotel_id\":1,\r\n     \"start_reservation\":\"2024-06-01\",\r\n    \"end_reservation\":\"2024-06-05\",\r\n    \"rooms\":[\r\n        {\r\n        \"capacity_room\":3,\r\n        \"number_of_room\":32\r\n        }\r\n        ,{\r\n        \"capacity_room\":1,\r\n        \"number_of_room\":33\r\n        }\r\n        ]\r\n}",
+									"raw": "{\r\n   \"hotel_id\" : 1,\r\n                \"start_reservation\" :\"2024-09-01\",\r\n                \"end_reservation\" : \"2024-09-03\",\r\n    \"rooms\":[\r\n        {\r\n        \"capacity_room\":2,\r\n        \"number_of_room\":5\r\n        }\r\n        ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -814,7 +838,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n\"size_room\":1,\r\n \"size_of_bed\":2,\r\n  \"capacity_room\":3,\r\n   \"price_room\":44, \r\n   \"available_services\":\"dd\",\r\n    \"hotel_id\":1\r\n\r\n},\r\n{\r\n\"size_room\":4,\r\n \"size_of_bed\":\"5\",\r\n  \"capacity_room\":5,\r\n   \"price_room\":555,\r\n    \"available_services\":\"ggggg\",\r\n     \"hotel_id\":1\r\n}\r\n]"
+									"raw": "[\r\n    {\r\n\"size_room\":1,\r\n \"size_of_bed\":2,\r\n \r\n    \"hotel_id\":1\r\n\r\n},\r\n{\r\n\"size_room\":4,\r\n \"size_of_bed\":\"5\",\r\n  \"capacity_room\":5,\r\n   \"price_room\":555,\r\n    \"available_services\":\"ggggg\",\r\n     \"hotel_id\":1\r\n}\r\n]"
 								},
 								"url": {
 									"raw": "{{url}}touristUpdateReserved",
@@ -857,12 +881,12 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}touristDeleteReserved/1",
+									"raw": "{{url}}touristDeleteReserved/24",
 									"host": [
 										"{{url}}touristDeleteReserved"
 									],
 									"path": [
-										"1"
+										"24"
 									]
 								}
 							},
@@ -969,7 +993,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
+											"value": "3|F9XoHJ4P2zxGmqMsEepIZKw4inKNyHPrywEnGfOg6ffdd6d3",
 											"type": "string"
 										}
 									]
@@ -978,7 +1002,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n             \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n           \r\n            \"rate\" : 1.4\r\n}",
+									"raw": "{\r\n            //  \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n            \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n           \r\n            \"rate\" : 1.4\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1002,7 +1026,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "11|7LPHMczbuMmVCabGe0qrEun7JyNj4XsAHNqmSHVo50c65c05",
+											"value": "3|F9XoHJ4P2zxGmqMsEepIZKw4inKNyHPrywEnGfOg6ffdd6d3",
 											"type": "string"
 										}
 									]
@@ -1011,7 +1035,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n            \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n           //  \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n            \"comment\" : \"Tffgdfg\"\r\n}",
+									"raw": "{\r\n            // \"hotel_id\" : 1,\r\n           //\"resturant_id\" : 1,\r\n            \"attraction_activity_id\" : 1,\r\n            // \"trip_id\" : 1,\r\n            \"comment\" : \"ddd\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1035,7 +1059,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "10|aCE04NXiK7Io7mQWYgm1A4R3fY1UHA54rngH0Jgocb646c03",
+											"value": "3|F9XoHJ4P2zxGmqMsEepIZKw4inKNyHPrywEnGfOg6ffdd6d3",
 											"type": "string"
 										}
 									]
@@ -1043,13 +1067,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}touristGetAllRateAndComment?hotel_id=1",
+									"raw": "{{url}}touristGetAllRateAndComment?attraction_activity_id=1",
 									"host": [
 										"{{url}}touristGetAllRateAndComment"
 									],
 									"query": [
 										{
-											"key": "hotel_id",
+											"key": "attraction_activity_id",
 											"value": "1"
 										}
 									]
@@ -1174,7 +1198,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n     \"id\" : 1,\r\n                \"phone_number\" : \"09439434343\",\r\n                \"payment_status\" :\"wallet\",\r\n                \"number_of_seat\": 2,\r\n                \"detalis\":[\r\n                    {\r\n                    \"name\":\"hassan\",\r\n                    \"age\":21\r\n                    }\r\n                ]\r\n              \r\n}",
+									"raw": "{\r\n     \"id\" : 1,\r\n                \"phone_number\" : \"09439434343\",\r\n                \"number_of_seat\": 2,\r\n                \"detalis\":[\r\n                    {\r\n                    \"name\":\"hassan\",\r\n                    \"age\":21\r\n                    }\r\n                ]\r\n              \r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1198,7 +1222,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "4|W0FI1D1d5XSBeeDB6uHJDczyx9rSb9jfJki3RH6R4e3f97e2",
+											"value": "5|YiTILicz6f2SWXFrzQmmG99lHqTymK6YIq3NDmjpd4e294c2",
 											"type": "string"
 										}
 									]
@@ -1225,7 +1249,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "8|QBNYSXzzzMkzMhcaUHzG8hgczUFP5tUBrfT7F4HH471559cc",
+											"value": "3|PTgPzQzwkWscU02V3udjUdppXE0YPgtk3sAmJeRW194ab3e5",
 											"type": "string"
 										}
 									]
@@ -1249,7 +1273,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "4|709tmSLfBTaQAt0xNOJRGNRTlPDiAuOW8dL9USUNe1bdc685",
+											"value": "4|fM9uIk0XbRJ3eiFkwzmDUVEoJqiHuhB96mmi81ao5b9c1874",
 											"type": "string"
 										}
 									]
@@ -1273,7 +1297,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "6|RmjYPfxvoPkknTYh28u0iq9gG4p2txqXlHEHpfbFad924182",
+											"value": "5|YiTILicz6f2SWXFrzQmmG99lHqTymK6YIq3NDmjpd4e294c2",
 											"type": "string"
 										}
 									]
@@ -1282,7 +1306,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"trip_id\" :1,\r\n                \"number_of_seat\" :2,\r\n                \"phone_number\" :\"093452893\",\r\n                \"payment_status\":\"wallet\",\r\n                \"detalis\" : [\r\n                    {\r\n\"name\":\"hassan\",\r\n\"age\":21\r\n                    },{\r\n\"name\":\"mahmod\",\r\n\"age\":21\r\n                    }\r\n                ]\r\n}",
+									"raw": "{\r\n    \"trip_id\" :1,\r\n                \"number_of_seat\" :2,\r\n                \"phone_number\" :\"093452893\",\r\n                \"detalis\" : [\r\n                    {\r\n\"name\":\"hassan\",\r\n\"age\":21\r\n                    },{\r\n\"name\":\"mahmod\",\r\n\"age\":21\r\n                    }\r\n                ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1853,7 +1877,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|Qar3OhJntOcCbRI1YzBBLKJsoDmzB166Ky6yBP4l43e91b78",
+											"value": "3|jbIUHnnZcSnkco4yYfd62rFAWdGjoLowtQEYUIDM71abb590",
 											"type": "string"
 										}
 									]
@@ -1878,7 +1902,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\r\n    {\r\n\"size_room\":1,\r\n \"size_of_bed\":2,\r\n  \"capacity_room\":3,\r\n   \"price_room\":44, \r\n   \"available_services\":\"dd\",\r\n    \"hotel_id\":1\r\n\r\n},\r\n{\r\n\"size_room\":4,\r\n \"size_of_bed\":\"5\",\r\n  \"capacity_room\":5,\r\n   \"price_room\":555,\r\n    \"available_services\":\"ggggg\",\r\n     \"hotel_id\":1\r\n}\r\n]"
+									"raw": "\r\n{\r\n \"id\":1,\r\n\"status\":\"Submitted\"\r\n}"
 								},
 								"url": {
 									"raw": "{{url}}Admin/adminUpdateReserved",
@@ -2030,7 +2054,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "3|pVhytODkZBL1FGSl0J6jgd9LDygKmRC0tKxF2YF38c37e26c",
+											"value": "6|erxRTyrkwPMnkF6J3DZZuyFINIlCdOKJcJmw32G14fd8e6c6",
 											"type": "string"
 										}
 									]
@@ -2531,7 +2555,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
+											"value": "3|qod8dhlzdOmXOdHvweQnBquGewe77cv64AB8yqpW75ff0adf",
 											"type": "string"
 										}
 									]
@@ -2757,7 +2781,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "2|yNe1CGC3NvbLfTsQbKmzxTHcEI7VjQSDh7cCBZfWe6ac0abb",
+											"value": "4|MxPbWGUWkRavaTw7FALZDQP2NHQsUsvD53lHHK8Na6ffe095",
 											"type": "string"
 										}
 									]
@@ -2829,7 +2853,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n               \"id\" :1,\r\n                \"payment_status\" :\"paid\"\r\n                // \"unpaid\"\r\n}"
+									"raw": "{\r\n               \"id\" :1,\r\n                \"status\" :\r\n                \r\n}"
 								},
 								"url": {
 									"raw": "{{url}}Admin/adminUpdateTripReserved",

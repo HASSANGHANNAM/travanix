@@ -398,16 +398,16 @@ class tripController extends Controller
                 "message" => "id not found"
             ]);
         }
-        if ($find['status'] == "Submitted" | $find['status'] == "Canceled") {
+        if ($find['status'] == "Submitted" || $find['status'] == "Canceled") {
             return response()->json([
                 "status" => 0,
                 "message" => "this request was handler"
             ]);
         }
-        if ($request->status != "Submitted" & $request->status != "Canceled") {
+        if ($request->status != "Submitted" && $request->status != "Canceled") {
             return response()->json([
                 "status" => 0,
-                "message" => "your post payment status not found in system"
+                "message" => "your post  status not found in system"
             ]);
         }
         if ($request->status == "Submitted") {
@@ -415,7 +415,7 @@ class tripController extends Controller
             $price = DB::table('trip')->select('price_trip')->where('id', $find->trip_id)->first();
             $newwallet = $oldWallet - ($price * $find->number_of_seat);
             if ($newwallet >= 0) {
-                $updateWallet = tourist::where('id', $find->tourist_id)->update(array('wallet' => ($request->wallet + $oldWallet->wallet)));
+                $updateWallet = tourist::where('id', $find->tourist_id)->update(array('wallet' => $newwallet));
             } else {
                 return response()->json([
                     "status" => 0,

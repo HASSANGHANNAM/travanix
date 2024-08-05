@@ -8,6 +8,7 @@ use App\Models\comment;
 use App\Models\favorite;
 use App\Models\rate;
 use App\Models\reserve;
+use App\Models\reserve_has_room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -170,9 +171,14 @@ class MainController extends Controller
         $deletefavorite = favorite::where('tourist_id', $find->id)->delete();
         $deletechargewallet = charge_wallet::where('tourist_id', $find->id)->delete();
         $findtrip = tourist_has_trip::where('tourist_id', $find->id)->get();
+        $findhotel = reserve::where('tourist_id', $find->id)->get();
         foreach ($findtrip as $t) {
             $deletetourist_details = tourist_details::where('tourist_has_trip_id', $t->id)->delete();
             $deletetourist_has_trip = tourist_has_trip::where('id', $t->id)->delete();
+        }
+        foreach ($findhotel as $h) {
+            $deletereserve_has_room = reserve_has_room::where('reserve_id', $h->id)->delete();
+            $deletereserve = reserve::where('id', $h->id)->delete();
         }
         $deletetourist = tourist::where('id', $find->id)->delete();
         $deleteuser = User::where('id', auth()->user()->id)->delete();

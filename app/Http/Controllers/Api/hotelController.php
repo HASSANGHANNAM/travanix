@@ -517,7 +517,7 @@ class hotelController extends Controller
         $price_all_reserve = 0;
         foreach ($request->rooms as $room) {
             $capacity = $room['capacity_room'];
-            $availableRooms = DB::table('hotel')
+            $notAvailableRooms = DB::table('hotel')
                 ->join('room', 'hotel.id', '=', 'room.hotel_id')
                 ->Join('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
                 ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
@@ -538,22 +538,26 @@ class hotelController extends Controller
                                 ->whereRaw('end_reservation < ?', [$endDate]);
                         });
                 })
+                ->where('status', "!=", "Canceled")
                 ->selectRaw("room_id,capacity_room,price_room,quantity, SUM(`number`) AS number")
                 ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
                 ->first();
-            if ($availableRooms == null) {
+            $find = DB::table('room')->where([
+                ['hotel_id', $request->hotel_id], ['capacity_room', $room['capacity_room']]
+            ])->first();
+            if ($notAvailableRooms == null && $find == null) {
                 return response()->json([
                     "status" => 0,
                     "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel"
                 ]);
             }
-            if ($availableRooms->quantity - $availableRooms->number < $room['number_of_room']) {
+            if (($notAvailableRooms != null && $notAvailableRooms->quantity - $notAvailableRooms->number < $room['number_of_room']) || ($find->quantity  < $room['number_of_room'])) {
                 return response()->json([
                     "status" => 0,
                     "message" => "number of room not found",
                 ]);
             }
-            $price_all_reserve = $price_all_reserve +  $availableRooms->price_room * $room['number_of_room'];
+            $price_all_reserve = $price_all_reserve +  $find->price_room * $room['number_of_room'];
         }
         $reserve = [
             "start_reservation" => $request->start_reservation,
@@ -564,9 +568,6 @@ class hotelController extends Controller
         ];
         $create = reserve::create($reserve);
         foreach ($request->rooms as $room) {
-            $find = DB::table('room')->where([
-                ['hotel_id', $request->hotel_id], ['capacity_room', $room['capacity_room']]
-            ])->first();
             $reserve_has_room = [
                 'reserve_id' => $create->id, 'number' => $room['number_of_room'], 'room_id' => $find->id
             ];
@@ -652,13 +653,37 @@ class hotelController extends Controller
                 "message" => "reserve not found",
             ]);
         }
+        if ($find['status'] == "Submitted" | $find['status'] == "Canceled") {
+            return response()->json([
+                "status" => 0,
+                "message" => "this request was handler"
+            ]);
+        }
+        if ($request->status != "Submitted" && $request->status != "Canceled") {
+            return response()->json([
+                "status" => 0,
+                "message" => "your post payment status not found in system"
+            ]);
+        }
+        if ($request->status == "Submitted") {
+            $oldWallet = DB::table('tourist')->select('wallet')->where('id', $find->tourist_id)->first();
+            $newwallet = $oldWallet->wallet - $find->price_all_reserve;
+            if ($newwallet >= 0) {
+                $updateWallet = tourist::where('id', $find->tourist_id)->update(array('wallet' =>  $newwallet));
+            } else {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "your  wallet less than price trip"
+                ]);
+            }
+        }
         $update = reserve::where('id', $request->id)->update(array('status' => $request->status));
         return response()->json([
             "status" => 1,
             "message" => "reserve was updated status",
         ]);
     }
-    public function adminGetRseserved()
+    public function adminGetReserved()
     {
         auth()->user();
         $reservequery = reserve::query();

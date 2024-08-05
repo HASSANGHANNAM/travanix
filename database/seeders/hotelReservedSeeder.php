@@ -29,31 +29,41 @@ class hotelReservedSeeder extends Seeder
                     [
                         "number_of_room" => 3,
                         "capacity_room" => 2
+                    ],
+                    [
+                        "number_of_room" => 1,
+                        "capacity_room" => 1
                     ]
                 ]
-
             ],
             [
-                "hotel_id" => 1,
+                "hotel_id" => 2,
                 "start_reservation" => "2024-10-01",
                 "end_reservation" => "2024-10-03",
                 "status" => "Canceled",
                 "rooms" => [
                     [
-                        "number_of_room" => 2,
+                        "number_of_room" => 3,
                         "capacity_room" => 2
+                    ],  [
+                        "number_of_room" => 1,
+                        "capacity_room" => 1
+                    ],
+                    [
+                        "number_of_room" => 1,
+                        "capacity_room" => 4
                     ]
                 ]
             ],
             [
-                "hotel_id" => 1,
+                "hotel_id" => 3,
                 "start_reservation" => "2024-11-01",
                 "end_reservation" => "2024-11-03",
                 "status" => "Submitted",
                 "rooms" => [
                     [
                         "number_of_room" => 1,
-                        "capacity_room" => 2
+                        "capacity_room" => 3
                     ]
                 ]
             ]
@@ -64,11 +74,10 @@ class hotelReservedSeeder extends Seeder
             $price_all_reserve = 0;
             foreach ($reserve['rooms'] as $room) {
                 $capacity = $room['capacity_room'];
-                $availableRooms = DB::table('hotel')
-                    ->join('room', 'hotel.id', '=', 'room.hotel_id')
-                    ->where('capacity_room', $capacity)
-                    ->first();
-                $price_all_reserve = $price_all_reserve +  $availableRooms->price_room * $room['number_of_room'];
+                $find = DB::table('room')->where([
+                    ['hotel_id', $reserve['hotel_id']], ['capacity_room', $room['capacity_room']]
+                ])->first();
+                $price_all_reserve = $price_all_reserve +  $find->price_room * $room['number_of_room'];
             }
             $re = [
                 "start_reservation" => $reserve['start_reservation'],
@@ -79,9 +88,6 @@ class hotelReservedSeeder extends Seeder
             ];
             $create = reserve::create($re);
             foreach ($reserve['rooms'] as $room) {
-                $find = DB::table('room')->where([
-                    ['hotel_id', $reserve['hotel_id']], ['capacity_room', $room['capacity_room']]
-                ])->first();
                 $reserve_has_room = [
                     'reserve_id' => $create->id, 'number' => $room['number_of_room'], 'room_id' => $find->id
                 ];

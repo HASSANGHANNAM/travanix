@@ -32,6 +32,27 @@ class tripSeeder extends Seeder
                 "coordinate_x" => 31.279862,
                 "coordinate_y" => 37.1297454,
                 "places" => [["hotel_id" => 3], ["resturant_id" => 1], ["attraction_activity_id" => 1]]
+            ],
+            [
+                "trip_name" => "trip ",
+                "description" => "bad trip",
+                "type_of_trip" => "Family",
+                "price_trip" => 1,
+                "number_of_allSeat" => 111,
+                "trip_start_time" => "2024-09-03 08:00:00",
+                "trip_end_time" => "2024-09-06 08:00:00",
+                "city_id" => 21,
+                "address" => "jordan",
+                "coordinate_x" => 31.279862,
+                "coordinate_y" => 37.1297454,
+                "places" => [
+                    ["hotel_id" => 3],
+                    ["hotel_id" => 1],
+                    ["hotel_id" => 2],
+                    ["resturant_id" => 1],
+                    ["attraction_activity_id" => 1]
+                ]
+
             ]
         ];
         foreach ($trips as $trip) {
