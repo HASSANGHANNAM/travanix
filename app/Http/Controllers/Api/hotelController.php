@@ -446,45 +446,47 @@ class hotelController extends Controller
         $price_all_reserve = 0;
         foreach ($request->rooms as $room) {
             $capacity = $room['capacity_room'];
-            $availableRooms = DB::table('hotel')
+            $notAvailableRooms = DB::table('hotel')
                 ->join('room', 'hotel.id', '=', 'room.hotel_id')
                 ->leftJoin('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
                 ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
                 ->where('capacity_room', $capacity)
-                // ->where(function ($query) use ($startDate, $endDate) {
-                //     $query->whereRaw('start_reservation < ?', [$startDate])
-                //         ->whereRaw('end_reservation > ?', [$endDate])
-                //         ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
-                //             $subQuery->whereRaw('start_reservation > ?', [$startDate])
-                //                 ->whereRaw('start_reservation <?', [$endDate]);
-                //         })
-                //         ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
-                //             $subQuery->whereRaw('end_reservation > ?', [$startDate])
-                //                 ->whereRaw('end_reservation < ?', [$endDate]);
-                //         })
-                //         ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
-                //             $subQuery->whereRaw('start_reservation > ?', [$startDate])
-                //                 ->whereRaw('end_reservation < ?', [$endDate]);
-                //         });
-                // })
+                ->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereRaw('start_reservation < ?', [$startDate])
+                        ->whereRaw('end_reservation > ?', [$endDate])
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                                ->whereRaw('start_reservation <?', [$endDate]);
+                        })
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('end_reservation > ?', [$startDate])
+                                ->whereRaw('end_reservation < ?', [$endDate]);
+                        })
+                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                                ->whereRaw('end_reservation < ?', [$endDate]);
+                        });
+                })
                 ->where('status', "!=", "Canceled")
                 ->selectRaw("room_id,capacity_room,price_room,quantity, SUM(`number`) AS number")
                 ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
                 ->first();
-            dd($availableRooms);
-            if ($availableRooms == null) {
+            $find = DB::table('room')->where([
+                ['hotel_id', $request->hotel_id], ['capacity_room', $room['capacity_room']]
+            ])->first();
+            if ($notAvailableRooms == null && $find == null) {
                 return response()->json([
                     "status" => 0,
                     "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel"
                 ]);
             }
-            if ($availableRooms->quantity - $availableRooms->number < $room['number_of_room']) {
+            if (($notAvailableRooms != null && $notAvailableRooms->quantity - $notAvailableRooms->number < $room['number_of_room']) || ($find->quantity  < $room['number_of_room'])) {
                 return response()->json([
                     "status" => 0,
                     "message" => "number of room not found",
                 ]);
             }
-            $price_all_reserve = $price_all_reserve +  $availableRooms->price_room * $room['number_of_room'];
+            $price_all_reserve = $price_all_reserve +  $find->price_room * $room['number_of_room'];
         }
         return response()->json([
             "status" => 1,
