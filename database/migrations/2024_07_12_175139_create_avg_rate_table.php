@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('avg_rate', function (Blueprint $table) {
             $table->id();
-            $table->float('avg')->unsigned();
+            $table->double('avg')->unsigned();
             $table->integer('count')->unsigned();
             $table->unsignedBigInteger('hotel_id')->nullable();
             $table->foreign('hotel_id')->references('id')->on('hotel');

@@ -15,7 +15,7 @@ class locationsController extends Controller
         auth()->user();
         $request->validate(
             [
-                "city_name" => "required|string|unique:city",
+                "city_name" => "required|string|unique:city|max:45",
                 "nation_id" => "required|integer"
             ]
         );
@@ -75,7 +75,7 @@ class locationsController extends Controller
         auth()->user();
         $request->validate(
             [
-                "nation_name" => "required|string|unique:nation"
+                "nation_name" => "required|string|unique:nation|max:45"
             ]
         );
         $nationData = [

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('trip', function (Blueprint $table) {
             $table->id();
-            $table->string('trip_name')->unique();
-            $table->float('price_trip')->unsigned();
+            $table->string('trip_name', 45)->unique();
+            $table->double('price_trip')->unsigned();
             $table->integer('number_of_allSeat')->unsigned();
             $table->string('type_of_trip', 45);
             $table->text('description');

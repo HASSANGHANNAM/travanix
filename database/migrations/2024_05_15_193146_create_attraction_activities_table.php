@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attraction_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('attraction_activity_name', 45);
+            $table->string('attraction_activity_name', 45)->unique();
             $table->time('opening_time');
             $table->time('closing_time');
             $table->text('description');

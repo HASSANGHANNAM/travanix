@@ -7,6 +7,7 @@ use App\Models\charge_wallet;
 use App\Models\comment;
 use App\Models\favorite;
 use App\Models\rate;
+use App\Models\reserve;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -145,6 +146,20 @@ class MainController extends Controller
     }
     public function touristCheckIfCanDeleteEmail()
     {
+        auth()->user();
+        $find = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+        $findtrip = tourist_has_trip::where('tourist_id', $find->id)->get();
+        $findhotel = reserve::where('tourist_id', $find->id)->get();
+        if (sizeof($findhotel) == 0 & sizeof($findtrip) == 0) {
+            return response()->json([
+                "status" => 1,
+                "message" => "not found reserves you can delete email"
+            ]);
+        }
+        return response()->json([
+            "status" => 0,
+            "message" => "found reserves you can not delete email"
+        ]);
     }
     public function touristDeleteEmail()
     {
@@ -257,42 +272,3 @@ class MainController extends Controller
         ]);
     }
 }
-
-
-// public function login(Request $request)
-//     {
-//         $request->validate(
-//             [
-//                 "Email_address_or_Phone_number" => "required",
-//                 "Password" => ['required', 'string', password::min(8)]
-//             ]
-//         );
-//         $loginDataPhone = [
-//             "Phone_number" => $request->Email_address_or_Phone_number,
-//             "password" => $request->Password
-//         ];
-//         $loginDataEmail = [
-//             "Email_address" => $request->Email_address_or_Phone_number,
-//             "password" => $request->Password
-//         ];
-//         if (auth()->attempt($loginDataPhone) || auth()->attempt($loginDataEmail)) {
-//             $accessToken = auth()->user()->createToken('auth_token')->plainTextToken;
-//             return response()->json([
-//                 "status" => 1,
-//                 "message" => "loged in",
-//                 'access_token' => $accessToken
-//             ]);
-//         }
-//         $userphone = DB::table('users')->where('Phone_number', $loginDataPhone['Phone_number'])->first();
-//         $useremail = DB::table('users')->where('Email_address', $loginDataEmail['Email_address'])->first();
-//         if (isset($userphone) || isset($useremail)) {
-//             return response()->json([
-//                 "status" => 0,
-//                 "message" => "password uncorrect",
-//             ]);
-//         }
-//         return response()->json([
-//             "status" => 0,
-//             "message" => "not found your email or phone number",
-//         ]);
-//     }

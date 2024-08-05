@@ -35,6 +35,7 @@ class citySeeder extends Seeder
             ['city_name' => "ar-Rusaifa", 'nation_id' => 2],
             ['city_name' => "al-Quwaisima", 'nation_id' => 2],
             ['city_name' => "Wadi as-Sir", 'nation_id' => 2],
+            ['city_name' => "Jerash", 'nation_id' => 2],
             ['city_name' => "Atlanta", 'nation_id' => 3],
             ['city_name' => "Boston", 'nation_id' => 3],
             ['city_name' => "Chicago", 'nation_id' => 3],

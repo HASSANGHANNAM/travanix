@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\city;
 use App\Models\nation;
 use App\Models\phatmacist;
+use App\Models\room;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,9 +24,16 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call(adminSeeder::class);
+        $this->call(touristSeeder::class);
         $this->call(nationSeeder::class);
         $this->call(citySeeder::class);
         $this->call(servicesSeeder::class);
         $this->call(hotelSeeder::class);
+        $this->call(roomSeeder::class);
+        $this->call(attraction_activitySeeder::class);
+        $this->call(resturantSeeder::class);
+        $this->call(tripSeeder::class);
+        $this->call(tripReservedSeeder::class);
+        // $this->call(hotelReservedSeeder::class);
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tourist_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 45);
             $table->integer('age');
             $table->unsignedBigInteger('tourist_has_trip_id');
             $table->foreign('tourist_has_trip_id')->references('id')->on('tourist_has_trip');

@@ -24,9 +24,9 @@ class tripController extends Controller
         auth()->user();
         $request->validate(
             [
-                "trip_name" => "required",
+                "trip_name" => "required|max:45",
                 "type_of_trip" => "required|max:45",
-                "description" => "required|max:255",
+                "description" => "required",
                 "price_trip" => "required",
                 "number_of_allSeat" => "required|integer",
                 "trip_start_time" => "required",
@@ -95,7 +95,7 @@ class tripController extends Controller
         $tripData = trip::with('places')->get();
         $data = [];
         foreach ($tripData as $t) {
-            $sum = tourist_has_trip::where('trip_id', $t->id)->sum('number_of_seat');
+            $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
             $number_of_seats_available = $t->number_of_allSeat - $sum;
             $location = location::find($t->location_id);
             $city = city::find($location->city_id);
@@ -160,7 +160,7 @@ class tripController extends Controller
         $tourist_has_trip = tourist_has_trip::where('trip_id', $id)->get();
         foreach ($tourist_has_trip as $t) {
             $deletet = tourist_details::where('tourist_has_trip_id', $t->id)->delete();
-            if ($t->payment_status == "paid") {
+            if ($t->status == "Submitted") {
                 $findwallet = tourist::find($t->tourist_id);
                 $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $t->number_of_seat * $find->price_trip));
             }
@@ -288,7 +288,7 @@ class tripController extends Controller
                 "message" => "trip not found",
             ]);
         }
-        $sum = tourist_has_trip::where('trip_id', $tripData->id)->sum('number_of_seat');
+        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         $location = location::find($tripData->location_id);
         $city = city::find($location->city_id);
@@ -365,7 +365,7 @@ class tripController extends Controller
                 "image" => $tripData->original['data']['image'],
                 'places' => $tripData->original['data']['places'],
                 "number_of_seats_available" => $tripData->original['data']['number_of_seats_available'],
-                "payment_status" => $tr->payment_status,
+                "status" => $tr->status,
                 "number_of_seat_reserved" => $tr->number_of_seat,
                 "phone_number" => $tr->phone_number,
                 "Email_address" => $dataoftourist->Email_address,
@@ -388,7 +388,7 @@ class tripController extends Controller
         $request->validate(
             [
                 "id" => "required|integer",
-                "payment_status" => "required",
+                "status" => "required",
             ]
         );
         $find = tourist_has_trip::find($request->id);
@@ -398,19 +398,19 @@ class tripController extends Controller
                 "message" => "id not found"
             ]);
         }
-        if ($find['payment_status'] == "paid" | $find['payment_status'] == "unpaid") {
+        if ($find['status'] == "Submitted" | $find['status'] == "Canceled") {
             return response()->json([
                 "status" => 0,
                 "message" => "this request was handler"
             ]);
         }
-        if ($request->payment_status != "paid" & $request->payment_status != "unpaid") {
+        if ($request->status != "Submitted" & $request->status != "Canceled") {
             return response()->json([
                 "status" => 0,
                 "message" => "your post payment status not found in system"
             ]);
         }
-        if ($find->payment_status == "wallet" & $request->payment_status == "paid") {
+        if ($request->status == "Submitted") {
             $oldWallet = DB::table('tourist')->select('wallet')->where('id', $find->tourist_id)->first();
             $price = DB::table('trip')->select('price_trip')->where('id', $find->trip_id)->first();
             $newwallet = $oldWallet - ($price * $find->number_of_seat);
@@ -423,7 +423,7 @@ class tripController extends Controller
                 ]);
             }
         }
-        $payment_status = tourist_has_trip::where('id', $request->id)->update(array('payment_status' => $request->payment_status));
+        $status = tourist_has_trip::where('id', $request->id)->update(array('status' => $request->status));
         return response()->json([
             "status" => 1,
             "message" => "you update payment status"
@@ -439,7 +439,7 @@ class tripController extends Controller
             if (DB::table('favorite')->where([['tourist_id', DB::table('tourist')->where('user_id', auth()->user()->id)->first()->id], ['trip_id', $t->id]])->first()) {
                 $fav = true;
             }
-            $sum = tourist_has_trip::where('trip_id', $t->id)->sum('number_of_seat');
+            $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
             $number_of_seats_available = $t->number_of_allSeat - $sum;
             $location = location::find($t->location_id);
             $city = city::find($location->city_id);
@@ -514,7 +514,7 @@ class tripController extends Controller
                 'places' => $tripData->original['data']['places'],
                 "favorite" => $tripData->original['data']['favorite'],
                 "number_of_seats_available" => $tripData->original['data']['number_of_seats_available'],
-                "payment_status" => $tr->payment_status,
+                "status" => $tr->status,
                 "number_of_seat_reserved" => $tr->number_of_seat,
                 "phone_number" => $tr->phone_number,
                 'details' => $tr->details->map(function ($detail) {
@@ -542,7 +542,7 @@ class tripController extends Controller
         if (DB::table('favorite')->where([['tourist_id', DB::table('tourist')->where('user_id', auth()->user()->id)->first()->id], ['trip_id', $tripData->id]])->first()) {
             $fav = true;
         }
-        $sum = tourist_has_trip::where('trip_id', $tripData->id)->sum('number_of_seat');
+        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         $location = location::find($tripData->location_id);
         $city = city::find($location->city_id);
@@ -595,7 +595,6 @@ class tripController extends Controller
                 "trip_id" => "required|max:45",
                 "number_of_seat" => "required",
                 "phone_number" => "required",
-                "payment_status" => "required",
                 'detalis.*.name' => 'required|max:45',
                 'detalis.*.age' => 'required|integer'
             ]
@@ -620,18 +619,12 @@ class tripController extends Controller
                 "message" => "trip not found",
             ]);
         }
-        $sum = tourist_has_trip::where('trip_id', $tripData->id)->sum('number_of_seat');
+        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         if ($request->number_of_seat > $number_of_seats_available) {
             return response()->json([
                 "status" => 0,
                 "message" => "number of seat not  found",
-            ]);
-        }
-        if ($request->payment_status == "paid" || $request->payment_status == "unpaid") {
-            return response()->json([
-                "status" => 0,
-                "message" => "you can use wallet or cash to paid",
             ]);
         }
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
@@ -640,7 +633,7 @@ class tripController extends Controller
             "tourist_id" => $touristId->id,
             "number_of_seat" => $request->number_of_seat,
             "phone_number" => $request->phone_number,
-            "payment_status" => $request->payment_status,
+            "status" => "Pending"
         ];
         $create = tourist_has_trip::create($tourist_has_tripData);
         foreach ($request->detalis as $d) {
@@ -665,21 +658,28 @@ class tripController extends Controller
                 "message" => "trip reserved id not isset"
             ]);
         }
-        $find = tourist_has_trip::find($id);
+        $find = DB::table('tourist_has_trip')->where([['trip_id', $id], ["tourist_id", (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id]])->first();
+        // $find = tourist_has_trip::find($id);
         if ($find == null) {
             return response()->json([
                 "status" => 0,
                 "message" => "trip reserved not found"
             ]);
         }
-        $trip = trip::find($find->trip_id);
-        $deletet = tourist_details::where('tourist_has_trip_id', $id)->delete();
-        if ($find->payment_status == "paid") {
-            $findwallet = tourist::find($find->tourist_id);
-            $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
-        }
+        $trip = trip::find($id);
+        $deletet = tourist_details::where('tourist_has_trip_id', $find->id)->delete();
+        // ارجاع المصاري
+        // if ($find->status == "Submitted") {
+        //     $findwallet = tourist::find($find->tourist_id);
+        //     $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
+        // }
         $delete = tourist_has_trip::where('id', $id)->delete();
+        return response()->json([
+            "status" => 1,
+            "message" => "trip reserved was deleted"
+        ]);
     }
+    // FIXME::
     public function touristUpdateReserveTrip(Request $request)
     {
         auth()->user();
@@ -688,32 +688,16 @@ class tripController extends Controller
                 "id" => "required|integer",
                 "number_of_seat" => "",
                 "phone_number" => "",
-                "payment_status" => "",
                 'detalis.*.name' => 'max:45',
                 'detalis.*.age' => 'integer'
             ]
         );
-        $reserve = tourist_has_trip::find($request->id);
+        $reserve = DB::table('tourist_has_trip')->where([['trip_id', $request->id], ["tourist_id", (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id]])->first();
         if ($reserve == null) {
             return response()->json([
                 "status" => 0,
                 "message" => "reserve not found"
             ]);
-        }
-        if (isset($request->payment_status)) {
-            if ($reserve->payment_status == "unpaid" || $reserve->payment_status == "paid") {
-                return response()->json([
-                    "status" => 0,
-                    "message" => "reserve not update because payment status was excuet by admin"
-                ]);
-            }
-            if ($request->payment_status == "paid" || $request->payment_status == "unpaid") {
-                return response()->json([
-                    "status" => 0,
-                    "message" => "you can use wallet or cash to paid",
-                ]);
-            }
-            $update = tourist_has_trip::where('id', $request->id)->update(array('payment_status' => $request->payment_status));
         }
         if (isset($request->phone_number)) {
             tourist_has_trip::where('id', $request->id)->update(array('phone_number' => $request->phone_number));

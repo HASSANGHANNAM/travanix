@@ -32,7 +32,6 @@ class hotelController extends Controller
     public function adminCreateHotel(Request $request)
     {
         auth()->user();
-        // dd(auth()->user()->Email_address);
         $request->validate(
             [
                 "hotel_name" => "required|max:45|unique:hotel",
@@ -449,28 +448,30 @@ class hotelController extends Controller
             $capacity = $room['capacity_room'];
             $availableRooms = DB::table('hotel')
                 ->join('room', 'hotel.id', '=', 'room.hotel_id')
-                ->Join('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
+                ->leftJoin('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
                 ->join('reserve', 'reserve_has_room.reserve_id', '=', 'reserve.id')
                 ->where('capacity_room', $capacity)
-                ->where(function ($query) use ($startDate, $endDate) {
-                    $query->whereRaw('start_reservation < ?', [$startDate])
-                        ->whereRaw('end_reservation > ?', [$endDate])
-                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
-                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
-                                ->whereRaw('start_reservation <?', [$endDate]);
-                        })
-                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
-                            $subQuery->whereRaw('end_reservation > ?', [$startDate])
-                                ->whereRaw('end_reservation < ?', [$endDate]);
-                        })
-                        ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
-                            $subQuery->whereRaw('start_reservation > ?', [$startDate])
-                                ->whereRaw('end_reservation < ?', [$endDate]);
-                        });
-                })
+                // ->where(function ($query) use ($startDate, $endDate) {
+                //     $query->whereRaw('start_reservation < ?', [$startDate])
+                //         ->whereRaw('end_reservation > ?', [$endDate])
+                //         ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                //             $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                //                 ->whereRaw('start_reservation <?', [$endDate]);
+                //         })
+                //         ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                //             $subQuery->whereRaw('end_reservation > ?', [$startDate])
+                //                 ->whereRaw('end_reservation < ?', [$endDate]);
+                //         })
+                //         ->orWhere(function ($subQuery)  use ($startDate, $endDate) {
+                //             $subQuery->whereRaw('start_reservation > ?', [$startDate])
+                //                 ->whereRaw('end_reservation < ?', [$endDate]);
+                //         });
+                // })
+                ->where('status', "!=", "Canceled")
                 ->selectRaw("room_id,capacity_room,price_room,quantity, SUM(`number`) AS number")
                 ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
                 ->first();
+            dd($availableRooms);
             if ($availableRooms == null) {
                 return response()->json([
                     "status" => 0,
@@ -498,9 +499,7 @@ class hotelController extends Controller
             [
                 "hotel_id" => "required|integer",
                 "start_reservation" => "required",
-                "end_reservation" => "required",
-                "payment_status" => "required",
-                'rooms.*.capacity_room' => 'integer',
+                "end_reservation" => "required",                'rooms.*.capacity_room' => 'integer',
                 'rooms.*.number_of_room' => 'integer'
             ]
         );
@@ -558,7 +557,7 @@ class hotelController extends Controller
             "start_reservation" => $request->start_reservation,
             "end_reservation" => $request->end_reservation,
             "tourist_id" => (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id,
-            "payment_status" => $request->payment_status,
+            "status" => "Pending",
             "price_all_reserve" => $price_all_reserve
         ];
         $create = reserve::create($reserve);
@@ -576,9 +575,6 @@ class hotelController extends Controller
             "message" => "you are reserve",
         ]);
     }
-
-
-
     public function touristGetReserved()
     {
         auth()->user();
@@ -599,7 +595,7 @@ class hotelController extends Controller
             $reservesReturn[] = [
                 'id' => $reserve->id,
                 'hotel_id' => $hotel_id,
-                'payment_status' => $reserve->payment_status,
+                'status' => $reserve->status,
                 'price_all_reserve' => $reserve->price_all_reserve,
                 'start_reservation' => $reserve->start_reservation,
                 'end_reservation' => $reserve->end_reservation,
@@ -644,7 +640,7 @@ class hotelController extends Controller
         $request->validate(
             [
                 "id" => "required|integer",
-                "payment_status" => "required",
+                "status" => "required",
             ]
         );
         $find = reserve::find($request->id);
@@ -654,10 +650,10 @@ class hotelController extends Controller
                 "message" => "reserve not found",
             ]);
         }
-        $update = reserve::where('id', $request->id)->update(array('payment_status' => $request->payment_status));
+        $update = reserve::where('id', $request->id)->update(array('status' => $request->status));
         return response()->json([
             "status" => 1,
-            "message" => "reserve was updated payment_status",
+            "message" => "reserve was updated status",
         ]);
     }
     public function adminGetRseserved()
@@ -684,7 +680,7 @@ class hotelController extends Controller
                 "Email_address" => $user->Email_address,
                 "tourist_name" => $tourist->tourist_name,
                 "wallet" => $tourist->wallet,
-                'payment_status' => $reserve->payment_status,
+                'status' => $reserve->status,
                 'price_all_reserve' => $reserve->price_all_reserve,
                 'start_reservation' => $reserve->start_reservation,
                 'end_reservation' => $reserve->end_reservation,

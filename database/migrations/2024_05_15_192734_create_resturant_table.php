@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('resturant_name', 45)->unique();
             $table->string('phone_number', 45);
-            $table->string('descreption', 255);
+            $table->text('descreption');
             $table->time('opining_time');
             $table->time('closing_time');
             $table->float('resturant_class');

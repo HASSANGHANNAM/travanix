@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('reserve', function (Blueprint $table) {
             $table->id();
-            $table->date('start_reservation')->nullable();
-            $table->date('end_reservation')->nullable();
-            $table->float('price_all_reserve')->unsigned();
-            $table->enum("payment_status", ["paid", "unpaid", "wallet", "cash"]);
+            $table->date('start_reservation');
+            $table->date('end_reservation');
+            $table->double('price_all_reserve')->unsigned();
+            $table->enum("status", ["Pending", "Canceled", "Submitted"]);
             $table->unsignedBigInteger('tourist_id');
             $table->foreign('tourist_id')->references('id')->on('tourist');
             $table->timestamps();

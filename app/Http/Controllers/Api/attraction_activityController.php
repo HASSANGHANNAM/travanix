@@ -21,14 +21,13 @@ class attraction_activityController extends Controller
     public function adminCreateAttraction_activity(Request $request)
     {
         auth()->user();
-        //TODO: validate time
         $request->validate(
             [
                 "attraction_activity_name" => "required|max:45|unique:attraction_activities",
                 "opening_time" => "required",
                 "closing_time" => "required",
                 "description" => "required",
-                "city_id" => "required",
+                "city_id" => "required|integer",
                 "address" => "required|max:255",
                 "coordinate_x" => "required",
                 "coordinate_y" => "required",
