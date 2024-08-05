@@ -542,7 +542,7 @@ class tripController extends Controller
         if (DB::table('favorite')->where([['tourist_id', DB::table('tourist')->where('user_id', auth()->user()->id)->first()->id], ['trip_id', $tripData->id]])->first()) {
             $fav = true;
         }
-        $sum = tourist_has_trip::where([['trip_id', $t->id], ['status', "!=", "Canceled"]])->sum('number_of_seat');
+        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         $location = location::find($tripData->location_id);
         $city = city::find($location->city_id);
