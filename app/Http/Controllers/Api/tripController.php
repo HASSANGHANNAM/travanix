@@ -673,7 +673,7 @@ class tripController extends Controller
         //     $findwallet = tourist::find($find->tourist_id);
         //     $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
         // }
-        $delete = tourist_has_trip::where('trip_id', $id)->delete();
+        $delete = tourist_has_trip::where([['trip_id', $id], ['tourist_id', (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id]])->delete();
         return response()->json([
             "status" => 1,
             "message" => "trip reserved was deleted"
