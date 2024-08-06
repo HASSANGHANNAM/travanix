@@ -95,7 +95,7 @@ class tripController extends Controller
         $tripData = trip::with('places')->get();
         $data = [];
         foreach ($tripData as $t) {
-            $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
+            $sum = tourist_has_trip::where([['trip_id', $t->id], ['status', "!=", "Canceled"]])->sum('number_of_seat');
             $number_of_seats_available = $t->number_of_allSeat - $sum;
             $location = location::find($t->location_id);
             $city = city::find($location->city_id);
@@ -288,7 +288,7 @@ class tripController extends Controller
                 "message" => "trip not found",
             ]);
         }
-        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
+        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         $location = location::find($tripData->location_id);
         $city = city::find($location->city_id);
