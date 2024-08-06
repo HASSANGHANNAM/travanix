@@ -619,7 +619,7 @@ class tripController extends Controller
                 "message" => "trip not found",
             ]);
         }
-        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['payment_status', "!=", "Canceled"]])->sum('number_of_seat');
+        $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         if ($request->number_of_seat > $number_of_seats_available) {
             return response()->json([
