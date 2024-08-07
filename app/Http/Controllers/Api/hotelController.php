@@ -485,6 +485,7 @@ class hotelController extends Controller
                 return response()->json([
                     "status" => 0,
                     "message" => "number of room not found",
+                    "price" => null
                 ]);
             }
             $price_all_reserve = $price_all_reserve +  $find->price_room * $room['number_of_room'];
