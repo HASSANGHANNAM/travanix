@@ -477,7 +477,8 @@ class hotelController extends Controller
             if ($notAvailableRooms == null && $find == null) {
                 return response()->json([
                     "status" => 0,
-                    "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel"
+                    "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel",
+                    "price" => null
                 ]);
             }
             if (($notAvailableRooms != null && $notAvailableRooms->quantity - $notAvailableRooms->number < $room['number_of_room']) || ($find->quantity  < $room['number_of_room'])) {
