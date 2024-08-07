@@ -14,6 +14,7 @@ use App\Models\tourist_details;
 use App\Models\tourist_has_trip;
 use App\Models\trip;
 use App\Models\trip_has_place;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -348,6 +349,7 @@ class tripController extends Controller
             // dd($dataoftourist);
             $data[] = [
                 'id' => $tripData->original['data']['id'],
+                'reserve_id' => $tr->id,
                 'type_of_trip' => $tripData->original['data']['type_of_trip'],
                 'trip_name' => $tripData->original['data']['trip_name'],
                 'description' => $tripData->original['data']['description'],
@@ -496,6 +498,7 @@ class tripController extends Controller
             $tripData = app(tripController::class)->touristGetTripById($tr->trip_id);
             $data[] = [
                 'id' => $tripData->original['data']['id'],
+                'reserve_id' => $tr->id,
                 'type_of_trip' => $tripData->original['data']['type_of_trip'],
                 'trip_name' => $tripData->original['data']['trip_name'],
                 'description' => $tripData->original['data']['description'],
@@ -658,22 +661,25 @@ class tripController extends Controller
                 "message" => "trip reserved id not isset"
             ]);
         }
-        $find = DB::table('tourist_has_trip')->where([['trip_id', $id], ["tourist_id", (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id]])->first();
-        // $find = tourist_has_trip::find($id);
+        $find = tourist_has_trip::find($id);
         if ($find == null) {
             return response()->json([
                 "status" => 0,
                 "message" => "trip reserved not found"
             ]);
         }
-        $trip = trip::find($id);
-        $deletet = tourist_details::where('tourist_has_trip_id', $find->id)->delete();
-        // ارجاع المصاري
-        // if ($find->status == "Submitted") {
-        //     $findwallet = tourist::find($find->tourist_id);
-        //     $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
-        // }
-        $delete = tourist_has_trip::where([['trip_id', $id], ['tourist_id', (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id]])->delete();
+        if ($find->status == "Pending") {
+            $findwallet = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+            $trip = trip::find($find->trip_id);
+            $yourDate = trip::find(1)->trip_start_time;
+            $Date = Carbon::create(substr($yourDate, 0, 4), substr($yourDate, 5, 2), substr($yourDate, 8, 2), substr($yourDate, 11, 2), substr($yourDate, 14, 2), substr($yourDate, 17, 2));
+            $now = Carbon::now();
+            if ($Date->greaterThan($now) && $Date->diffInHours($now) > 24) {
+                $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
+            }
+        }
+        $deletedeta = tourist_details::where('tourist_has_trip_id', $find->id)->delete();
+        $delete = tourist_has_trip::where('id', $id)->delete();
         return response()->json([
             "status" => 1,
             "message" => "trip reserved was deleted"
