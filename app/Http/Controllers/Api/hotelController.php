@@ -478,14 +478,14 @@ class hotelController extends Controller
                 return response()->json([
                     "status" => 0,
                     "message" => "capacity of room  " . $room['capacity_room'] . " not found in this hotel",
-                    "price" => null
+                    "price" => 0
                 ]);
             }
             if (($notAvailableRooms != null && $notAvailableRooms->quantity - $notAvailableRooms->number < $room['number_of_room']) || ($find->quantity  < $room['number_of_room'])) {
                 return response()->json([
                     "status" => 0,
                     "message" => "number of room not found",
-                    "price" => null
+                    "price" => 0
                 ]);
             }
             $price_all_reserve = $price_all_reserve +  $find->price_room * $room['number_of_room'];
