@@ -446,6 +446,9 @@ class hotelController extends Controller
         $price_all_reserve = 0;
         foreach ($request->rooms as $room) {
             $capacity = $room['capacity_room'];
+            if ($room['number_of_room'] == 0) {
+                continue;
+            }
             $notAvailableRooms = DB::table('hotel')
                 ->join('room', 'hotel.id', '=', 'room.hotel_id')
                 ->leftJoin('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
@@ -519,6 +522,9 @@ class hotelController extends Controller
         $price_all_reserve = 0;
         foreach ($request->rooms as $room) {
             $capacity = $room['capacity_room'];
+            if ($room['number_of_room'] == 0) {
+                continue;
+            }
             $notAvailableRooms = DB::table('hotel')
                 ->join('room', 'hotel.id', '=', 'room.hotel_id')
                 ->Join('reserve_has_room', 'room.id', '=', 'reserve_has_room.room_id')
@@ -570,6 +576,9 @@ class hotelController extends Controller
         ];
         $create = reserve::create($reserve);
         foreach ($request->rooms as $room) {
+            if ($room['number_of_room'] == 0) {
+                continue;
+            }
             $reserve_has_room = [
                 'reserve_id' => $create->id, 'number' => $room['number_of_room'], 'room_id' => $find->id
             ];
