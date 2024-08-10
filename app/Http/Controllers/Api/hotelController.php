@@ -21,6 +21,7 @@ use App\Models\service;
 use App\Models\tourist;
 use App\Models\trip_has_place;
 use App\Models\User;
+use Carbon\Carbon;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -506,7 +507,8 @@ class hotelController extends Controller
             [
                 "hotel_id" => "required|integer",
                 "start_reservation" => "required",
-                "end_reservation" => "required",                'rooms.*.capacity_room' => 'integer',
+                "end_reservation" => "required",
+                'rooms.*.capacity_room' => 'integer',
                 'rooms.*.number_of_room' => 'integer'
             ]
         );
@@ -567,10 +569,18 @@ class hotelController extends Controller
             }
             $price_all_reserve = $price_all_reserve +  $find->price_room * $room['number_of_room'];
         }
+        $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+        $newwallet = $touristId->wallet - $price_all_reserve;
+        if ($newwallet < 0) {
+            return response()->json([
+                "status" => 0,
+                "message" => "wallet less than price"
+            ], 402);
+        }
         $reserve = [
             "start_reservation" => $request->start_reservation,
             "end_reservation" => $request->end_reservation,
-            "tourist_id" => (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id,
+            "tourist_id" => $touristId->id,
             "status" => "Pending",
             "price_all_reserve" => $price_all_reserve
         ];
@@ -598,17 +608,22 @@ class hotelController extends Controller
         $reservesReturn = [];
         foreach ($reserves as $reserve) {
             $rooms = [];
-            $hotel_id = 0;
+            $hotel_id = null;
             foreach ($reserve->reserve_has_room as $reserve_has_room) {
                 $rooms[] = [
                     'capacity_room' => $reserve_has_room->room->capacity_room,
                     'number' => $reserve_has_room->number,
                 ];
                 $hotel_id = $reserve_has_room->room->hotel_id;
+                $hotelData = app(hotelController::class)->touristGetHotelById($hotel_id);
+            }
+            if ($hotel_id == null) {
+                DB::table('reserve')->where('id', $reserve->id)->delete();
+                continue;
             }
             $reservesReturn[] = [
                 'id' => $reserve->id,
-                'hotel_id' => $hotel_id,
+                'hotelData' => $hotelData->original['data'][0],
                 'status' => $reserve->status,
                 'price_all_reserve' => $reserve->price_all_reserve,
                 'start_reservation' => $reserve->start_reservation,
@@ -641,8 +656,18 @@ class hotelController extends Controller
                 "message" => "reserve not found",
             ]);
         }
-        $update = DB::table('reserve_has_room')->where('reserve_id', $id)->delete();
-        $update = DB::table('reserve')->where('id', $id)->delete();
+        if (Carbon::now()->greaterThan($find->start_reservation)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "start of reserved was end"
+            ]);
+        }
+        if ($find->status == "Submitted") {
+            $findwallet = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+            $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->price_all_reserve));
+        }
+        $delete = DB::table('reserve_has_room')->where('reserve_id', $id)->delete();
+        $delete = DB::table('reserve')->where('id', $id)->delete();
         return response()->json([
             "status" => 1,
             "message" => "reserve was deleted",
@@ -664,7 +689,7 @@ class hotelController extends Controller
                 "message" => "reserve not found",
             ]);
         }
-        if ($find['status'] == "Submitted" | $find['status'] == "Canceled") {
+        if ($find['status'] == "Submitted" || $find['status'] == "Canceled") {
             return response()->json([
                 "status" => 0,
                 "message" => "this request was handler"
@@ -674,6 +699,12 @@ class hotelController extends Controller
             return response()->json([
                 "status" => 0,
                 "message" => "your post payment status not found in system"
+            ]);
+        }
+        if (Carbon::now()->greaterThan($find->start_reservation)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "start of reserved was end"
             ]);
         }
         if ($request->status == "Submitted") {
@@ -704,17 +735,24 @@ class hotelController extends Controller
             $tourist = tourist::find($reserve->tourist_id);
             $user = User::find($tourist->user_id);
             $rooms = [];
-            $hotel_id = 0;
+            $hotel_id = null;
+            $hotel_name = "";
             foreach ($reserve->reserve_has_room as $reserve_has_room) {
                 $rooms[] = [
                     'capacity_room' => $reserve_has_room->room->capacity_room,
                     'number' => $reserve_has_room->number,
                 ];
                 $hotel_id = $reserve_has_room->room->hotel_id;
+                $hotel_name = hotel::find($hotel_id)->hotel_name;
+            }
+            if ($hotel_id == null) {
+                DB::table('reserve')->where('id', $reserve->id)->delete();
+                continue;
             }
             $reservesReturn[] = [
                 'id' => $reserve->id,
                 'hotel_id' => $hotel_id,
+                'hotel_name' => $hotel_name,
                 "Email_address" => $user->Email_address,
                 "tourist_name" => $tourist->tourist_name,
                 "wallet" => $tourist->wallet,

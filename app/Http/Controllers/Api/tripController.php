@@ -41,6 +41,14 @@ class tripController extends Controller
                 'places.*.attraction_activity_id' => 'integer',
             ]
         );
+        $Date = Carbon::create(substr($request->trip_start_time, 0, 4), substr($request->trip_start_time, 5, 2), substr($request->trip_start_time, 8, 2), substr($request->trip_start_time, 11, 2), substr($request->trip_start_time, 14, 2), substr($request->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->diffInHours($now) < 24 || $Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time off less than 24 houre"
+            ]);
+        }
         $locationData = [
             'city_id' => $request->city_id,
             'address' => $request->address,
@@ -156,6 +164,14 @@ class tripController extends Controller
                 "message" => "trip not found"
             ]);
         }
+        $Date = Carbon::create(substr($find->trip_start_time, 0, 4), substr($find->trip_start_time, 5, 2), substr($find->trip_start_time, 8, 2), substr($find->trip_start_time, 11, 2), substr($find->trip_start_time, 14, 2), substr($find->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time of trip was end"
+            ]);
+        }
         $trip = trip_has_place::where('trip_id', $id)->delete();
         $deletefavorite = favorite::where('trip_id', $id)->delete();
         $tourist_has_trip = tourist_has_trip::where('trip_id', $id)->get();
@@ -202,6 +218,14 @@ class tripController extends Controller
             return response()->json([
                 "status" => 0,
                 "message" => "trip not found"
+            ]);
+        }
+        $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->diffInHours($now) < 12 || $Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time of reserve was end"
             ]);
         }
         if (isset($request->trip_name)) {
@@ -346,7 +370,6 @@ class tripController extends Controller
                         ->where('tourist.id', '=', $tourist_id);
                 })
                 ->first();
-            // dd($dataoftourist);
             $data[] = [
                 'id' => $tripData->original['data']['id'],
                 'reserve_id' => $tr->id,
@@ -400,6 +423,16 @@ class tripController extends Controller
                 "message" => "id not found"
             ]);
         }
+
+        $trip = trip::find($find->trip->id);
+        $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time of trip was end"
+            ]);
+        }
         if ($find['status'] == "Submitted" || $find['status'] == "Canceled") {
             return response()->json([
                 "status" => 0,
@@ -434,9 +467,9 @@ class tripController extends Controller
     public function touristGetTrips()
     {
         auth()->user();
-        $tripData = trip::with('places')->get();
+        $trip = trip::with('places')->get();
         $data = [];
-        foreach ($tripData as $t) {
+        foreach ($trip as $t) {
             $fav = false;
             if (DB::table('favorite')->where([['tourist_id', DB::table('tourist')->where('user_id', auth()->user()->id)->first()->id], ['trip_id', $t->id]])->first()) {
                 $fav = true;
@@ -602,6 +635,21 @@ class tripController extends Controller
                 'detalis.*.age' => 'required|integer'
             ]
         );
+        $tripData = trip::find($request->trip_id);
+        if ($tripData == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "trip not found",
+            ]);
+        }
+        $Date = Carbon::create(substr($tripData->trip_start_time, 0, 4), substr($tripData->trip_start_time, 5, 2), substr($tripData->trip_start_time, 8, 2), substr($tripData->trip_start_time, 11, 2), substr($tripData->trip_start_time, 14, 2), substr($tripData->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->diffInHours($now) < 12 || $Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time of reserve was end"
+            ]);
+        }
         $count = count($request->detalis);
         if ($count < $request->number_of_seat) {
             return response()->json([
@@ -615,13 +663,6 @@ class tripController extends Controller
                 "message" => "detalis was more than number_of_seat"
             ]);
         }
-        $tripData = trip::find($request->trip_id);
-        if ($tripData == null) {
-            return response()->json([
-                "status" => 0,
-                "message" => "trip not found",
-            ]);
-        }
         $sum = tourist_has_trip::where([['trip_id', $tripData->id], ['status', "!=", "Canceled"]])->sum('number_of_seat');
         $number_of_seats_available = $tripData->number_of_allSeat - $sum;
         if ($request->number_of_seat > $number_of_seats_available) {
@@ -631,6 +672,14 @@ class tripController extends Controller
             ]);
         }
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+        $price = DB::table('trip')->select('price_trip')->where('id', $request->trip_id)->first();
+        $newwallet = $touristId->wallet - ($price * $request->number_of_seat);
+        if ($newwallet < 0) {
+            return response()->json([
+                "status" => 0,
+                "message" => "wallet less than price"
+            ], 402);
+        }
         $tourist_has_tripData = [
             "trip_id" => $request->trip_id,
             "tourist_id" => $touristId->id,
@@ -668,13 +717,21 @@ class tripController extends Controller
                 "message" => "trip reserved not found"
             ]);
         }
-        if ($find->status == "Pending") {
+        $trip = trip::find($find->trip->id);
+        $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time of trip was end"
+            ]);
+        }
+        if ($find->status == "Submitted") {
             $findwallet = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
-            $trip = trip::find($find->trip_id);
-            $yourDate = trip::find(1)->trip_start_time;
+            $yourDate = $trip->trip_start_time;
             $Date = Carbon::create(substr($yourDate, 0, 4), substr($yourDate, 5, 2), substr($yourDate, 8, 2), substr($yourDate, 11, 2), substr($yourDate, 14, 2), substr($yourDate, 17, 2));
             $now = Carbon::now();
-            if ($Date->greaterThan($now) && $Date->diffInHours($now) > 24) {
+            if ($Date->greaterThan($now) && $Date->diffInHours($now) > 12) {
                 $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
             }
         }
@@ -685,7 +742,6 @@ class tripController extends Controller
             "message" => "trip reserved was deleted"
         ]);
     }
-    // FIXME::
     public function touristUpdateReserveTrip(Request $request)
     {
         auth()->user();
@@ -705,9 +761,21 @@ class tripController extends Controller
                 "message" => "reserve not found"
             ]);
         }
-        if (isset($request->phone_number)) {
-            tourist_has_trip::where('id', $request->id)->update(array('phone_number' => $request->phone_number));
+        $tripData = trip::find($reserve->trip_id);
+        if ($tripData == null) {
+            return response()->json([
+                "status" => 0,
+                "message" => "trip not found",
+            ]);
         }
+        $Date = Carbon::create(substr($tripData->trip_start_time, 0, 4), substr($tripData->trip_start_time, 5, 2), substr($tripData->trip_start_time, 8, 2), substr($tripData->trip_start_time, 11, 2), substr($tripData->trip_start_time, 14, 2), substr($tripData->trip_start_time, 17, 2));
+        $now = Carbon::now();
+        if ($Date->diffInHours($now) < 12 || $Date->lessThan($now)) {
+            return response()->json([
+                "status" => 0,
+                "message" => "time of reserve was end"
+            ]);
+        };
         if (isset($request->detalis) && isset($request->number_of_seat)) {
             $count = count($request->detalis);
             if ($count < $request->number_of_seat) {
@@ -722,20 +790,28 @@ class tripController extends Controller
                     "message" => "detalis was more than number_of_seat"
                 ]);
             }
-            $tripData = trip::find($request->trip_id);
-            if ($tripData == null) {
-                return response()->json([
-                    "status" => 0,
-                    "message" => "trip not found",
-                ]);
-            }
             $sum = tourist_has_trip::where('trip_id', $tripData->id)->sum('number_of_seat');
-            $number_of_seats_available = $tripData->number_of_allSeat - $sum;
+            $number_of_seats_available = $tripData->number_of_allSeat - $sum + $reserve->number_of_seat;
             if ($request->number_of_seat > $number_of_seats_available) {
                 return response()->json([
                     "status" => 0,
                     "message" => "number of seat not  found",
                 ]);
+            }
+            $findwallet = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
+            if ($reserve->status == "Submitted") {
+                if ($findwallet->wallet + $reserve->number_of_seat * $tripData->price_trip < $request->number_of_seat * $tripData->price_trip) {
+                    return response()->json([
+                        "status" => 0,
+                        "message" => "wallet less than price"
+                    ], 402);
+                }
+                $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $reserve->number_of_seat * $tripData->price_trip));
+            } elseif ($findwallet->wallet < $request->number_of_seat * $tripData->price_trip) {
+                return response()->json([
+                    "status" => 0,
+                    "message" => "wallet less than price"
+                ], 402);
             }
             $delete = tourist_details::where('tourist_has_trip_id', $request->id)->delete();
             foreach ($request->detalis as $d) {
@@ -746,11 +822,15 @@ class tripController extends Controller
                 ];
                 tourist_details::create($detalisData);
             }
+            $update = DB::table('tourist_has_trip')->where('id', $reserve->id)->update(array('status' => "Pending"));
         } elseif (isset($request->detalis) || isset($request->number_of_seat)) {
             return response()->json([
                 "status" => 0,
                 "message" => "you must to send detalis and number_of_seat",
             ]);
+        }
+        if (isset($request->phone_number)) {
+            tourist_has_trip::where('id', $request->id)->update(array('phone_number' => $request->phone_number));
         }
         return response()->json([
             "status" => 1,
