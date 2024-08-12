@@ -454,7 +454,7 @@ class tripController extends Controller
         if ($request->status == "Submitted") {
             $oldWallet = DB::table('tourist')->select('wallet')->where('id', $find->tourist_id)->first();
             $price = DB::table('trip')->select('price_trip')->where('id', $find->trip_id)->first();
-            $newwallet = $oldWallet - ($price * $find->number_of_seat);
+            $newwallet = $oldWallet->wallet - ($price->price_trip * $find->number_of_seat);
             if ($newwallet >= 0) {
                 $updateWallet = tourist::where('id', $find->tourist_id)->update(array('wallet' => $newwallet));
             } else {
