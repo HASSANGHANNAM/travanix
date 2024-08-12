@@ -467,7 +467,7 @@ class tripController extends Controller
         $status = tourist_has_trip::where('id', $request->id)->update(array('status' => $request->status));
         return response()->json([
             "status" => 1,
-            "message" => "you update payment status"
+            "message" => "you update status"
         ]);
     }
     public function touristGetTrips()
@@ -679,7 +679,7 @@ class tripController extends Controller
         }
         $touristId = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
         $price = DB::table('trip')->select('price_trip')->where('id', $request->trip_id)->first();
-        $newwallet = $touristId->wallet - ($price * $request->number_of_seat);
+        $newwallet = $touristId->wallet - ($price->price_trip * $request->number_of_seat);
         if ($newwallet < 0) {
             return response()->json([
                 "status" => 0,
@@ -723,7 +723,7 @@ class tripController extends Controller
                 "message" => "trip reserved not found"
             ]);
         }
-        $trip = trip::find($find->trip->id);
+        $trip = trip::find($find->trip_id);
         $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
         $now = Carbon::now();
         if ($Date->lessThan($now)) {
