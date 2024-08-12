@@ -70,19 +70,22 @@ class tripController extends Controller
         foreach ($request->places as $place) {
             if (isset($place['hotel_id'])) {
                 $trip_has_placeData = [
-                    'hotel_id' => $place['hotel_id'], 'trip_id' => $trip->id
+                    'hotel_id' => $place['hotel_id'],
+                    'trip_id' => $trip->id
                 ];
                 $create_trip_has_place = trip_has_place::create($trip_has_placeData);
             }
             if (isset($place['resturant_id'])) {
                 $trip_has_placeData = [
-                    'resturant_id' => $place['resturant_id'], 'trip_id' => $trip->id
+                    'resturant_id' => $place['resturant_id'],
+                    'trip_id' => $trip->id
                 ];
                 $create_trip_has_place = trip_has_place::create($trip_has_placeData);
             }
             if (isset($place['attraction_activity_id'])) {
                 $trip_has_placeData = [
-                    'attraction_activity_id' => $place['attraction_activity_id'], 'trip_id' => $trip->id
+                    'attraction_activity_id' => $place['attraction_activity_id'],
+                    'trip_id' => $trip->id
                 ];
                 $create_trip_has_place = trip_has_place::create($trip_has_placeData);
             }
@@ -280,19 +283,22 @@ class tripController extends Controller
             foreach ($request->places as $place) {
                 if (isset($place['hotel_id'])) {
                     $trip_has_placeData = [
-                        'hotel_id' => $place['hotel_id'], 'trip_id' => $trip->id
+                        'hotel_id' => $place['hotel_id'],
+                        'trip_id' => $trip->id
                     ];
                     $create_trip_has_place = trip_has_place::create($trip_has_placeData);
                 }
                 if (isset($place['resturant_id'])) {
                     $trip_has_placeData = [
-                        'resturant_id' => $place['resturant_id'], 'trip_id' => $trip->id
+                        'resturant_id' => $place['resturant_id'],
+                        'trip_id' => $trip->id
                     ];
                     $create_trip_has_place = trip_has_place::create($trip_has_placeData);
                 }
                 if (isset($place['attraction_activity_id'])) {
                     $trip_has_placeData = [
-                        'attraction_activity_id' => $place['attraction_activity_id'], 'trip_id' => $trip->id
+                        'attraction_activity_id' => $place['attraction_activity_id'],
+                        'trip_id' => $trip->id
                     ];
                     $create_trip_has_place = trip_has_place::create($trip_has_placeData);
                 }
@@ -424,7 +430,7 @@ class tripController extends Controller
             ]);
         }
 
-        $trip = trip::find($find->trip->id);
+        $trip = trip::find($find->trip_id);
         $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
         $now = Carbon::now();
         if ($Date->lessThan($now)) {
