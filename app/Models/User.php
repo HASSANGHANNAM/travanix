@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function notificationTokens()
     {
-        return $this->hasMany(notificationToken::class);
+        // return $this->hasMany(notificationToken::class);
     }
 }

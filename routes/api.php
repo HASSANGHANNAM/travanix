@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\attraction_activityController;
 use App\Http\Controllers\api\charge_walletController;
+use App\Http\Controllers\Api\dashboardController;
 use App\Http\Controllers\api\favoriteController;
 use App\Http\Controllers\api\hotelController;
 use App\Http\Controllers\api\locationsController;
@@ -106,6 +107,7 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::get('/Admin/adminSearchTrip', [searchController::class, 'adminSearchTrip']);
     Route::get('/Admin/adminGetAllRateAndComment', [rateAndCommentController::class, 'adminGetAllRateAndComment']);
     Route::get('/Admin/adminGetAvgRate', [rateAndCommentController::class, 'adminGetAvgRate']);
+    Route::get('/Admin/adminDashboard', [dashboardController::class, 'adminDashboard']);
 
 
 

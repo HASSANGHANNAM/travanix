@@ -760,7 +760,7 @@ class tripController extends Controller
                 'detalis.*.age' => 'integer'
             ]
         );
-        $reserve = DB::table('tourist_has_trip')->where([['trip_id', $request->id], ["tourist_id", (DB::table('tourist')->where('user_id', auth()->user()->id)->first())->id]])->first();
+        $reserve = DB::table('tourist_has_trip')->where('id', $request->id)->first();
         if ($reserve == null) {
             return response()->json([
                 "status" => 0,
