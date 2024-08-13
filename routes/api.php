@@ -12,6 +12,7 @@ use App\Http\Controllers\api\rateAndCommentController;
 use App\Http\Controllers\api\resturantController;
 use App\Http\Controllers\api\searchController;
 use App\Http\Controllers\api\tripController;
+use App\Http\Controllers\PushNotificationController;
 use App\Models\hotel;
 
 /*
@@ -139,3 +140,6 @@ Route::group(['middleware' => ['auth:sanctum', 'check.admin']], function () {
     Route::delete('/Admin/adminDeleteTrip/{id}', [tripController::class, 'adminDeleteTrip']);
     Route::delete('/Admin/adminDeleteComment/{comment_id}', [rateAndCommentController::class, 'adminDeleteComment']);
 });
+Route::post('send', [PushNotificationController::class, 'bulksend'])->name('bulksend');
+Route::get('all-notifications', [PushNotificationController::class, 'index']);
+Route::get('get-notification-form', [PushNotificationController::class, 'create']);

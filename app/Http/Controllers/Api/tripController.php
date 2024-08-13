@@ -403,7 +403,7 @@ class tripController extends Controller
                 "tourist_name" => $dataoftourist->tourist_name,
                 "wallet" => $dataoftourist->wallet,
                 'details' => $tr->details->map(function ($detail) {
-                    return [$detail->name, $detail->age, $detail->id];
+                    return ['name' => $detail->name, 'age' => $detail->age, 'id' => $detail->id];
                 })->all()
             ];
         }

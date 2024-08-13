@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(tourist::class);
     }
+
+    public function notificationTokens()
+    {
+        return $this->hasMany(notificationToken::class);
+    }
 }
