@@ -35,7 +35,7 @@ class MainController extends Controller
             ],
             // "Phone_number" => "required|min: 10|max:45|unique:users|regex:/09(.+)/",
             "Password" => ['required', 'string', password::min(8)],
-            "tourist_name" => "required|max:45"
+            "tourist_name" => "required|max:45|unique:tourist"
         ]);
         $userData['type'] = 2;
         //$userData['Phone_number'] = $request->Phone_number;
@@ -113,7 +113,7 @@ class MainController extends Controller
     {
         $user_data = auth()->user();
         if (isset($request->Email_address)) {
-            if ($user_data->Email_address !== $request->Email_address) {
+            if ($user_data->Email_address != $request->Email_address) {
                 $user = $request->validate([
                     "Email_address" =>   [
                         'required',
@@ -125,26 +125,27 @@ class MainController extends Controller
                 ]);
                 User::where('id', $user_data->id)->update(array('Email_address' => $request->Email_address));
             }
-            if (isset($request->Password)) {
-                if ($user_data->password !== $request->Password) {
-                    $user = $request->validate([
-                        "Password" => ['required', 'string', password::min(8)],
-                    ]);
-                    User::where('id', $user_data->id)->update(array('password' => Hash::make($request->Password)));
-                }
-            }
-            if (isset($request->tourist_name)) {
+        }
+        if (isset($request->Password)) {
+            $user = $request->validate([
+                "Password" => ['required', 'string', password::min(8)],
+            ]);
+            User::where('id', $user_data->id)->update(array('password' => Hash::make($request->Password)));
+        }
+        if (isset($request->tourist_name)) {
+            if ($user_data->Email_address != $request->Email_address) {
                 $user = $request->validate([
-                    "tourist_name" => "required|max:45"
+                    "tourist_name" => "required|max:45|unique:tourist"
                 ]);
                 tourist::where('user_id', $user_data->id)->update(array('tourist_name' => $request->tourist_name));
             }
-            return response()->json([
-                "status" => 1,
-                "message" => "succes"
-            ]);
         }
+        return response()->json([
+            "status" => 1,
+            "message" => "succes"
+        ]);
     }
+
     public function touristCheckIfCanDeleteEmail()
     {
         auth()->user();

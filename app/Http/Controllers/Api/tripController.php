@@ -42,7 +42,7 @@ class tripController extends Controller
             ]
         );
         $Date = Carbon::create(substr($request->trip_start_time, 0, 4), substr($request->trip_start_time, 5, 2), substr($request->trip_start_time, 8, 2), substr($request->trip_start_time, 11, 2), substr($request->trip_start_time, 14, 2), substr($request->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->diffInHours($now) < 24 || $Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,
@@ -168,7 +168,7 @@ class tripController extends Controller
             ]);
         }
         $Date = Carbon::create(substr($find->trip_start_time, 0, 4), substr($find->trip_start_time, 5, 2), substr($find->trip_start_time, 8, 2), substr($find->trip_start_time, 11, 2), substr($find->trip_start_time, 14, 2), substr($find->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,
@@ -201,7 +201,7 @@ class tripController extends Controller
             [
                 "trip_id" => "required|integer",
                 "trip_name" => "",
-                "description" => "max:255",
+                "description" => "required",
                 "type_of_trip" => "max:45",
                 "price_trip" => "",
                 "number_of_allSeat" => "integer",
@@ -224,7 +224,7 @@ class tripController extends Controller
             ]);
         }
         $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->diffInHours($now) < 12 || $Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,
@@ -432,7 +432,7 @@ class tripController extends Controller
 
         $trip = trip::find($find->trip_id);
         $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,
@@ -649,7 +649,7 @@ class tripController extends Controller
             ]);
         }
         $Date = Carbon::create(substr($tripData->trip_start_time, 0, 4), substr($tripData->trip_start_time, 5, 2), substr($tripData->trip_start_time, 8, 2), substr($tripData->trip_start_time, 11, 2), substr($tripData->trip_start_time, 14, 2), substr($tripData->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->diffInHours($now) < 12 || $Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,
@@ -725,7 +725,7 @@ class tripController extends Controller
         }
         $trip = trip::find($find->trip_id);
         $Date = Carbon::create(substr($trip->trip_start_time, 0, 4), substr($trip->trip_start_time, 5, 2), substr($trip->trip_start_time, 8, 2), substr($trip->trip_start_time, 11, 2), substr($trip->trip_start_time, 14, 2), substr($trip->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,
@@ -736,7 +736,7 @@ class tripController extends Controller
             $findwallet = DB::table('tourist')->where('user_id', auth()->user()->id)->first();
             $yourDate = $trip->trip_start_time;
             $Date = Carbon::create(substr($yourDate, 0, 4), substr($yourDate, 5, 2), substr($yourDate, 8, 2), substr($yourDate, 11, 2), substr($yourDate, 14, 2), substr($yourDate, 17, 2));
-            $now = Carbon::now();
+            $now = Carbon::now('Asia/Damascus');
             if ($Date->greaterThan($now) && $Date->diffInHours($now) > 12) {
                 $update = tourist::where('id', $findwallet->id)->update(array('wallet' => $findwallet->wallet + $find->number_of_seat * $trip->price_trip));
             }
@@ -775,7 +775,7 @@ class tripController extends Controller
             ]);
         }
         $Date = Carbon::create(substr($tripData->trip_start_time, 0, 4), substr($tripData->trip_start_time, 5, 2), substr($tripData->trip_start_time, 8, 2), substr($tripData->trip_start_time, 11, 2), substr($tripData->trip_start_time, 14, 2), substr($tripData->trip_start_time, 17, 2));
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Damascus');
         if ($Date->diffInHours($now) < 12 || $Date->lessThan($now)) {
             return response()->json([
                 "status" => 0,

@@ -743,7 +743,7 @@ class rateAndCommentController extends Controller
                 $commentsWithRates = DB::table('rate')
                     ->join('comment', function ($join) use ($tripId) {
                         $join->on('rate.tourist_id', '=', 'comment.tourist_id')
-                            ->where('rate.tricommentp_id', '=', $tripId)
+                            ->where('rate.trip_id', '=', $tripId)
                             ->where('comment.trip_id', '=', $tripId);
                     })
                     ->get();

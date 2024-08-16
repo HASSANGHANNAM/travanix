@@ -72,7 +72,8 @@ class hotelController extends Controller
             file_put_contents($imagePath, $imagePut);
             $counter++;
             $imageData = [
-                'path_of_image' => $pathToStore, 'hotel_id' => $createHotel->id
+                'path_of_image' => $pathToStore,
+                'hotel_id' => $createHotel->id
             ];
             $creatImage = image::create($imageData);
         }
@@ -282,9 +283,7 @@ class hotelController extends Controller
         ]);
     }
     // TODO:
-    public function adminUpdateHotel()
-    {
-    }
+    public function adminUpdateHotel() {}
     public function adminGetHotelById($id)
     {
         auth()->user();
@@ -476,7 +475,8 @@ class hotelController extends Controller
                 ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
                 ->first();
             $find = DB::table('room')->where([
-                ['hotel_id', $request->hotel_id], ['capacity_room', $room['capacity_room']]
+                ['hotel_id', $request->hotel_id],
+                ['capacity_room', $room['capacity_room']]
             ])->first();
             if ($notAvailableRooms == null && $find == null) {
                 return response()->json([
@@ -553,7 +553,8 @@ class hotelController extends Controller
                 ->groupBy('quantity', 'capacity_room', 'room_id', 'price_room')
                 ->first();
             $find = DB::table('room')->where([
-                ['hotel_id', $request->hotel_id], ['capacity_room', $room['capacity_room']]
+                ['hotel_id', $request->hotel_id],
+                ['capacity_room', $room['capacity_room']]
             ])->first();
             if ($notAvailableRooms == null && $find == null) {
                 return response()->json([
@@ -590,7 +591,9 @@ class hotelController extends Controller
                 continue;
             }
             $reserve_has_room = [
-                'reserve_id' => $create->id, 'number' => $room['number_of_room'], 'room_id' => $find->id
+                'reserve_id' => $create->id,
+                'number' => $room['number_of_room'],
+                'room_id' => $find->id
             ];
             reserve_has_room::create($reserve_has_room);
         }
@@ -656,7 +659,7 @@ class hotelController extends Controller
                 "message" => "reserve not found",
             ]);
         }
-        if (Carbon::now()->greaterThan($find->start_reservation)) {
+        if (Carbon::now('Asia/Damascus')->greaterThan($find->start_reservation)) {
             return response()->json([
                 "status" => 0,
                 "message" => "start of reserved was end"
@@ -701,7 +704,7 @@ class hotelController extends Controller
                 "message" => "your post payment status not found in system"
             ]);
         }
-        if (Carbon::now()->greaterThan($find->start_reservation)) {
+        if (Carbon::now('Asia/Damascus')->greaterThan($find->start_reservation)) {
             return response()->json([
                 "status" => 0,
                 "message" => "start of reserved was end"
